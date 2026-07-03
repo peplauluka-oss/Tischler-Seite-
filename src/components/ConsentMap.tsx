@@ -17,7 +17,7 @@ export default function ConsentMap() {
 
   if (!consent) {
     return (
-      <div className="flex h-full min-h-64 flex-col items-center justify-center rounded-2xl border border-char/15 bg-wood-oak/10 p-6 text-center">
+      <div className="flex h-full min-h-64 flex-col items-center justify-center rounded-2xl border border-char/15 bg-oak/10 p-6 text-center">
         <p className="max-w-xs text-sm text-char/70">
           Hier liegt eine Google-Maps-Karte. Beim Laden werden Daten an
           Google übertragen (Details in unserer{" "}
@@ -29,7 +29,7 @@ export default function ConsentMap() {
         <button
           type="button"
           onClick={() => setConsent(true)}
-          className="mt-4 rounded-full bg-char px-5 py-2.5 text-sm font-medium text-wood-raw transition hover:bg-wood-walnut"
+          className="mt-4 rounded-full bg-char px-5 py-2.5 text-sm font-medium text-cream transition hover:bg-walnut"
         >
           Karte laden
         </button>

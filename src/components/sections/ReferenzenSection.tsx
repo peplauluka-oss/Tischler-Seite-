@@ -1,28 +1,34 @@
-import ActSection from "@/components/story/ActSection";
-import Keyvisual from "@/components/story/Keyvisual";
+import Reveal from "@/components/Reveal";
 import ReferenzGalerie from "@/components/ReferenzGalerie";
 import { kundenstimmen } from "@/content/referenzen";
 
-/** Akt 5 – REFERENZEN, synchron zur Fügung des Tischs. */
+/** Referenzen: filterbare Galerie + Kundenstimmen. */
 export default function ReferenzenSection() {
   return (
-    <ActSection act="referenzen" id="referenzen" label="Akt 05 · Die Fügung" keyvisual={<Keyvisual variant="fuegung" />}>
-      <div className="rounded-2xl bg-wood-raw/85 p-6 shadow-sm backdrop-blur sm:p-8">
-        <h2 className="font-display text-3xl font-bold tracking-tight text-wood-walnut sm:text-4xl">
-          Aus unserer Werkstatt
-        </h2>
-        <ReferenzGalerie />
-        <div className="mt-6 grid gap-4 border-t border-wood-walnut/15 pt-5 sm:grid-cols-2">
+    <section id="referenzen" className="bg-cream-2/50 px-5 py-24 sm:px-8 sm:py-32">
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <p className="tech-label mb-6">Referenzen</p>
+          <h2 className="max-w-2xl font-display text-4xl font-bold leading-[1.06] tracking-tight text-walnut sm:text-5xl">
+            Aus unserer Werkstatt
+          </h2>
+        </Reveal>
+        <Reveal delay={120}>
+          <ReferenzGalerie />
+        </Reveal>
+        <div className="mt-14 grid gap-8 border-t border-walnut/15 pt-10 sm:grid-cols-2">
           {kundenstimmen.map((k, i) => (
-            <blockquote key={i} className="text-sm italic leading-relaxed text-char/70">
-              „{k.zitat}“
-              <footer className="mt-1 font-mono text-[0.65rem] not-italic uppercase tracking-[0.15em] text-wood-walnut/70">
-                — {k.name}
-              </footer>
-            </blockquote>
+            <Reveal key={i} delay={i * 140}>
+              <blockquote className="text-lg italic leading-relaxed text-char/75">
+                „{k.zitat}“
+                <footer className="mt-3 font-mono text-[0.68rem] not-italic uppercase tracking-[0.18em] text-walnut/70">
+                  — {k.name}
+                </footer>
+              </blockquote>
+            </Reveal>
           ))}
         </div>
       </div>
-    </ActSection>
+    </section>
   );
 }

@@ -18,7 +18,7 @@ export default function WerkstattMietenPage() {
       ctaText="Verfügbarkeit anfragen"
     >
       <div className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-2xl bg-wood-oak/15 p-6">
+        <div className="rounded-2xl bg-oak/15 p-6">
           <h2 className="font-display text-xl font-bold text-char">Werkbank ohne Maschinen</h2>
           <p className="mt-2 text-sm leading-relaxed text-char/70">
             Ein fester Arbeitsplatz mit Werkbank und Handwerkzeug – für
@@ -29,7 +29,7 @@ export default function WerkstattMietenPage() {
             [PLATZHALTER: Konditionen &amp; Preise]
           </p>
         </div>
-        <div className="rounded-2xl bg-wood-oak/15 p-6">
+        <div className="rounded-2xl bg-oak/15 p-6">
           <h2 className="font-display text-xl font-bold text-char">Mit Maschinennutzung</h2>
           <p className="mt-2 text-sm leading-relaxed text-char/70">
             Zugang zum Maschinenpark nach kurzer Einweisung:

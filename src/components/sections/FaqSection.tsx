@@ -7,17 +7,17 @@ import { faqJsonLd } from "@/lib/jsonld";
  */
 export default function FaqSection() {
   return (
-    <section id="faq" className="relative z-10 bg-wood-raw px-4 pb-24 sm:px-6">
+    <section id="faq" className="relative z-10 bg-cream px-4 pb-24 sm:px-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd()) }}
       />
       <div className="mx-auto max-w-3xl">
         <p className="tech-label mb-6">Häufige Fragen</p>
-        <h2 className="font-display text-3xl font-bold tracking-tight text-wood-walnut sm:text-4xl">
+        <h2 className="font-display text-3xl font-bold tracking-tight text-walnut sm:text-4xl">
           Gut zu wissen
         </h2>
-        <div className="mt-8 divide-y divide-wood-walnut/15 border-y border-wood-walnut/15">
+        <div className="mt-8 divide-y divide-walnut/15 border-y border-walnut/15">
           {faq.map((f) => (
             <details key={f.frage} className="faq-item group py-4">
               <summary className="flex items-center justify-between gap-4 font-medium text-char">

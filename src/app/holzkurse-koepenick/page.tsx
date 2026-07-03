@@ -20,7 +20,7 @@ export default function KoepenickPage() {
       ctaText="Kurs in Köpenick anfragen"
     >
       <div className="space-y-6 text-char/80">
-        <div className="rounded-2xl bg-wood-oak/15 p-6">
+        <div className="rounded-2xl bg-oak/15 p-6">
           <h2 className="font-display text-xl font-bold text-char">Erlebniskurs Köpenick</h2>
           <p className="mt-2 text-sm leading-relaxed">
             Holzbearbeitung zum Anfassen: Unter Anleitung entsteht in

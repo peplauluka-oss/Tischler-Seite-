@@ -1,43 +1,59 @@
 import Link from "next/link";
-import ActSection from "@/components/story/ActSection";
-import Keyvisual from "@/components/story/Keyvisual";
+import Reveal from "@/components/Reveal";
 import { angebote } from "@/content/angebote";
 
-/** Akt 3 – ANGEBOTE: die drei Conversion-Pfade, synchron zur Exploded View. */
+/** Die drei Conversion-Pfade als große Editorial-Karten. */
 export default function AngeboteSection() {
   return (
-    <ActSection act="angebote" id="angebote" label="Akt 03 · Das Sägewerk" keyvisual={<Keyvisual variant="bretter" />}>
-      <h2 className="font-display text-3xl font-bold tracking-tight text-wood-walnut sm:text-4xl">
-        Drei Wege zu Ihrem Werkstück
-      </h2>
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
-        {angebote.map((a) => (
-          <article
-            key={a.slug}
-            className="flex flex-col rounded-2xl bg-wood-raw/85 p-6 shadow-sm backdrop-blur transition hover:shadow-md"
-          >
-            <h3 className="font-display text-xl font-bold text-char">{a.titel}</h3>
-            <p className="mt-1 font-medium text-wood-walnut">{a.kurz}</p>
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-char/70">{a.beschreibung}</p>
+    <section id="angebote" className="bg-cream px-5 py-24 sm:px-8 sm:py-32">
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <p className="tech-label mb-6">Angebot · 01–03</p>
+          <h2 className="max-w-2xl font-display text-4xl font-bold leading-[1.06] tracking-tight text-walnut sm:text-5xl">
+            Drei Wege zu Ihrem Werkstück
+          </h2>
+        </Reveal>
+        <div className="mt-14 grid gap-5 md:grid-cols-3">
+          {angebote.map((a, i) => (
+            <Reveal key={a.slug} delay={i * 120} as="article" className="group">
+              <Link
+                href={a.href}
+                className="flex h-full flex-col rounded-3xl border border-walnut/10 bg-cream-2/60 p-7 transition duration-300 hover:-translate-y-1.5 hover:border-walnut/25 hover:bg-cream-2 hover:shadow-[0_24px_60px_-30px_rgba(63,44,29,0.45)] sm:p-8"
+              >
+                <span className="drawing-numeral">0{i + 1}</span>
+                <h3 className="mt-4 font-display text-2xl font-bold tracking-tight text-char">
+                  {a.titel}
+                </h3>
+                <p className="mt-1.5 font-medium text-walnut">{a.kurz}</p>
+                <p className="mt-4 flex-1 text-[0.95rem] leading-relaxed text-char/65">
+                  {a.beschreibung}
+                </p>
+                <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-char">
+                  {a.cta}
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-char/20 transition duration-300 group-hover:translate-x-1 group-hover:border-char group-hover:bg-char group-hover:text-cream"
+                  >
+                    →
+                  </span>
+                </span>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={200}>
+          <p className="mt-8 text-sm text-char/55">
+            Verschenken statt selber bauen?{" "}
             <Link
-              href={a.href}
-              className="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-char px-4 py-2 text-sm font-medium text-wood-raw transition hover:bg-wood-walnut"
+              href="/kontakt?anliegen=gutschein"
+              className="font-medium text-walnut underline underline-offset-4 hover:text-char"
             >
-              {a.cta}
-              <span aria-hidden="true">→</span>
-            </Link>
-          </article>
-        ))}
+              Gutscheine
+            </Link>{" "}
+            — und exklusive Holzprodukte im Onlineshop [PLATZHALTER: Link].
+          </p>
+        </Reveal>
       </div>
-      {/* Sekundäre Pfade – bewusst nicht gleichrangig */}
-      <p className="mt-5 rounded-full bg-wood-oak/20 px-5 py-2.5 text-center text-sm text-char/70">
-        Verschenken statt selber bauen?{" "}
-        <Link href="/kontakt?anliegen=gutschein" className="font-medium text-wood-walnut underline underline-offset-2 hover:text-char">
-          Gutscheine
-        </Link>{" "}
-        und exklusive Holzprodukte im{" "}
-        <span className="font-medium">Onlineshop [PLATZHALTER: Link]</span>.
-      </p>
-    </ActSection>
+    </section>
   );
 }

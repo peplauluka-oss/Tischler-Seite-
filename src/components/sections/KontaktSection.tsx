@@ -13,10 +13,10 @@ export default function KontaktSection({
   defaultAnliegen?: AnliegenKey;
 }) {
   return (
-    <section id="kontakt" className="relative z-10 bg-wood-raw px-4 py-20 sm:px-6">
+    <section id="kontakt" className="relative z-10 bg-cream px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-6xl">
         <p className="tech-label mb-6">Kontakt · Anfahrt</p>
-        <h2 className="font-display text-3xl font-bold tracking-tight text-wood-walnut sm:text-4xl">
+        <h2 className="font-display text-3xl font-bold tracking-tight text-walnut sm:text-4xl">
           Sprechen wir über Ihr Projekt
         </h2>
         <div className="mt-10 grid gap-10 lg:grid-cols-[3fr_2fr]">
@@ -30,7 +30,7 @@ export default function KontaktSection({
             </ul>
           </div>
           <div className="space-y-5">
-            <div className="rounded-2xl bg-wood-oak/15 p-6">
+            <div className="rounded-2xl bg-oak/15 p-6">
               <h3 className="font-display text-lg font-bold text-char">Werkstatt Kaulsdorf</h3>
               <address className="mt-2 text-sm not-italic leading-relaxed text-char/75">
                 {site.address.street}
@@ -42,7 +42,7 @@ export default function KontaktSection({
               </p>
               <a
                 href={site.phoneHref}
-                className="mt-4 inline-block rounded-full bg-char px-5 py-2.5 text-sm font-medium text-wood-raw transition hover:bg-wood-walnut"
+                className="mt-4 inline-block rounded-full bg-char px-5 py-2.5 text-sm font-medium text-cream transition hover:bg-walnut"
               >
                 Jetzt anrufen: {site.phone}
               </a>

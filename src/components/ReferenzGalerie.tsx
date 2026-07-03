@@ -27,8 +27,8 @@ export default function ReferenzGalerie() {
             aria-pressed={aktiv === f}
             className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
               aktiv === f
-                ? "bg-char text-wood-raw"
-                : "bg-wood-oak/20 text-char/70 hover:bg-wood-oak/35"
+                ? "bg-char text-cream"
+                : "bg-oak/20 text-char/70 hover:bg-oak/35"
             }`}
           >
             {f}
@@ -37,7 +37,7 @@ export default function ReferenzGalerie() {
       </div>
       <ul className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3">
         {sichtbar.map((r) => (
-          <li key={r.titel + r.bild} className="overflow-hidden rounded-xl bg-wood-oak/15">
+          <li key={r.titel + r.bild} className="overflow-hidden rounded-xl bg-oak/15">
             {/* unoptimized nur für die SVG-Platzhalter – bei echten Fotos
                 (JPG/WebP) das Attribut entfernen, damit next/image optimiert */}
             <Image

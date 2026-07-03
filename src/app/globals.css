@@ -1,16 +1,25 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Design-Tokens „Hobbytischlerei Berlin“
-   Farben aus echten Holztönen abgeleitet; --precision ist die einzige
-   futuristische Akzentfarbe (Laser-Schnittlinie, CAD-Layer, Fokus-Ringe).
+   Design-Tokens „Hobbytischlerei Berlin“ — v2 (Editorial Redesign)
+
+   Dunkler, warmer Hero (Espresso) mit Creme-Typografie, danach helle,
+   warme Editorial-Sektionen. --precision bleibt die einzige futuristische
+   Akzentfarbe (Laser-Linie, CAD-Labels, Fokus-Ringe) — sparsam einsetzen.
 --------------------------------------------------------------------------- */
 @theme {
-  --color-wood-raw: #efe6d3; /* helle Schnittfläche – Seitenhintergrund   */
-  --color-wood-oak: #c49a6c; /* Eiche – Flächen, Karten-Akzente           */
-  --color-wood-walnut: #5f4432; /* Nussbaum – Headlines, dunkle Sektionen */
-  --color-char: #201a13; /* fast Schwarz („gebranntes Holz“) – Text       */
-  --color-precision: #1f7a72; /* Technik-Petrol – NUR für Micro-Details   */
+  /* Holz & Wärme */
+  --color-espresso: #16100a; /* dunkles Röstholz – Hero & CTA-Band          */
+  --color-espresso-2: #221910; /* erhöhte Flächen auf dunklem Grund         */
+  --color-cream: #f2e9d8; /* Schnittfläche – heller Seitenhintergrund       */
+  --color-cream-2: #e9ddc6; /* Karten auf hellem Grund                      */
+  --color-oak: #c49a6c; /* Eiche – Akzente, Linien                          */
+  --color-oak-light: #ddb98d; /* helle Eiche auf dunklem Grund              */
+  --color-walnut: #5f4432; /* Nussbaum – Headlines auf hell                 */
+  --color-char: #221b12; /* Text auf hellem Grund                           */
+  /* Technik-Schicht */
+  --color-precision: #1f7a72; /* auf hellem Grund                           */
+  --color-precision-bright: #3fd9c6; /* Glow auf dunklem Grund              */
 
   --font-display: var(--font-bricolage), "Bricolage Grotesque", system-ui, sans-serif;
   --font-sans: var(--font-instrument), "Instrument Sans", system-ui, sans-serif;
@@ -20,8 +29,6 @@
 html {
   scroll-behavior: smooth;
 }
-
-/* Lenis übernimmt das Scrolling nur, wenn aktiv (kein reduced motion) */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -31,32 +38,47 @@ html.lenis body {
 }
 
 body {
-  background: var(--color-wood-raw);
+  background: var(--color-cream);
   color: var(--color-char);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Sichtbarer Keyboard-Fokus in der Technik-Akzentfarbe (WCAG) */
+/* Feines Filmkorn über der ganzen Seite – nimmt digitalen Flächen die
+   Sterilität. Reines CSS (SVG-Turbulence als Data-URI), kein Asset. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Sichtbarer Keyboard-Fokus (WCAG) */
 :focus-visible {
   outline: 2px solid var(--color-precision);
   outline-offset: 3px;
   border-radius: 2px;
 }
+.on-dark :focus-visible {
+  outline-color: var(--color-precision-bright);
+}
 
 ::selection {
-  background: var(--color-wood-oak);
-  color: var(--color-char);
+  background: var(--color-oak);
+  color: var(--color-espresso);
 }
 
 /* --------------------------------------------------------------------------
-   Wiederkehrendes grafisches Motiv: Werkstattzeichnungs-Ästhetik
-   (feine Linien + kleine Mono-Beschriftungen an Sektionen)
+   Werkstattzeichnungs-Motiv: kleine Mono-Kicker mit Messlinie
 -------------------------------------------------------------------------- */
 .tech-label {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-precision);
   display: inline-flex;
@@ -71,8 +93,122 @@ body {
   background: currentColor;
   opacity: 0.6;
 }
+.on-dark .tech-label {
+  color: var(--color-precision-bright);
+}
 
-/* Preloader: feine Linie „sägt“ durch den Schriftzug */
+/* Große Ziffern im Zeichnungs-Stil */
+.drawing-numeral {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--color-oak);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+-------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.8rem 1.6rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn-primary {
+  background: var(--color-char);
+  color: var(--color-cream);
+}
+.btn-primary:hover {
+  background: var(--color-walnut);
+  box-shadow: 0 10px 30px -12px rgba(34, 27, 18, 0.55);
+}
+.btn-outline {
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+}
+.btn-outline:hover {
+  border-color: currentColor;
+}
+.on-dark .btn-primary {
+  background: var(--color-cream);
+  color: var(--color-espresso);
+}
+.on-dark .btn-primary:hover {
+  background: var(--color-oak-light);
+  box-shadow: 0 12px 34px -12px rgba(221, 185, 141, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   Scroll-Reveal (IntersectionObserver setzt .is-visible)
+   – bei prefers-reduced-motion: alles sofort sichtbar, keine Bewegung
+-------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.2, 0.65, 0.25, 1), transform 0.9s cubic-bezier(0.2, 0.65, 0.25, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Intro (3D-Bühne)
+-------------------------------------------------------------------------- */
+.intro-dark-bg {
+  background:
+    radial-gradient(120% 90% at 70% 12%, #2a1e12 0%, #1c1309 42%, #120c06 100%);
+}
+
+/* Statischer Fallback: nur zeigen, wenn KEIN 3D läuft */
+.story-3d .intro-fallback {
+  display: none;
+}
+/* Ohne 3D bleibt das Intro ein normaler, einbildschirmiger Hero */
+.story-static .intro-track {
+  height: auto !important;
+}
+.story-static .intro-sticky {
+  position: relative !important;
+  height: auto !important;
+  min-height: 100svh;
+}
+.story-static [data-intro-phase="b"],
+.story-static [data-intro-phase="c"] {
+  display: none;
+}
+
+/* Scroll-Hinweis */
+@keyframes scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.65; }
+  50% { transform: translateY(7px); opacity: 1; }
+}
+.scroll-hint-dot {
+  animation: scroll-hint 2.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint-dot { animation: none; }
+}
+
+/* Preloader: feine Linie „sägt“ durch den Schriftzug (rein CSS) */
 @keyframes saw-line {
   from { transform: translateX(-101%); }
   to   { transform: translateX(101%); }
@@ -90,24 +226,7 @@ body {
   .preloader { display: none; }
 }
 
-/* Scroll-Hinweis im Hero */
-@keyframes scroll-hint {
-  0%, 100% { transform: translateY(0); opacity: 0.7; }
-  50% { transform: translateY(6px); opacity: 1; }
-}
-.scroll-hint-dot {
-  animation: scroll-hint 2s ease-in-out infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .scroll-hint-dot { animation: none; }
-}
-
-/* Fallback-Kaskade: statische Keyvisuals nur zeigen, wenn KEIN 3D läuft */
-.story-3d .keyvisual {
-  display: none;
-}
-
-/* Details/Summary-Accordion ohne Standard-Marker */
+/* FAQ-Accordion */
 details.faq-item > summary {
   list-style: none;
   cursor: pointer;

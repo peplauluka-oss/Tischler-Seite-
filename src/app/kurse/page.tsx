@@ -24,16 +24,16 @@ export default function KursePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(coursesJsonLd()) }}
       />
-      <h2 className="font-display text-2xl font-bold text-wood-walnut">Unsere Kurse</h2>
+      <h2 className="font-display text-2xl font-bold text-walnut">Unsere Kurse</h2>
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         {kurse.map((k) => (
-          <article key={k.titel} className="flex flex-col rounded-2xl bg-wood-oak/15 p-6">
+          <article key={k.titel} className="flex flex-col rounded-2xl bg-oak/15 p-6">
             <p className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-precision">
               Standort {k.ort}
             </p>
             <h3 className="mt-2 font-display text-lg font-bold text-char">{k.titel}</h3>
             <p className="mt-2 flex-1 text-sm leading-relaxed text-char/70">{k.beschreibung}</p>
-            <dl className="mt-4 space-y-1 border-t border-wood-walnut/15 pt-3 text-sm text-char/70">
+            <dl className="mt-4 space-y-1 border-t border-walnut/15 pt-3 text-sm text-char/70">
               <div className="flex justify-between">
                 <dt>Dauer</dt>
                 <dd className="font-mono text-xs">{k.dauer}</dd>
@@ -45,7 +45,7 @@ export default function KursePage() {
             </dl>
             <Link
               href="/kontakt?anliegen=kurs"
-              className="mt-4 inline-block w-fit rounded-full bg-char px-4 py-2 text-sm font-medium text-wood-raw transition hover:bg-wood-walnut"
+              className="mt-4 inline-block w-fit rounded-full bg-char px-4 py-2 text-sm font-medium text-cream transition hover:bg-walnut"
             >
               Termin anfragen
             </Link>

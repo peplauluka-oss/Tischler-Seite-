@@ -30,14 +30,14 @@ export default function StickyMobileBar() {
         <a
           href={site.phoneHref}
           tabIndex={visible ? 0 : -1}
-          className="flex-1 rounded-full bg-wood-oak px-4 py-2.5 text-center text-sm font-medium text-char"
+          className="flex-1 rounded-full bg-oak px-4 py-2.5 text-center text-sm font-medium text-char"
         >
           Anrufen
         </a>
         <Link
           href="/kontakt"
           tabIndex={visible ? 0 : -1}
-          className="flex-1 rounded-full bg-wood-raw px-4 py-2.5 text-center text-sm font-medium text-char"
+          className="flex-1 rounded-full bg-cream px-4 py-2.5 text-center text-sm font-medium text-char"
         >
           Anfragen
         </Link>
