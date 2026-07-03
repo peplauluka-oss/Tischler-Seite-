@@ -57,6 +57,53 @@ const JITTER = Array.from({ length: SLICES }, (_, i) => ({
 }));
 
 const V = new THREE.Vector3();
+const dummy = new THREE.Object3D();
+
+/**
+ * Staubpartikel im Gegenlicht — hängen fast still in der Luft und geben
+ * dem dunklen Raum Tiefe. Bewegung hängt an Zeit UND Scroll-Fortschritt
+ * (leichte Parallaxe beim Swipen), bleibt also auch bei frameloop=demand
+ * lebendig, wann immer gerendert wird.
+ */
+function Motes({ count }: { count: number }) {
+  const mesh = useRef<THREE.InstancedMesh>(null!);
+  const seeds = useMemo(
+    () =>
+      Array.from({ length: count }, (_, i) => ({
+        x: (rand(i) - 0.5) * 7,
+        y: 0.1 + rand(i + 31) * 2.4,
+        z: -1.2 + rand(i + 77) * 2.6,
+        speed: 0.25 + rand(i + 13) * 0.75,
+        phase: rand(i + 51) * 6.28,
+        size: 0.4 + rand(i + 5),
+      })),
+    [count]
+  );
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    const p = introProgress.value;
+    for (let i = 0; i < count; i++) {
+      const s = seeds[i];
+      dummy.position.set(
+        s.x + Math.sin(t * 0.05 * s.speed + s.phase) * 0.3 + p * 0.6 * s.speed,
+        s.y + Math.sin(t * 0.04 * s.speed + s.phase * 2.0) * 0.2 + p * 0.3,
+        s.z
+      );
+      dummy.scale.setScalar(s.size * 0.011);
+      dummy.updateMatrix();
+      mesh.current.setMatrixAt(i, dummy.matrix);
+    }
+    mesh.current.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh ref={mesh} args={[undefined, undefined, count]}>
+      <sphereGeometry args={[1, 6, 6]} />
+      <meshBasicMaterial color="#e8c493" transparent opacity={0.2} toneMapped={false} />
+    </instancedMesh>
+  );
+}
 
 export default function LogScene({ tier }: { tier: DeviceTier }) {
   const group = useRef<THREE.Group>(null!);
@@ -199,6 +246,9 @@ export default function LogScene({ tier }: { tier: DeviceTier }) {
           <torusGeometry args={[RADIUS + 0.16, 0.008, 8, 96]} />
         </mesh>
       </group>
+
+      {/* Staub im Gegenlicht (nur auf leistungsfähigen Geräten) */}
+      {tier !== "low" && <Motes count={55} />}
 
       {/* weicher Kontaktschatten verankert die Skulptur im Raum */}
       {tier !== "low" && (

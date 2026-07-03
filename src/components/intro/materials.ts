@@ -46,8 +46,8 @@ const NOISE_GLSL = /* glsl */ `
      Fragment (Bump-Shading), damit Silhouette und Licht zusammenpassen. */
   float barkH(vec3 p, float shift) {
     float plates = fbm(vec3(p.x * 3.6, (p.y + shift) * 1.1, p.z * 3.6));
-    float furrows = fbm(vec3(p.x * 9.0, (p.y + shift) * 1.8, p.z * 9.0));
-    return (plates - 0.5) * 0.1 + (furrows - 0.5) * 0.045;
+    float furrows = fbm(vec3(p.x * 12.0, (p.y + shift) * 2.0, p.z * 12.0));
+    return (plates - 0.5) * 0.1 + (furrows - 0.5) * 0.05;
   }
 `;
 
@@ -136,7 +136,7 @@ export function createSliceMaterial(shift: number) {
         // Borkenplatten (hell) mit tiefen, dunklen Furchen dazwischen +
         // faserige Längsstreifen — Eichenborke, keine glatte Karamellwalze.
         float plates = fbm(vec3(vWoodPos.x * 3.6, (vWoodPos.y + uShift) * 1.1, vWoodPos.z * 3.6));
-        float furrow = fbm(vec3(vWoodPos.x * 9.0, (vWoodPos.y + uShift) * 1.8, vWoodPos.z * 9.0));
+        float furrow = fbm(vec3(vWoodPos.x * 12.0, (vWoodPos.y + uShift) * 2.0, vWoodPos.z * 12.0));
         float fibre  = fbm(vec3(vWoodPos.x * 22.0, (vWoodPos.y + uShift) * 2.5, vWoodPos.z * 22.0));
         float crevice = smoothstep(0.55, 0.25, furrow); // 1 = tiefe Furche
         vec3 barkCol = mix(vec3(0.295, 0.212, 0.132), vec3(0.135, 0.092, 0.056), crevice);
