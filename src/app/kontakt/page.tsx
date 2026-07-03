@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import KontaktSection from "@/components/sections/KontaktSection";
 import FaqSection from "@/components/sections/FaqSection";
 import StickyMobileBar from "@/components/StickyMobileBar";
-import { anliegenOptions, type AnliegenKey } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Kontakt & Anfahrt – Hobbytischlerei Berlin-Kaulsdorf",
@@ -12,21 +10,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/kontakt" },
 };
 
-export default async function KontaktPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ anliegen?: string }>;
-}) {
-  const { anliegen } = await searchParams;
-  const valid = anliegenOptions.some((o) => o.value === anliegen)
-    ? (anliegen as AnliegenKey)
-    : undefined;
-
+/**
+ * Bewusst vollständig statisch (auch für den GitHub-Pages-Export):
+ * ?anliegen=… liest das Formular selbst clientseitig aus der URL.
+ */
+export default function KontaktPage() {
   return (
     <main className="pt-16">
-      <Suspense>
-        <KontaktSection defaultAnliegen={valid} />
-      </Suspense>
+      <KontaktSection />
       <FaqSection />
       <StickyMobileBar />
     </main>

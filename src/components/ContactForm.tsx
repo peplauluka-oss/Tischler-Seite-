@@ -60,7 +60,8 @@ export default function ContactForm({
 
     setStatus("sending");
     try {
-      const res = await fetch("/api/kontakt", {
+      const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+      const res = await fetch(`${base}/api/kontakt`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -69,6 +70,13 @@ export default function ContactForm({
       setStatus("ok");
       form.reset();
     } catch {
+      // Fallback (z. B. statisches Hosting ohne Backend): E-Mail-Programm
+      // mit vorausgefüllter Nachricht öffnen – der Conversion-Pfad bleibt offen.
+      const betreff = encodeURIComponent(`Anfrage: ${anliegen}`);
+      const body = encodeURIComponent(
+        `Name: ${data.name}\nTelefon: ${data.telefon || "-"}\n\n${data.nachricht}`
+      );
+      window.location.href = `mailto:service@hobbytischlerei.de?subject=${betreff}&body=${body}`;
       setStatus("error");
     }
   }

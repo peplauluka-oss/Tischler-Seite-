@@ -41,7 +41,7 @@ export default function ReferenzGalerie() {
             {/* unoptimized nur für die SVG-Platzhalter – bei echten Fotos
                 (JPG/WebP) das Attribut entfernen, damit next/image optimiert */}
             <Image
-              src={r.bild}
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${r.bild}`}
               alt={r.alt}
               width={320}
               height={200}
