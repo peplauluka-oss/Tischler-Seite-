@@ -2,16 +2,16 @@
 
 import { Canvas, useThree } from "@react-three/fiber";
 import { useEffect } from "react";
-import LogScene from "./LogScene";
+import SliceScene from "./SliceScene";
 import { introProgress, type DeviceTier } from "./progress";
 
 /**
- * Der Canvas der Intro-Interaktion. Wird per next/dynamic lazy geladen —
- * die Hero-Headline (LCP) ist reines HTML und wartet nie auf Three.js.
+ * Canvas der Schnitt-Interaktion — lazy geladen (next/dynamic), die
+ * Hero-Headline (LCP) ist reines HTML und wartet nie auf Three.js.
  *
  * frameloop="demand": gerendert wird nur bei Scroll-Änderung plus ein
- * sparsamer ~30fps-Ticker fürs Kamera-Atmen, solange der Besucher am
- * Seitenanfang steht und der Tab sichtbar ist.
+ * sparsamer ~30fps-Ticker für den ruhigen Lichtzug, solange der Besucher
+ * am Seitenanfang steht, der Tab sichtbar ist und bereits interagiert hat.
  */
 function Invalidator() {
   const invalidate = useThree((s) => s.invalidate);
@@ -28,7 +28,7 @@ function IdleTicker() {
       raf = requestAnimationFrame(tick);
       if (t - last < 33) return;
       last = t;
-      if (document.visibilityState === "visible" && introProgress.value < 0.07) {
+      if (document.visibilityState === "visible" && introProgress.value < 0.05) {
         invalidate();
       }
     };
@@ -38,17 +38,17 @@ function IdleTicker() {
   return null;
 }
 
-export default function LogCanvas({ tier }: { tier: DeviceTier }) {
+export default function IntroCanvas({ tier }: { tier: DeviceTier }) {
   return (
     <Canvas
       frameloop="demand"
       dpr={tier === "low" ? 1 : [1, 1.75]}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ fov: 38, position: [0, 1.25, 5.6], near: 0.1, far: 30 }}
+      gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+      camera={{ fov: 50, position: [0, 0, 3], near: 0.1, far: 20 }}
     >
       <Invalidator />
       <IdleTicker />
-      <LogScene tier={tier} />
+      <SliceScene tier={tier} />
     </Canvas>
   );
 }

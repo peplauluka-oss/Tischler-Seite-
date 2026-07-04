@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { introProgress, detectDeviceTier, type DeviceTier } from "./progress";
 
-const LogCanvas = dynamic(() => import("./LogCanvas"), { ssr: false });
+const IntroCanvas = dynamic(() => import("./IntroCanvas"), { ssr: false });
 
 /** Länge der Intro-Strecke in Viewport-Höhen */
 const TRACK_VH = 340;
@@ -34,8 +34,28 @@ export default function IntroStage({ children }: { children: React.ReactNode }) 
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setTier(detectDeviceTier());
-    setReady(true);
+    /* 3D erst bei der ERSTEN Nutzer-Interaktion aktivieren (Mausbewegung,
+       Touch, Scroll) — der erste Paint + Interaktivität (LCP/TBT/TTI)
+       gehören komplett dem HTML. Reale Besucher interagieren innerhalb
+       von Millisekunden; als Fallback lädt die Szene spätestens nach 8 s
+       Leerlauf. Bis dahin zeigt der Hero das statische Keyvisual. */
+    let done = false;
+    const events = ["pointermove", "pointerdown", "touchstart", "wheel", "keydown", "scroll"] as const;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const activate = () => {
+      if (done) return;
+      done = true;
+      events.forEach((ev) => window.removeEventListener(ev, activate));
+      if (timer) clearTimeout(timer);
+      setTier(detectDeviceTier());
+      setReady(true);
+    };
+    events.forEach((ev) => window.addEventListener(ev, activate, { passive: true }));
+    timer = setTimeout(activate, 8000);
+    return () => {
+      events.forEach((ev) => window.removeEventListener(ev, activate));
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
@@ -43,12 +63,30 @@ export default function IntroStage({ children }: { children: React.ReactNode }) 
 
     gsap.registerPlugin(ScrollTrigger);
 
-    /* Smooth Scrolling / Swipe-Trägheit (nutzt nativen Scroll → sticky ok) */
+    /* Smooth Scrolling / Swipe-Trägheit (nutzt nativen Scroll → sticky ok).
+       WICHTIG für Performance: Der rAF-Loop läuft NICHT permanent, sondern
+       nur bei Aktivität (Eingabe + 1,5 s Nachlauf bzw. solange Lenis
+       animiert). Ein dauerhaft wacher Main Thread würde TBT/TTI ruinieren. */
     const lenis = new Lenis({ lerp: 0.11 });
-    const raf = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
     lenis.on("scroll", ScrollTrigger.update);
+
+    let rafId = 0;
+    let wakeUntil = 0;
+    const loop = (time: number) => {
+      lenis.raf(time);
+      if (performance.now() < wakeUntil || lenis.isScrolling) {
+        rafId = requestAnimationFrame(loop);
+      } else {
+        rafId = 0;
+      }
+    };
+    const wake = () => {
+      wakeUntil = performance.now() + 1500;
+      if (!rafId) rafId = requestAnimationFrame(loop);
+    };
+    const wakeEvents = ["wheel", "touchstart", "touchmove", "pointerdown", "keydown"] as const;
+    wakeEvents.forEach((ev) => window.addEventListener(ev, wake, { passive: true }));
+    wake(); // initialer Kick (z. B. für Anker-Navigation)
 
     const ctx = gsap.context((self) => {
       ScrollTrigger.create({
@@ -73,27 +111,32 @@ export default function IntroStage({ children }: { children: React.ReactNode }) 
         },
       });
 
-      /* Phase a: Headline ist beim Laden voll da (LCP!), nur ausblenden */
+      /* Phase a: Headline ist beim Laden voll da (LCP!), nur ausblenden —
+         sie verschwindet, während der erste Schnitt öffnet. */
       q('[data-intro-phase="a"]').forEach((el) => {
-        tl.to(el, { opacity: 0, y: -46, duration: 0.1 }, 0.05);
+        tl.to(el, { opacity: 0, y: -40, duration: 0.09 }, 0.07);
       });
 
-      /* Phase b: CAD-Labels schweben während des Aufbrechens ein/aus */
-      q('[data-intro-phase="b"]').forEach((el, i) => {
-        const at = 0.2 + i * 0.05;
-        tl.fromTo(el, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.1 }, at)
-          .to(el, { opacity: 0, y: -26, duration: 0.1 }, at + 0.32);
+      /* Zwischentexte: jedes Element bringt sein Fenster als
+         data-win="start,ende" mit (Anteile der Gesamtstrecke 0–1).
+         Nur transform + opacity, kurze Wege — ruhig, nicht zappelig. */
+      q("[data-win]").forEach((el) => {
+        const [a, b] = (el.dataset.win ?? "0,1").split(",").map(Number);
+        const d = Math.max(b - a, 0.08);
+        tl.fromTo(el, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: d * 0.35 }, a)
+          .to(el, { opacity: 0, y: -22, duration: d * 0.35 }, b - d * 0.35);
       });
 
-      /* Phase c: der Abbinder */
+      /* Phase c: der Abbinder im dunklen Raum */
       q('[data-intro-phase="c"]').forEach((el) => {
-        tl.fromTo(el, { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.12 }, 0.85);
+        tl.fromTo(el, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.1 }, 0.88);
       });
     }, trackRef);
 
     return () => {
       ctx.revert();
-      gsap.ticker.remove(raf);
+      wakeEvents.forEach((ev) => window.removeEventListener(ev, wake));
+      if (rafId) cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, [ready, tier]);
@@ -104,21 +147,17 @@ export default function IntroStage({ children }: { children: React.ReactNode }) 
     <div id="intro" className={is3d ? "story-3d" : "story-static"}>
       <div
         ref={trackRef}
-        className="intro-track intro-dark-bg on-dark relative text-cream"
+        className="intro-track relative"
         style={{ height: `${TRACK_VH}vh` }}
       >
-        <div className="intro-sticky sticky top-0 h-screen overflow-hidden">
-          {/* Canvas hinter den Overlays */}
+        {/* Vor dem 3D-Start (und im statischen Fallback) zeigt die Bühne
+            eine CSS-Holzwand — der Canvas malt dann dasselbe Motiv darüber. */}
+        <div className="intro-sticky intro-wood-bg sticky top-0 h-screen overflow-hidden">
           {is3d && (
             <div className="absolute inset-0 z-0" aria-hidden="true">
-              <LogCanvas tier={tier} />
+              <IntroCanvas tier={tier} />
             </div>
           )}
-          {/* Lesbarkeits-Scrim: dunkelt die untere Kante hinter dem Text ab */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 z-[5] h-[45%] bg-gradient-to-t from-espresso/85 via-espresso/35 to-transparent"
-          />
           {/* HTML-Overlays (echtes HTML, SEO & Screenreader) */}
           <div className="relative z-10 h-full">{children}</div>
         </div>
