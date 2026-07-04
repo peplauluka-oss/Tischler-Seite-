@@ -152,7 +152,7 @@ export default function IntroStage({ children }: { children: React.ReactNode }) 
       >
         {/* Vor dem 3D-Start (und im statischen Fallback) zeigt die Bühne
             eine CSS-Holzwand — der Canvas malt dann dasselbe Motiv darüber. */}
-        <div className="intro-sticky intro-wood-bg sticky top-0 h-screen overflow-hidden">
+        <div className="intro-sticky intro-wood-bg sticky top-0 h-svh overflow-hidden">
           {is3d && (
             <div className="absolute inset-0 z-0" aria-hidden="true">
               <IntroCanvas tier={tier} />

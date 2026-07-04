@@ -15,7 +15,6 @@ export default function KontaktSection({
   return (
     <section id="kontakt" className="relative z-10 bg-cream px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-6xl">
-        <p className="tech-label mb-6">Kontakt · Anfahrt</p>
         <h2 className="font-display text-3xl font-bold tracking-tight text-walnut sm:text-4xl">
           Sprechen wir über Ihr Projekt
         </h2>

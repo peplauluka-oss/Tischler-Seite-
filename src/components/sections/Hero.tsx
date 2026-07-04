@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { site } from "@/content/site";
 
 /**
  * Hero-Overlay der Schnitt-Interaktion (Server-Komponente, echtes HTML).
@@ -26,8 +25,8 @@ export default function Hero() {
           Meisterstück.
         </h1>
         <p className="mt-6 max-w-xl text-lg text-espresso/75 sm:text-xl">
-          {site.subline} Lernen, mieten oder bauen lassen — Sie entscheiden,
-          wie viel Holz Sie selbst in die Hand nehmen.
+          Kurse, Mietwerkstatt und Auftragsarbeiten in Berlin-Kaulsdorf — Sie
+          entscheiden, wie viel Holz Sie selbst in die Hand nehmen.
         </p>
         <div className="mt-9 flex flex-wrap gap-3">
           <Link

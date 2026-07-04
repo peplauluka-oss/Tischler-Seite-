@@ -13,7 +13,6 @@ export default function FaqSection() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd()) }}
       />
       <div className="mx-auto max-w-3xl">
-        <p className="tech-label mb-6">Häufige Fragen</p>
         <h2 className="font-display text-3xl font-bold tracking-tight text-walnut sm:text-4xl">
           Gut zu wissen
         </h2>

@@ -10,8 +10,7 @@ export default function CtaBand() {
     <section className="on-dark intro-dark-bg px-5 py-24 text-cream sm:px-8 sm:py-32">
       <div className="mx-auto max-w-4xl text-center">
         <Reveal>
-          <p className="tech-label justify-center">Ihre Entscheidung</p>
-          <h2 className="mt-6 font-display text-4xl font-bold leading-[1.08] tracking-tight sm:text-6xl">
+          <h2 className="font-display text-4xl font-bold leading-[1.08] tracking-tight sm:text-6xl">
             Bestellen Sie Ihr Maßstück —
             <br />
             <span className="text-oak-light">oder bauen Sie es selbst bei uns.</span>

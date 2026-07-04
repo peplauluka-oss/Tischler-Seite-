@@ -8,7 +8,6 @@ export default function AngeboteSection() {
     <section id="angebote" className="bg-cream px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <p className="tech-label mb-6">Angebot · 01–03</p>
           <h2 className="max-w-2xl font-display text-4xl font-bold leading-[1.06] tracking-tight text-walnut sm:text-5xl">
             Drei Wege zu Ihrem Werkstück
           </h2>

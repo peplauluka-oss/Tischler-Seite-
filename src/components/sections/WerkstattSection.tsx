@@ -10,7 +10,6 @@ export default function WerkstattSection() {
       <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[5fr_6fr] lg:gap-16">
         <div>
           <Reveal>
-            <p className="tech-label mb-6">Material · Werkstatt</p>
             <h2 className="font-display text-4xl font-bold leading-[1.06] tracking-tight text-walnut sm:text-5xl">
               Massives Holz,
               <br />
