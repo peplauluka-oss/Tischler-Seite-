@@ -1,8 +1,9 @@
 # Hobbytischlerei Berlin — Website-Relaunch
 
 Scroll-getriebene 3D-Experience für die Erlebniswerkstatt in Berlin-Kaulsdorf:
-**Ein Stück Holz durchläuft beim Scrollen die komplette Verwandlung — vom Baum
-bis zum fertigen Maßtisch** (6 Akte, siehe unten).
+**Ein massiver Eichenstamm bricht beim Scrollen/Swipen in sieben dicke
+Scheiben auf** — dunkler Editorial-Hero, danach warme One-Pager-Sektionen
+(Angebote → Werkstatt → Prozess → Referenzen → CTA → Kontakt → FAQ).
 
 ## Tech-Stack
 
@@ -51,34 +52,39 @@ das `unoptimized`-Attribut entfernen. Deutsche Alt-Texte nicht vergessen!
 nur serverseitig. Vor Livegang einen Mail-Dienst anbinden (z. B. Resend/Postmark)
 — die Stelle ist im Code markiert.
 
-## Die 3D-Scroll-Story (Architektur)
+## Die 3D-Swipe-Interaktion (Architektur, `src/components/intro/`)
 
-- `src/components/story/acts.ts` — **die eine Quelle der Wahrheit**: Akt-Fenster
-  (0–1) auf der 700vh-Strecke. DOM-Sektionen und 3D-Szene lesen dieselben Zahlen.
-- `StoryStage.tsx` — Bühne: Lenis, Master-ScrollTrigger (scrub → Fortschritt 0–1),
-  Ein-/Ausblenden der HTML-Sektionen, lazy-Loading des 3D-Bundles.
-- `HeroWood.tsx` — das Held-Objekt (Baum → Stamm → 6 Bretter → Tisch), alle
-  Zustände von Anfang an in einer Gruppe, gemorpht rein aus dem Scroll-Fortschritt.
-- `materials.ts` — prozedurale Shader (Rinde per fbm-Noise, Jahresringe radial,
-  Hobel-Lichtkante mit Roughness-Blend 0.9 → 0.35).
-- `CameraRig.tsx` — eine durchgehende Kamerafahrt (Keyframes + 180°-Orbit in Akt 5).
-- `Particles.tsx` — Sägespäne & Schleifstaub als InstancedMesh; Lebenszyklus
-  ausschließlich aus dem Scroll-Fortschritt → beliebig vor-/zurückscrollbar.
+- `IntroStage.tsx` — Bühne: 340vh-Track mit sticky 100vh-Screen, Lenis
+  (Swipe-Trägheit), Master-ScrollTrigger (scrub → Fortschritt 0–1) und den
+  drei HTML-Overlay-Phasen (Headline → CAD-Labels → Abbinder).
+- `LogScene.tsx` — die Szene: sieben unterschiedlich dicke Stamm-Scheiben,
+  Aufbruch-Choreografie mit Stagger von der Mitte nach außen, wandernde
+  Präzisions-Lichtlinie, 60°-Umrundung, Beruhigung zur Skulptur; dazu
+  Kamerafahrt (inkl. Portrait-Anpassung für Mobile) und Staub im Gegenlicht.
+- `materials.ts` — EIN prozeduraler Shader für Rinde (fbm-Borke mit
+  analytischen Relief-Normalen, wasserdichtes Displacement) und Stirnholz
+  (Jahresringe mit Noise-Wobble, glühender Kern beim Aufbrechen). uShift
+  hält Borke & Ringe über alle Scheiben hinweg kontinuierlich.
+- `progress.ts` — Fortschritts-Store + Geräte-Heuristik. Sämtliche Bewegung
+  wird pro Frame aus dem Scroll-Fortschritt berechnet → beliebig
+  vor-/zurückswipbar, kein eigener Timer.
 
 ### Fallback-Kaskade (automatisch, `progress.ts → detectDeviceTier()`)
 
-1. `prefers-reduced-motion` → keine Scroll-Kopplung, statische SVG-Keyvisuals
-   pro Sektion (`Keyvisual.tsx`), kein Canvas.
-2. Schwache Geräte (Kerne/RAM/DPR-Heuristik) → reduzierte Geometrie, keine
-   Partikel, DPR 1, keine Kontaktschatten.
+1. `prefers-reduced-motion` → keine Scroll-Kopplung: Der Track kollabiert
+   auf einen normalen Hero mit statischem SVG-Keyvisual, kein Canvas.
+2. Schwache Geräte (Kerne/RAM/DPR-Heuristik) → reduzierte Geometrie, kein
+   Staub, DPR 1, keine Kontaktschatten.
 3. Kein WebGL / kein JavaScript → wie (1). Der komplette Inhalt bleibt lesbar.
 
 ### Performance-Regeln
 
 - 3D lädt per `next/dynamic` — die Hero-Headline (LCP) ist reines HTML.
 - `frameloop="demand"`: gerendert wird nur bei Scroll-Änderung + sparsamer
-  Idle-Ticker für das Kamera-„Atmen“ in Akt 1.
-- DPR geclampt auf 1–1.75, Partikel als ein InstancedMesh, Schatten ≤ 512 px.
+  ~30fps-Idle-Ticker fürs Kamera-„Atmen“ am Seitenanfang.
+- DPR geclampt auf 1–1.75, Staub als ein InstancedMesh, Schatten ≤ 512 px.
+- Sektions-Animationen unterhalb des Intros: reines CSS + ein
+  IntersectionObserver (`Reveal.tsx`) — kein GSAP außerhalb der Bühne.
 
 ## SEO
 
