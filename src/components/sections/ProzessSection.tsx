@@ -20,7 +20,7 @@ export default function ProzessSection() {
           />
           <ol className="grid gap-10 md:grid-cols-4 md:gap-6">
             {prozessSchritte.map((s, i) => (
-              <Reveal key={s.nr} as="li" delay={i * 140} className="relative">
+              <Reveal key={s.nr} as="li" delay={i * 70} className="relative">
                 <span className="relative z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-precision/50 bg-cream font-mono text-sm text-precision">
                   {s.nr}
                 </span>

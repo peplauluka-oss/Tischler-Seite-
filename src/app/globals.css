@@ -108,6 +108,11 @@ body::before {
 /* --------------------------------------------------------------------------
    Buttons
 -------------------------------------------------------------------------- */
+/* Starke Custom-Easings (Standard-CSS-Kurven sind zu schwach) */
+:root {
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -117,13 +122,16 @@ body::before {
   font-weight: 500;
   font-size: 0.95rem;
   line-height: 1;
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s;
+  transition: transform 160ms var(--ease-out-strong), background 200ms ease, color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
 }
-.btn:hover {
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    transform: translateY(-2px);
+  }
 }
+/* Druck-Feedback: das Interface „hört zu“ */
 .btn:active {
-  transform: translateY(0);
+  transform: scale(0.97);
 }
 .btn-primary {
   background: var(--color-char);
@@ -154,8 +162,8 @@ body::before {
 -------------------------------------------------------------------------- */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.9s cubic-bezier(0.2, 0.65, 0.25, 1), transform 0.9s cubic-bezier(0.2, 0.65, 0.25, 1);
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease-out-strong), transform 0.7s var(--ease-out-strong);
   transition-delay: var(--reveal-delay, 0s);
 }
 .reveal.is-visible {
@@ -252,5 +260,30 @@ details.faq-item[open] .faq-chevron {
   transform: rotate(45deg);
 }
 .faq-chevron {
-  transition: transform 0.2s ease;
+  transition: transform 200ms var(--ease-out-strong);
+}
+/* Sanftes Auf-/Zuklappen per grid-rows-Trick: die native UA-Regel
+   (Kinder von <details> werden per display:none versteckt) wird hier
+   überschrieben, die Höhe kommt stattdessen von grid-template-rows –
+   das ist animierbar, display:none nicht. */
+details.faq-item > .faq-content {
+  display: grid !important;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 300ms var(--ease-out-strong);
+}
+details.faq-item[open] > .faq-content {
+  grid-template-rows: 1fr;
+}
+details.faq-item > .faq-content > p {
+  overflow: hidden;
+  min-height: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  details.faq-item > .faq-content {
+    transition: none;
+  }
+  .faq-chevron {
+    transition: none;
+  }
 }

@@ -45,7 +45,7 @@ export default function KursePage() {
             </dl>
             <Link
               href="/kontakt?anliegen=kurs"
-              className="mt-4 inline-block w-fit rounded-full bg-char px-4 py-2 text-sm font-medium text-cream transition hover:bg-walnut"
+              className="mt-4 inline-block w-fit rounded-full bg-char px-4 py-2 text-sm font-medium text-cream transition-[background-color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-walnut active:scale-[0.97] active:duration-150"
             >
               Termin anfragen
             </Link>

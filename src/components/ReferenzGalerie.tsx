@@ -25,7 +25,7 @@ export default function ReferenzGalerie() {
             type="button"
             onClick={() => setAktiv(f)}
             aria-pressed={aktiv === f}
-            className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
+            className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.96] ${
               aktiv === f
                 ? "bg-char text-cream"
                 : "bg-oak/20 text-char/70 hover:bg-oak/35"
@@ -37,17 +37,22 @@ export default function ReferenzGalerie() {
       </div>
       <ul className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3">
         {sichtbar.map((r) => (
-          <li key={r.titel + r.bild} className="overflow-hidden rounded-xl bg-oak/15">
+          <li
+            key={r.titel + r.bild}
+            className="group overflow-hidden rounded-xl bg-oak/15"
+          >
             {/* unoptimized nur für die SVG-Platzhalter – bei echten Fotos
                 (JPG/WebP) das Attribut entfernen, damit next/image optimiert */}
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${r.bild}`}
-              alt={r.alt}
-              width={320}
-              height={200}
-              unoptimized
-              className="h-24 w-full object-cover sm:h-28"
-            />
+            <div className="overflow-hidden">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${r.bild}`}
+                alt={r.alt}
+                width={320}
+                height={200}
+                unoptimized
+                className="h-24 w-full object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.06] sm:h-28"
+              />
+            </div>
             <div className="p-3">
               <p className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-precision">
                 {r.kategorie}

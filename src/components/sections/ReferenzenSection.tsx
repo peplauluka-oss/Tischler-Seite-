@@ -12,12 +12,12 @@ export default function ReferenzenSection() {
             Aus unserer Werkstatt
           </h2>
         </Reveal>
-        <Reveal delay={120}>
+        <Reveal delay={80}>
           <ReferenzGalerie />
         </Reveal>
         <div className="mt-14 grid gap-8 border-t border-walnut/15 pt-10 sm:grid-cols-2">
           {kundenstimmen.map((k, i) => (
-            <Reveal key={i} delay={i * 140}>
+            <Reveal key={i} delay={i * 70}>
               <blockquote className="text-lg italic leading-relaxed text-char/75">
                 „{k.zitat}“
                 <footer className="mt-3 font-mono text-[0.68rem] not-italic uppercase tracking-[0.18em] text-walnut/70">

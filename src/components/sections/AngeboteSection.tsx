@@ -14,10 +14,10 @@ export default function AngeboteSection() {
         </Reveal>
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {angebote.map((a, i) => (
-            <Reveal key={a.slug} delay={i * 120} as="article" className="group">
+            <Reveal key={a.slug} delay={i * 70} as="article" className="group">
               <Link
                 href={a.href}
-                className="flex h-full flex-col rounded-3xl border border-walnut/10 bg-cream-2/60 p-7 transition duration-300 hover:-translate-y-1.5 hover:border-walnut/25 hover:bg-cream-2 hover:shadow-[0_24px_60px_-30px_rgba(63,44,29,0.45)] sm:p-8"
+                className="flex h-full flex-col rounded-3xl border border-walnut/10 bg-cream-2/60 p-7 transition-[transform,border-color,background-color,box-shadow] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-1.5 hover:border-walnut/25 hover:bg-cream-2 hover:shadow-[0_24px_60px_-30px_rgba(63,44,29,0.45)] active:scale-[0.985] active:duration-150 sm:p-8"
               >
                 <span className="drawing-numeral">0{i + 1}</span>
                 <h3 className="mt-4 font-display text-2xl font-bold tracking-tight text-char">
@@ -31,7 +31,7 @@ export default function AngeboteSection() {
                   {a.cta}
                   <span
                     aria-hidden="true"
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-char/20 transition duration-300 group-hover:translate-x-1 group-hover:border-char group-hover:bg-char group-hover:text-cream"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-char/20 transition-[transform,border-color,background-color,color] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1 group-hover:border-char group-hover:bg-char group-hover:text-cream"
                   >
                     →
                   </span>
@@ -40,7 +40,7 @@ export default function AngeboteSection() {
             </Reveal>
           ))}
         </div>
-        <Reveal delay={200}>
+        <Reveal delay={120}>
           <p className="mt-8 text-sm text-char/55">
             Verschenken statt selber bauen?{" "}
             <Link

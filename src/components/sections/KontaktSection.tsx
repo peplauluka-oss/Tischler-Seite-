@@ -41,7 +41,7 @@ export default function KontaktSection({
               </p>
               <a
                 href={site.phoneHref}
-                className="mt-4 inline-block rounded-full bg-char px-5 py-2.5 text-sm font-medium text-cream transition hover:bg-walnut"
+                className="mt-4 inline-block rounded-full bg-char px-5 py-2.5 text-sm font-medium text-cream transition-[background-color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-walnut active:scale-[0.97] active:duration-150"
               >
                 Jetzt anrufen: {site.phone}
               </a>

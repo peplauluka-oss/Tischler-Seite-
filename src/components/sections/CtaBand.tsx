@@ -16,7 +16,7 @@ export default function CtaBand() {
             <span className="text-oak-light">oder bauen Sie es selbst bei uns.</span>
           </h2>
         </Reveal>
-        <Reveal delay={140}>
+        <Reveal delay={80}>
           <p className="mx-auto mt-6 max-w-xl text-lg text-cream/60">
             Beides beginnt mit einer kurzen Nachricht. Wir melden uns und
             besprechen, wie Ihr Werkstück entsteht.

@@ -16,7 +16,7 @@ export default function WerkstattSection() {
               ehrliches Handwerk
             </h2>
           </Reveal>
-          <Reveal delay={120}>
+          <Reveal delay={80}>
             <p className="mt-7 text-lg leading-relaxed text-char/75">
               Wir arbeiten mit Eiche, Esche und Nussbaum — Brett für Brett
               von Hand ausgesucht, besäumt und gehobelt. Keine Folie, kein
@@ -28,7 +28,7 @@ export default function WerkstattSection() {
               Verfügung. [PLATZHALTER: Maschinenliste mit Kunde abstimmen]
             </p>
           </Reveal>
-          <Reveal delay={200}>
+          <Reveal delay={120}>
             <ul className="mt-8 flex flex-wrap gap-2">
               {[
                 "Formatkreissäge",
@@ -54,7 +54,7 @@ export default function WerkstattSection() {
             ["[PLATZHALTER: Foto — Hände am Hobel]", "min-h-32"],
             ["[PLATZHALTER: Foto — Holzlager Eiche]", "min-h-32"],
           ].map(([label, cls], i) => (
-            <Reveal key={label} delay={i * 130} className={cls as string}>
+            <Reveal key={label} delay={i * 70} className={cls as string}>
               <div className="flex h-full items-end overflow-hidden rounded-3xl bg-gradient-to-br from-oak/45 via-oak/25 to-walnut/30 p-5">
                 <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-walnut/80">
                   {label}

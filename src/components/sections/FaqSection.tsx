@@ -19,13 +19,15 @@ export default function FaqSection() {
         <div className="mt-8 divide-y divide-walnut/15 border-y border-walnut/15">
           {faq.map((f) => (
             <details key={f.frage} className="faq-item group py-4">
-              <summary className="flex items-center justify-between gap-4 font-medium text-char">
+              <summary className="flex cursor-pointer items-center justify-between gap-4 font-medium text-char">
                 {f.frage}
                 <span className="faq-chevron text-precision" aria-hidden="true">
                   +
                 </span>
               </summary>
-              <p className="mt-3 pr-8 text-sm leading-relaxed text-char/70">{f.antwort}</p>
+              <div className="faq-content">
+                <p className="pr-8 pt-3 text-sm leading-relaxed text-char/70">{f.antwort}</p>
+              </div>
             </details>
           ))}
         </div>
