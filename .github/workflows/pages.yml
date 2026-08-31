@@ -2,7 +2,7 @@ name: Deploy GitHub Pages (Preview)
 
 on:
   push:
-    branches: [main, claude/hobbytischlerei-relaunch-b6dpp9]
+    branches: [main, claude/medusa-berlin-hero-ep3f7n, claude/hobbytischlerei-relaunch-b6dpp9]
   workflow_dispatch:
 
 permissions:
@@ -24,8 +24,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # Statischer Export kann kein Backend – die Formular-API gibt es nur
-      # auf Vercel. Das Formular fällt auf Pages automatisch auf E-Mail zurück.
+      # Der Medusa-Prototyp hat kein Backend; falls ein Branch API-Routen
+      # mitbringt, können sie im statischen Export nicht mitgebaut werden.
       - name: API-Routen für statischen Export entfernen
         run: rm -rf src/app/api
       - name: Build (statischer Export)
