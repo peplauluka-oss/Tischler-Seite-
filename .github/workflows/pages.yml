@@ -2,7 +2,11 @@ name: Deploy GitHub Pages (Preview)
 
 on:
   push:
-    branches: [main, claude/medusa-berlin-hero-ep3f7n, claude/hobbytischlerei-relaunch-b6dpp9]
+    # Veröffentlicht wird ausschließlich über den Standard-Branch: Die
+    # github-pages-Umgebung lässt Deployments nur von dort zu. Dessen
+    # Workflow checkt diesen Branch aus. Nach Änderungen hier also den
+    # Workflow "Deploy GitHub Pages" manuell starten (workflow_dispatch).
+    branches: [main, claude/hobbytischlerei-relaunch-b6dpp9]
   workflow_dispatch:
 
 permissions:

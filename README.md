@@ -32,6 +32,20 @@ unscharf. Stattdessen steht es als vertikale Kinofläche über die volle
 Bildhöhe, die Seiten füllt ein stark unscharfer Lichtabdruck desselben
 Bildes. Auf dem Telefon deckt der Clip den Screen ohnehin nativ formatfüllend.
 
+## Live-Demo
+
+**https://peplauluka-oss.github.io/Tischler-Seite-/**
+
+Veröffentlicht wird über den Pages-Workflow des **Standard-Branches**: Die
+`github-pages`-Umgebung erlaubt Deployments nur von dort, deshalb läuft der
+Workflow auf dem Standard-Branch, checkt aber diesen Branch aus (Eingabe
+`publish_ref`, Standardwert = dieser Branch).
+
+Nach Änderungen hier: Actions → *Deploy GitHub Pages (Preview)* → **Run
+workflow** (auf dem Standard-Branch). Sauberer wäre, in den Repo-Einstellungen
+unter *Environments → github-pages → Deployment branches* die Beschränkung
+aufzuheben — dann deployt dieser Branch direkt.
+
 ## Technik
 
 - **Next.js 15 (App Router) + TypeScript**, statisch vorgerendert
