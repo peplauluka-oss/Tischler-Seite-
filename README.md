@@ -1,118 +1,120 @@
-# Hobbytischlerei Berlin — Website-Relaunch
+# BLACK MEDUSA BERLIN — Website-Prototyp
 
-Scroll-getriebene 3D-Experience für die Erlebniswerkstatt in Berlin-Kaulsdorf:
-**Ein massiver Eichenstamm bricht beim Scrollen/Swipen in sieben dicke
-Scheiben auf** — dunkler Editorial-Hero, danach warme One-Pager-Sektionen
-(Angebote → Werkstatt → Prozess → Referenzen → CTA → Kontakt → FAQ).
+Erste Ausbaustufe der Website für den Club **Black Medusa** in Berlin.
+Schwerpunkt dieser Iteration: der scrollgesteuerte Hero und die
+Tischreservierung. Alles Weitere ist als tragfähiges Gerüst angelegt.
 
-## Tech-Stack
+Konversionsziel der Seite ist die **Tischreservierung**. Es gibt bewusst
+keinen Online-Ticketverkauf — der Eintritt läuft über die Abendkasse.
 
-- **Next.js 15 (App Router) + TypeScript** — SSR/SSG, aller Text ist echtes HTML (SEO)
-- **React Three Fiber + drei** — eine persistente 3D-Szene, vollständig prozedural
-  (Holz-Maserung & Jahresringe per Custom Shader, keine 3D-Modelle, keine Texturen)
-- **GSAP ScrollTrigger** (scrub) + **Lenis** Smooth Scrolling
-- **Tailwind CSS v4** (Design-Tokens in `src/app/globals.css`)
-- Kein CMS: Inhalte als typisierte Content-Objekte in `src/content/`
+## Die Hero-Choreografie
 
-## Starten
+Eine einzige GSAP-Timeline (`ScrollTrigger`, `scrub`) über ~380 vh Scrollweg,
+gerendert in einer `sticky` Bühne. Der Ablauf:
+
+| Fortschritt | Was passiert |
+| --- | --- |
+| 0–8 % | **Ankunft.** Clubclip formatfüllend, schmale Brandingleiste, sonst nichts. |
+| 8–26 % | **Logo → Navigation.** Die Wortmarke wandert nach links, verblasst; an derselben Kante erscheint die permanente Navigation. |
+| 20–56 % | **Das Video gibt nach.** Es verschwindet nicht, es tritt zurück: skaliert, wandert nach rechts, verliert Helligkeit; eine zweite Bildebene schiebt sich dahinter. |
+| 42–70 % | **Das Event tritt auf.** SINAN → Special Guest → Eckdaten, gestaffelt. |
+| 69–77 % | **Countdown.** Läuft unabhängig vom Scroll live weiter. |
+| 77–90 % | **Konversion.** Reservierungs-CTA, danach der nachrangige Event-CTA. |
+| 80–100 % | **Musterbruch.** Die Bildebene läuft ein Stück gegen die Scrollrichtung — kurzer Tiefenwechsel vor dem Übergang in die Eventsektion. |
+
+Feinjustierung: `CUE` in `src/components/hero/Hero.tsx`.
+
+### Warum das Video hochkant im Bild steht
+
+Das Originalmaterial ist ein Hochkantclip (720 × 1280). Formatfüllend auf
+Desktopbreite gezogen müsste es rund 3-fach hochskaliert werden — sichtbar
+unscharf. Stattdessen steht es als vertikale Kinofläche über die volle
+Bildhöhe, die Seiten füllt ein stark unscharfer Lichtabdruck desselben
+Bildes. Auf dem Telefon deckt der Clip den Screen ohnehin nativ formatfüllend.
+
+## Technik
+
+- **Next.js 15 (App Router) + TypeScript**, statisch vorgerendert
+- **Tailwind CSS v4** — Tokens in `src/app/globals.css` (`@theme`)
+- **GSAP + ScrollTrigger** für die scrollgebundene Hero-Choreografie
+- **Framer Motion** für UI-Bewegung: Overlay, Menü, Einblender
+- **Lenis** für weiches Scrollen, an den GSAP-Ticker gekoppelt
+- Kein CMS, keine Datenbank, kein Backend: Inhalte liegen typisiert in `src/content/`
 
 ```bash
 npm install
-npm run dev        # Entwicklung → http://localhost:3000
-npm run build      # Produktions-Build
-npm start          # Produktionsserver
+npm run dev      # http://localhost:3000
+npm run build    # Produktionsbuild
 ```
 
-## Inhalte austauschen (ohne Programmierkenntnisse)
+## Wo was liegt
 
-Alle Texte, Adressen und Angebote liegen als einfache Listen in `src/content/`:
-
-| Datei | Inhalt |
-| --- | --- |
-| `src/content/site.ts` | Name, Adresse, Telefon, E-Mail, Öffnungszeiten, Links |
-| `src/content/angebote.ts` | Die drei Angebots-Karten (Kurse / Miete / Auftrag) |
-| `src/content/kurse.ts` | Kursliste mit Dauer & Preis |
-| `src/content/prozess.ts` | Die 4 Prozess-Schritte |
-| `src/content/referenzen.ts` | Galerie-Projekte & Kundenstimmen |
-| `src/content/faq.ts` | FAQ (erzeugt automatisch das FAQPage-JSON-LD) |
-
-Alles, was noch vom Kunden kommen muss, ist im Code und auf der Seite als
-`[PLATZHALTER: …]` markiert — einfach danach suchen:
-
-```bash
-grep -rn "PLATZHALTER" src/
+```
+src/
+  app/                  Layout (Schriften, Metadaten), Seite, Tokens, Favicon
+  components/
+    hero/               Hero, HeroVideo, HeroBrandBar, EventReveal, Countdown
+    nav/SiteNav         permanente Navigation + mobiles Menü
+    reservation/        Overlay + Formular
+    sections/           Event, Artists, Experience, Gallery, Location
+    ui/                 Marke, Buttons, Sektionsrahmen, Einblender
+  content/
+    event.ts            ← Eventdaten (Termin, Line-up, Tischkategorien)
+    club.ts             ← Clubdaten, Navigation, Bildmaterial
+  lib/                  Countdown, Scroll, Reservierungs-Kontext, Asset-Pfade
+public/media/           Clubclip (mp4/webm), Poster, sechs Clubfotos (WebP)
+legacy/                 archiviertes Vorprojekt (Hobbytischlerei), nicht gebaut
 ```
 
-**Fotos:** Referenzbilder liegen in `public/referenzen/` (aktuell SVG-Platzhalter).
-Echte Fotos (JPG/WebP, ~1200 px breit) hineinlegen, Pfade in
-`src/content/referenzen.ts` anpassen und in `src/components/ReferenzGalerie.tsx`
-das `unoptimized`-Attribut entfernen. Deutsche Alt-Texte nicht vergessen!
+### Event austauschen
 
-**Kontaktformular:** `src/app/api/kontakt/route.ts` protokolliert Anfragen bisher
-nur serverseitig. Vor Livegang einen Mail-Dienst anbinden (z. B. Resend/Postmark)
-— die Stelle ist im Code markiert.
+Alles in `src/content/event.ts`. Für das nächste Event genügen in der Regel
+vier Zeilen: `headliner`, `startsAt`, `dateShort`, `dateLong`.
 
-## Die 3D-Swipe-Interaktion (Architektur, `src/components/intro/`)
+## Offene Punkte für den Betreiber
 
-- `IntroStage.tsx` — Bühne: 340vh-Track mit sticky 100vh-Screen, Lenis
-  (Swipe-Trägheit), Master-ScrollTrigger (scrub → Fortschritt 0–1) und den
-  drei HTML-Overlay-Phasen (Headline → CAD-Labels → Abbinder).
-- `LogScene.tsx` — die Szene: sieben unterschiedlich dicke Stamm-Scheiben,
-  Aufbruch-Choreografie mit Stagger von der Mitte nach außen, wandernde
-  Präzisions-Lichtlinie, 60°-Umrundung, Beruhigung zur Skulptur; dazu
-  Kamerafahrt (inkl. Portrait-Anpassung für Mobile) und Staub im Gegenlicht.
-- `materials.ts` — EIN prozeduraler Shader für Rinde (fbm-Borke mit
-  analytischen Relief-Normalen, wasserdichtes Displacement) und Stirnholz
-  (Jahresringe mit Noise-Wobble, glühender Kern beim Aufbrechen). uShift
-  hält Borke & Ringe über alle Scheiben hinweg kontinuierlich.
-- `progress.ts` — Fortschritts-Store + Geräte-Heuristik. Sämtliche Bewegung
-  wird pro Frame aus dem Scroll-Fortschritt berechnet → beliebig
-  vor-/zurückswipbar, kein eigener Timer.
+Was nicht bekannt war, wurde **nicht erfunden**, sondern als Platzhalter
+markiert — sichtbar im Interface durch ein kleines `TBC`:
 
-### Fallback-Kaskade (automatisch, `progress.ts → detectDeviceTier()`)
+- **Termin und Einlasszeit** des Events (aktuell Platzhalter 05.09.2026)
+- **Support-DJs / Resident** (im Line-up als TBA geführt)
+- **Adresse und Öffnungszeiten**
+- **Tischkategorien** (Standard / Lounge / Premium sind ein Vorschlag,
+  bewusst ohne Preise und Mindestverzehr)
+- **Impressum und Datenschutzerklärung** — Pflicht vor dem Livegang
+- **Logodatei**: Das Haus führt ein Medusa-Signet im Mäanderring. Bis das
+  Original vorliegt, steht in `src/components/ui/Brand.tsx` ein eigenes
+  Zeichen aus demselben Formenkanon.
 
-1. `prefers-reduced-motion` → keine Scroll-Kopplung: Der Track kollabiert
-   auf einen normalen Hero mit statischem SVG-Keyvisual, kein Canvas.
-2. Schwache Geräte (Kerne/RAM/DPR-Heuristik) → reduzierte Geometrie, kein
-   Staub, DPR 1, keine Kontaktschatten.
-3. Kein WebGL / kein JavaScript → wie (1). Der komplette Inhalt bleibt lesbar.
+### Rechtliches zum Material
 
-### Performance-Regeln
+- **Nutzungsrechte** an Clip und Fotos vom Rechteinhaber freigeben lassen
+  (der Clip trägt das Wasserzeichen `@blackmedusaberlin`).
+- **Persönlichkeitsrechte:** Im Clip sind Gäste und ein DJ erkennbar. Ohne
+  Einwilligung sollte er vor dem Livegang durch Material ohne erkennbare
+  Personen ersetzt werden — die Hero-Mechanik bleibt davon unberührt, es ist
+  ein Dateiaustausch in `public/media/`.
 
-- 3D lädt per `next/dynamic` — die Hero-Headline (LCP) ist reines HTML.
-- `frameloop="demand"`: gerendert wird nur bei Scroll-Änderung + sparsamer
-  ~30fps-Idle-Ticker fürs Kamera-„Atmen“ am Seitenanfang.
-- DPR geclampt auf 1–1.75, Staub als ein InstancedMesh, Schatten ≤ 512 px.
-- Sektions-Animationen unterhalb des Intros: reines CSS + ein
-  IntersectionObserver (`Reveal.tsx`) — kein GSAP außerhalb der Bühne.
+## Reservierung
 
-## SEO
+Frontend-Prototyp ohne Backend: Das Formular validiert, zeigt einen
+Sendezustand und einen Erfolgszustand — und sagt dort ausdrücklich, dass
+nichts übertragen wurde. Für den Echtbetrieb genügt ein Submit-Handler
+(`src/components/reservation/ReservationForm.tsx`), der die Daten an eine
+API-Route, ein Mailrelay oder eine WhatsApp-Business-Schnittstelle gibt.
 
-- Sprechende URLs: `/kurse`, `/werkstatt-mieten`, `/auftragsarbeiten`,
-  `/holzkurse-koepenick` (bestehende Köpenick-Seite bleibt erhalten!), `/kontakt`.
-- JSON-LD: `LocalBusiness` (Layout), `Course` (/kurse), `FAQPage` (FAQ-Sektion).
-  **Kein** `aggregateRating` ohne echte, belegbare Bewertungen.
-- `sitemap.xml` & `robots.txt` werden automatisch generiert
-  (`src/app/sitemap.ts`, `src/app/robots.ts`). Domain in `src/content/site.ts`.
+## Barrierefreiheit & Performance
 
-## Rechtliches
+- `prefers-reduced-motion`: keine Scroll-Choreografie, kein Autoplay — der
+  Hero wird direkt in seinem Endzustand als ruhige Komposition ausgeliefert
+- Der Clip lässt sich jederzeit anhalten und pausiert außerhalb des Sichtfelds
+- Tastaturbedienung inkl. Sprunglink, Fokusfalle im Overlay, Escape schließt
+- Formularfelder mit Labels, Fehlermeldungen als `role="alert"`
+- Bilder als WebP mit Blur-Platzhalter, Videos in WebM (2,6 MB) und MP4 (3,1 MB)
 
-`/impressum` und `/datenschutz` enthalten **strukturierte Platzhalter** —
-die verbindlichen Texte liefert der Kunde/Anwalt. Google Maps lädt erst nach
-aktiver Einwilligung (Zwei-Klick-Lösung, `ConsentMap.tsx`). Es laufen keine
-Tracking-Tools, daher ist kein Cookie-Banner nötig.
+## Deployment
 
-## Deployment (Vercel)
-
-1. Repository bei [vercel.com](https://vercel.com) importieren — Framework
-   „Next.js“ wird automatisch erkannt, keine Sonderkonfiguration nötig.
-2. Finale Domain in `src/content/site.ts` (`url`) eintragen → Canonicals,
-   OpenGraph und Sitemap stimmen dann automatisch.
-3. Nach Livegang: Search Console anmelden, `sitemap.xml` einreichen,
-   JSON-LD mit dem Rich-Results-Test prüfen.
-
-## Vor Livegang vom Kunden benötigt
-
-Logo (SVG) · 10–15 Werkstatt-/Referenzfotos · Kursliste mit Terminen & Preisen ·
-Mietkonditionen · Öffnungszeiten · Impressums-/Datenschutzangaben · echte
-Kundenstimmen · Google-Bewertungslink · Entscheidung Shop (verlinken/integrieren).
+Läuft auf Vercel out of the box. Für den GitHub-Pages-Export
+(`.github/workflows/pages.yml`) muss dieser Branch in die `branches`-Liste
+des Workflows aufgenommen werden; der Export setzt `GITHUB_PAGES=true` und
+`NEXT_PUBLIC_BASE_PATH`.

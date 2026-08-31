@@ -1,28 +1,25 @@
-import type { Metadata } from "next";
-import {
-  Bricolage_Grotesque,
-  Instrument_Sans,
-  IBM_Plex_Mono,
-} from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { IBM_Plex_Mono, Manrope, Oswald } from "next/font/google";
 import "./globals.css";
-import { site } from "@/content/site";
-import { localBusinessJsonLd } from "@/lib/jsonld";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 
-/* Display-Schrift: modern & charaktervoll, nicht kalt */
-const bricolage = Bricolage_Grotesque({
+/* Display: Bebas Neue Pro ist lizenzpflichtig — Oswald ist der im Briefing
+   vorgesehene Ersatz (condensed, versal, Plakat-Charakter). */
+const oswald = Oswald({
   subsets: ["latin"],
-  variable: "--font-bricolage",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-oswald",
   display: "swap",
 });
-/* Fließtext */
-const instrument = Instrument_Sans({
+
+/* UI & Fließtext */
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-instrument",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-manrope",
   display: "swap",
 });
-/* Technik-Labels & Bemaßungen (nur CAD-Layer und Zahlen) */
+
+/* Technische Mikrotypografie: Countdown, Daten, Nummerierungen */
 const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
@@ -31,43 +28,48 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    default: "Tischlerkurse & Mietwerkstatt in Berlin | Hobbytischlerei Kaulsdorf",
-    template: "%s | Hobbytischlerei Berlin",
-  },
+  title: "BLACK MEDUSA BERLIN — Club & Cocktailbar",
   description:
-    "Holzbearbeitung lernen, Werkstatt mieten oder Möbel nach Maß bauen lassen: Die Hobbytischlerei in Berlin-Kaulsdorf ist Ihre Erlebniswerkstatt für Holz.",
+    "Black Medusa Berlin: Balkan, Türkçe Pop und Club-Sound in Berlin. Nächstes Event mit Special Guest Sinan — Tisch direkt online reservieren.",
   openGraph: {
-    type: "website",
+    title: "BLACK MEDUSA BERLIN",
+    description:
+      "Nächstes Event: Special Guest SINAN. Tisch reservieren — Tickets an der Abendkasse.",
     locale: "de_DE",
-    siteName: site.name,
-    title: "Tischlerkurse & Mietwerkstatt in Berlin | Hobbytischlerei Kaulsdorf",
-    description:
-      "Kurse, Mietwerkstatt und Auftragsarbeiten – vom Baum zum Meisterstück in Berlin-Kaulsdorf.",
+    type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Tischlerkurse & Mietwerkstatt in Berlin | Hobbytischlerei Kaulsdorf",
-    description:
-      "Kurse, Mietwerkstatt und Auftragsarbeiten – vom Baum zum Meisterstück in Berlin-Kaulsdorf.",
-  },
-  alternates: { canonical: "/" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#050406",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="de" className={`${bricolage.variable} ${instrument.variable} ${plexMono.variable}`}>
+    <html
+      lang="de"
+      className={`${oswald.variable} ${manrope.variable} ${plexMono.variable}`}
+    >
       <body>
+        {/* Läuft vor dem ersten Paint: Nur wenn Bewegung erwünscht ist,
+            starten die Hero-Elemente unsichtbar — sonst bleibt die Seite
+            auch ohne JavaScript vollständig lesbar. */}
         <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd()) }}
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('motion-on')}}catch(e){}",
+          }}
         />
-        <Header />
+        <a
+          href="#events"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] focus:bg-ember focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white"
+        >
+          Zum Inhalt springen
+        </a>
         {children}
-        <Footer />
       </body>
     </html>
   );

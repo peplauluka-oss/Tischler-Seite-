@@ -1,58 +1,41 @@
-import Link from "next/link";
-import { site } from "@/content/site";
+import { Wordmark } from "@/components/ui/Brand";
+import { club, navItems } from "@/content/club";
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 bg-char text-cream">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
-        <div>
-          <p className="font-display text-lg font-bold">Hobbytischlerei Berlin</p>
-          <address className="mt-3 text-sm not-italic leading-relaxed text-cream/70">
-            {site.address.street}
-            <br />
-            {site.address.zip} {site.address.city}
-            <br />
-            <a href={site.phoneHref} className="hover:text-cream">
-              {site.phone}
-            </a>
-            <br />
-            <a href={`mailto:${site.email}`} className="hover:text-cream">
-              {site.email}
-            </a>
-          </address>
-        </div>
-        <nav aria-label="Angebote" className="text-sm">
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-oak">
-            Angebote
-          </p>
-          <ul className="mt-3 space-y-2 text-cream/70">
-            <li><Link href="/kurse" className="hover:text-cream">Kurse &amp; Workshops</Link></li>
-            <li><Link href="/holzkurse-koepenick" className="hover:text-cream">Holzkurse Köpenick</Link></li>
-            <li><Link href="/werkstatt-mieten" className="hover:text-cream">Werkstatt mieten</Link></li>
-            <li><Link href="/auftragsarbeiten" className="hover:text-cream">Auftragsarbeiten</Link></li>
-            <li><Link href="/kontakt?anliegen=gutschein" className="hover:text-cream">Gutschein verschenken</Link></li>
-            {site.shopUrl ? (
-              <li><a href={site.shopUrl} className="hover:text-cream">Onlineshop</a></li>
-            ) : (
-              <li className="text-cream/40">Onlineshop [PLATZHALTER: Link]</li>
-            )}
-          </ul>
-        </nav>
-        <nav aria-label="Rechtliches" className="text-sm">
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-oak">
-            Rechtliches
-          </p>
-          <ul className="mt-3 space-y-2 text-cream/70">
-            <li><Link href="/impressum" className="hover:text-cream">Impressum</Link></li>
-            <li><Link href="/datenschutz" className="hover:text-cream">Datenschutz</Link></li>
-            <li className="text-cream/40">AGB [PLATZHALTER: vom Kunden]</li>
+    <footer className="border-t border-ivory/12 px-5 py-16 md:px-[7vw] md:py-20">
+      <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
+        <Wordmark markSize={40} className="[&_.display]:text-lg" />
+
+        <nav aria-label="Fußzeile">
+          <ul className="grid grid-cols-2 gap-x-12 gap-y-3 sm:grid-cols-3 md:flex md:gap-10">
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <a
+                  href={`#${item.id}`}
+                  className="text-[0.7rem] font-semibold tracking-[0.24em] text-mute transition-colors hover:text-ivory"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
-      <div className="border-t border-cream/10">
-        <p className="mx-auto max-w-6xl px-4 py-5 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-cream/40 sm:px-6">
-          © {new Date().getFullYear()} Hobbytischlerei Berlin · Alt-Kaulsdorf 52 · Handwerk seit [PLATZHALTER: Gründungsjahr]
+
+      <div className="mt-14 flex flex-col gap-4 border-t border-ivory/10 pt-6 md:flex-row md:items-center md:justify-between">
+        <p className="font-mono text-[0.5625rem] leading-relaxed tracking-[0.2em] text-mute">
+          © {new Date().getFullYear()} {club.nameFull} · {club.city} — IMPRESSUM
+          UND DATENSCHUTZ FOLGEN (PFLICHTANGABEN VOR LIVEGANG)
         </p>
+        <a
+          href={club.instagramUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="font-mono text-[0.5625rem] tracking-[0.2em] text-mute transition-colors hover:text-ivory"
+        >
+          INSTAGRAM · @{club.instagram.toUpperCase()}
+        </a>
       </div>
     </footer>
   );

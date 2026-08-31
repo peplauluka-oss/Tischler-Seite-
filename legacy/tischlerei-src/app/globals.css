@@ -1,0 +1,289 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design-Tokens „Hobbytischlerei Berlin“ — v2 (Editorial Redesign)
+
+   Dunkler, warmer Hero (Espresso) mit Creme-Typografie, danach helle,
+   warme Editorial-Sektionen. --precision bleibt die einzige futuristische
+   Akzentfarbe (Laser-Linie, CAD-Labels, Fokus-Ringe) — sparsam einsetzen.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Holz & Wärme */
+  --color-espresso: #16100a; /* dunkles Röstholz – Hero & CTA-Band          */
+  --color-espresso-2: #221910; /* erhöhte Flächen auf dunklem Grund         */
+  --color-cream: #f2e9d8; /* Schnittfläche – heller Seitenhintergrund       */
+  --color-cream-2: #e9ddc6; /* Karten auf hellem Grund                      */
+  --color-oak: #c49a6c; /* Eiche – Akzente, Linien                          */
+  --color-oak-light: #ddb98d; /* helle Eiche auf dunklem Grund              */
+  --color-walnut: #5f4432; /* Nussbaum – Headlines auf hell                 */
+  --color-char: #221b12; /* Text auf hellem Grund                           */
+  /* Technik-Schicht */
+  --color-precision: #1f7a72; /* auf hellem Grund                           */
+  --color-precision-bright: #3fd9c6; /* Glow auf dunklem Grund              */
+
+  --font-display: var(--font-bricolage), "Bricolage Grotesque", system-ui, sans-serif;
+  --font-sans: var(--font-instrument), "Instrument Sans", system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-char);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Feines Filmkorn über der ganzen Seite – nimmt digitalen Flächen die
+   Sterilität. Reines CSS (SVG-Turbulence als Data-URI), kein Asset. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Sichtbarer Keyboard-Fokus (WCAG) */
+:focus-visible {
+  outline: 2px solid var(--color-precision);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.on-dark :focus-visible {
+  outline-color: var(--color-precision-bright);
+}
+
+::selection {
+  background: var(--color-oak);
+  color: var(--color-espresso);
+}
+
+/* --------------------------------------------------------------------------
+   Werkstattzeichnungs-Motiv: kleine Mono-Kicker mit Messlinie
+-------------------------------------------------------------------------- */
+.tech-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-precision);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.tech-label::before {
+  content: "";
+  display: inline-block;
+  width: 2.5rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.on-dark .tech-label {
+  color: var(--color-precision-bright);
+}
+
+/* Große Ziffern im Zeichnungs-Stil */
+.drawing-numeral {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--color-oak);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+-------------------------------------------------------------------------- */
+/* Starke Custom-Easings (Standard-CSS-Kurven sind zu schwach) */
+:root {
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.8rem 1.6rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1;
+  transition: transform 160ms var(--ease-out-strong), background 200ms ease, color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+}
+/* Druck-Feedback: das Interface „hört zu“ */
+.btn:active {
+  transform: scale(0.97);
+}
+.btn-primary {
+  background: var(--color-char);
+  color: var(--color-cream);
+}
+.btn-primary:hover {
+  background: var(--color-walnut);
+  box-shadow: 0 10px 30px -12px rgba(34, 27, 18, 0.55);
+}
+.btn-outline {
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+}
+.btn-outline:hover {
+  border-color: currentColor;
+}
+.on-dark .btn-primary {
+  background: var(--color-cream);
+  color: var(--color-espresso);
+}
+.on-dark .btn-primary:hover {
+  background: var(--color-oak-light);
+  box-shadow: 0 12px 34px -12px rgba(221, 185, 141, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   Scroll-Reveal (IntersectionObserver setzt .is-visible)
+   – bei prefers-reduced-motion: alles sofort sichtbar, keine Bewegung
+-------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease-out-strong), transform 0.7s var(--ease-out-strong);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Intro (3D-Bühne)
+-------------------------------------------------------------------------- */
+.intro-dark-bg {
+  background:
+    radial-gradient(120% 90% at 70% 12%, #2a1e12 0%, #1c1309 42%, #120c06 100%);
+}
+
+/* CSS-Holzwand: sichtbar vor dem 3D-Start und im statischen Fallback —
+   der Canvas malt anschließend dasselbe Motiv (Eichenbohlen) darüber. */
+.intro-wood-bg {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(60, 40, 24, 0.16) 0 2px,
+      transparent 2px 9.5rem
+    ),
+    linear-gradient(160deg, #cda374 0%, #c49a6c 38%, #b28a5e 72%, #a37d54 100%);
+}
+
+/* Statischer Fallback: nur zeigen, wenn KEIN 3D läuft */
+.story-3d .intro-fallback {
+  display: none;
+}
+/* Ohne 3D bleibt das Intro ein normaler, einbildschirmiger Hero */
+.story-static .intro-track {
+  height: auto !important;
+}
+.story-static .intro-sticky {
+  position: relative !important;
+  height: auto !important;
+  min-height: 100svh;
+}
+.story-static [data-intro-phase="b"],
+.story-static [data-intro-phase="c"] {
+  display: none;
+}
+
+/* Scroll-Hinweis */
+@keyframes scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.65; }
+  50% { transform: translateY(7px); opacity: 1; }
+}
+.scroll-hint-dot {
+  animation: scroll-hint 2.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint-dot { animation: none; }
+}
+
+/* Preloader: feine Linie „sägt“ durch den Schriftzug (rein CSS) */
+@keyframes saw-line {
+  from { transform: translateX(-101%); }
+  to   { transform: translateX(101%); }
+}
+@keyframes preloader-out {
+  to { opacity: 0; visibility: hidden; }
+}
+.preloader {
+  animation: preloader-out 0.35s ease 0.6s forwards;
+  /* heller Start → weicher Übergang auf die Eichenwand */
+  background: var(--color-cream);
+}
+.preloader-line {
+  animation: saw-line 0.55s cubic-bezier(0.65, 0, 0.35, 1) 0.08s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .preloader { display: none; }
+}
+
+/* FAQ-Accordion */
+details.faq-item > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details.faq-item > summary::-webkit-details-marker {
+  display: none;
+}
+details.faq-item[open] .faq-chevron {
+  transform: rotate(45deg);
+}
+.faq-chevron {
+  transition: transform 200ms var(--ease-out-strong);
+}
+/* Sanftes Auf-/Zuklappen per grid-rows-Trick: die native UA-Regel
+   (Kinder von <details> werden per display:none versteckt) wird hier
+   überschrieben, die Höhe kommt stattdessen von grid-template-rows –
+   das ist animierbar, display:none nicht. */
+details.faq-item > .faq-content {
+  display: grid !important;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 300ms var(--ease-out-strong);
+}
+details.faq-item[open] > .faq-content {
+  grid-template-rows: 1fr;
+}
+details.faq-item > .faq-content > p {
+  overflow: hidden;
+  min-height: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  details.faq-item > .faq-content {
+    transition: none;
+  }
+  .faq-chevron {
+    transition: none;
+  }
+}
