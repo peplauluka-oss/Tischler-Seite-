@@ -4,6 +4,11 @@ on:
   push:
     branches: [main, claude/hobbytischlerei-relaunch-b6dpp9]
   workflow_dispatch:
+    inputs:
+      publish_ref:
+        description: "Branch, dessen Stand veröffentlicht werden soll"
+        required: false
+        default: claude/medusa-berlin-hero-ep3f7n
 
 permissions:
   contents: read
@@ -18,7 +23,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Die github-pages-Umgebung lässt Deployments nur vom Standard-Branch
+      # zu. Der Workflow läuft deshalb hier, veröffentlicht aber den Stand
+      # des unten genannten Branches (derzeit der Medusa-Prototyp).
+      # Zum Zurückschalten auf diesen Branch: die beiden with-Zeilen löschen.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.publish_ref || 'claude/medusa-berlin-hero-ep3f7n' }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
