@@ -1,92 +1,89 @@
 /* ---------------------------------------------------------------------------
-   Event-Daten — die einzige Quelle für alles, was im Hero, in den Event-
-   Sektionen und im Reservierungs-Overlay über die kommende Nacht steht.
+   AKTUELLES EVENT — das einzige Content-Objekt, das der Betreiber pflegt.
 
-   WICHTIG für den Betreiber / die nächste Iteration:
-   Alles, was mit `status: "tbc"` markiert ist, ist ein **Platzhalter** und
-   noch nicht bestätigt. Die Oberfläche zeigt solche Werte mit einem kleinen
-   „TBC“-Marker an — es wird bewusst nichts erfunden.
+   Gedachter Ablauf (bewusst ohne Entwickler):
+     1. Black Medusa baut das Event-Creative für Instagram.
+     2. Dasselbe Creative wird hier hinterlegt (später über ein CMS).
+     3. Die Website zeigt es als Kampagnenbild — das Layout bleibt gleich.
+
+   Das Artwork ist das Hauptvisual. Die Felder darunter sind die strukturierte
+   Fassung derselben Information: für Screenreader, Suchmaschinen, Countdown
+   und Reservierung. Nichts davon wird aus dem Bild gelesen.
+
+   `status: "tbc"` heißt: noch nicht bestätigt — die Oberfläche kennzeichnet
+   solche Werte sichtbar, statt etwas zu erfinden.
 --------------------------------------------------------------------------- */
 
 export type FactStatus = "confirmed" | "tbc";
 
-export type Fact = {
-  label: string;
-  value: string;
-  status: FactStatus;
+export type EventArtwork = {
+  /** Pfad unter /public. `null` → die Bühne zeigt den Platzhalter. */
+  src: string | null;
+  /** Beschreibung des Bildinhalts für Screenreader — Pflicht, sobald gesetzt. */
+  alt: string;
+  /** Seitenverhältnis des Creatives. Instagram-Post: 4/5, Story: 9/16. */
+  ratio: "4/5" | "1/1" | "9/16";
 };
 
 export const event = {
-  /** Headliner — als Display-Typo im Hero */
+  /** Sichtbar schalten, wenn kein Event ansteht → Bühne zeigt „kein Termin“. */
+  active: true,
+
   headliner: "SINAN",
-  /** Rolle des Headliners (bestätigt) */
   role: "SPECIAL GUEST",
+  title: "SINAN LIVE",
 
   /**
-   * PLATZHALTER — Datum/Uhrzeit sind noch nicht bestätigt.
-   * Zum Ändern reicht diese eine Zeile (ISO inkl. Zeitzonen-Offset Berlin).
-   * Der Countdown, das Datum im Hero und die Reservierung ziehen daraus.
+   * Das Kampagnenbild. Sobald hier das Instagram-Creative liegt, übernimmt
+   * es die gesamte visuelle Arbeit — die Bühne drumherum bleibt unverändert.
    */
+  artwork: {
+    src: null,
+    alt: "",
+    ratio: "4/5",
+  } as EventArtwork,
+
+  /** PLATZHALTER — Termin bestätigen lassen. Countdown und Reservierung
+      ziehen aus dieser einen Zeile (ISO mit Zeitzonen-Offset Berlin). */
   startsAt: "2026-09-05T23:00:00+02:00",
   dateStatus: "tbc" as FactStatus,
 
-  /** Anzeige-Strings bewusst als Literale: keine Locale-/Zeitzonen-Differenz
-      zwischen Server- und Client-Rendering (Hydration bleibt stabil). */
-  dateShort: "SA · 05.09.2026",
+  /* Anzeige-Strings als Literale: keine Locale-Differenz zwischen Server-
+     und Client-Rendering, damit die Hydration stabil bleibt. */
+  weekday: "SAMSTAG",
+  dayMonth: "05.09.",
+  year: "2026",
+  dateShort: "SA 05.09.",
   dateLong: "Samstag, 5. September 2026",
   doors: "22:00",
   start: "23:00",
 
-  /** Ende für den Countdown-Zustand „läuft gerade“ → danach „Event beendet“ */
+  /** Nach so vielen Stunden gilt das Event als beendet (Countdown-Zustand). */
   endsAfterHours: 6,
 
-  /** Musikrichtung — Ausrichtung des Hauses, keine Setlist-Behauptung */
-  music: "BALKAN · TÜRKÇE POP · CLUB",
+  /** Musikalische Ausrichtung — knapp, zur Wiedererkennung. */
+  music: "BALKAN · TÜRKÇE · ARABIC",
 
-  /** Line-up. Support steht pro Nacht unterschiedlich fest → TBC statt Fantasie. */
-  lineup: [
-    { name: "SINAN", role: "SPECIAL GUEST", status: "confirmed" as FactStatus },
-    { name: "SUPPORT", role: "DJ · WIRD ERGÄNZT", status: "tbc" as FactStatus },
-  ],
-
-  /** Tickets: bewusst kein Online-Verkauf — Einlass über die Abendkasse. */
-  admission: "TICKETS NUR AN DER ABENDKASSE",
+  /** Kein Onlineverkauf: Einlass läuft über die Abendkasse. */
+  admission: "Eintritt an der Abendkasse",
 } as const;
 
-/** Kurze Fakten-Zeile im Hero — knapp halten, nicht überladen. */
-export const heroFacts: Fact[] = [
-  { label: "DATUM", value: event.dateShort, status: event.dateStatus },
-  { label: "EINLASS", value: `${event.doors} UHR`, status: "tbc" },
-  { label: "CLUB", value: "BLACK MEDUSA · BERLIN", status: "confirmed" },
-  { label: "SOUND", value: event.music, status: "confirmed" },
-];
+/* ---------------------------------------------------------------------------
+   RESERVIERUNG — Konfiguration des schrittweisen Ablaufs.
+   Nur was wirklich gebraucht wird: Gruppengröße, Termin, Kontaktweg, Name.
+--------------------------------------------------------------------------- */
 
-/**
- * Tisch-Kategorien — PLATZHALTER-Struktur für den Prototyp.
- * Keine Preise, keine Mindestverzehr-Angaben: beides muss vom Betreiber
- * kommen. Kategorien lassen sich hier eintauschen, ohne UI zu ändern.
- */
-export const tableCategories = [
-  {
-    id: "standard",
-    name: "STANDARD",
-    hint: "Tisch im Barbereich",
-    accent: false,
-  },
-  {
-    id: "lounge",
-    name: "LOUNGE",
-    hint: "Sitzbox mit Sofa",
-    accent: false,
-  },
-  {
-    id: "premium",
-    name: "PREMIUM",
-    hint: "Box mit bestem Blick auf die Fläche",
-    accent: true,
-  },
+export const groupSizes = [
+  { id: "1-5", label: "1 – 5", hint: "Tisch" },
+  { id: "6-10", label: "6 – 10", hint: "Große Box" },
+  { id: "11-20", label: "11 – 20", hint: "Mehrere Boxen" },
+  { id: "20+", label: "20 +", hint: "Wir melden uns persönlich" },
 ] as const;
 
-export type TableCategoryId = (typeof tableCategories)[number]["id"];
+export const contactChannels = [
+  { id: "whatsapp", label: "WhatsApp", hint: "Antwort meist am selben Tag" },
+  { id: "phone", label: "Anruf", hint: "Wir rufen zurück" },
+] as const;
 
-export const guestRange = { min: 2, max: 12, default: 4 } as const;
+export type GroupSizeId = (typeof groupSizes)[number]["id"];
+export type ContactChannelId = (typeof contactChannels)[number]["id"];

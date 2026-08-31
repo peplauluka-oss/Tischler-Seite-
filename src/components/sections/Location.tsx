@@ -1,17 +1,14 @@
 import Image from "next/image";
-import Section from "@/components/ui/Section";
 import Reveal from "@/components/ui/Reveal";
-import { ReserveButton } from "@/components/ui/Cta";
 import { club, images } from "@/content/club";
 import { asset } from "@/lib/asset";
 
-/** Platzhalter mit klarer Kennzeichnung — Adresse und Öffnungszeiten liegen
-    im Material nicht vor und werden bewusst nicht erfunden. */
-function Placeholder({ children }: { children: React.ReactNode }) {
+/** Unbestätigte Angabe — sichtbar gekennzeichnet statt erfunden. */
+function Pending({ children }: { children: React.ReactNode }) {
   return (
     <span className="text-mute">
       {children}
-      <span className="ml-2 font-mono text-[0.5625rem] tracking-[0.18em] text-ember-soft/80">
+      <span className="ml-2 text-[0.5625rem] font-bold tracking-[0.16em] text-ember-soft/85">
         TBC
       </span>
     </span>
@@ -20,20 +17,15 @@ function Placeholder({ children }: { children: React.ReactNode }) {
 
 export default function Location() {
   return (
-    <Section
-      id="location"
-      index="05"
-      title="LOCATION"
-      lead="Cocktailbar und Club unter einem Dach — in Berlin."
-    >
-      <div className="grid gap-10 md:grid-cols-2 md:gap-16">
-        <Reveal>
-          <figure className="relative aspect-[4/5] overflow-hidden">
+    <section id="location" className="scroll-mt-16 py-24 md:py-32">
+      <div className="grid gap-10 md:grid-cols-12 md:items-end md:gap-0">
+        <Reveal className="md:col-span-7 md:col-start-1">
+          <figure className="relative aspect-[4/3] w-full md:aspect-[3/2]">
             <Image
               src={asset(images.eingang.src)}
               alt={images.eingang.alt}
               fill
-              sizes="(max-width: 768px) 100vw, 45vw"
+              sizes="(max-width: 768px) 100vw, 58vw"
               loading="lazy"
               className="graded-night object-cover"
               placeholder="blur"
@@ -41,31 +33,42 @@ export default function Location() {
             />
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void via-void/20 to-transparent"
+              className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent"
             />
-            <figcaption className="absolute bottom-4 left-4 font-mono text-[0.5625rem] tracking-[0.24em] text-ivory/80">
-              {images.eingang.caption}
-            </figcaption>
           </figure>
         </Reveal>
 
-        <Reveal delay={0.08}>
-          <dl className="border-t border-ivory/12">
-            <div className="border-b border-ivory/10 py-5">
-              <dt className="eyebrow text-[0.5625rem]">ADRESSE</dt>
-              <dd className="mt-2 text-sm font-semibold tracking-[0.06em]">
-                <Placeholder>{club.address}</Placeholder>
+        <Reveal delay={0.08} className="px-5 md:col-span-5 md:col-start-8 md:px-0 md:pl-12">
+          <span className="label">Location</span>
+          {/* Ein einziges langes Wort: Trennung erlauben und die Größe an die
+              Spalte binden, sonst schiebt es die Seite seitlich auf. */}
+          <p
+            className="display mt-4 hyphens-auto break-words text-ivory"
+            style={{ fontSize: "clamp(2.25rem, 4.6vw, 3.75rem)" }}
+          >
+            {club.district}
+          </p>
+          <p className="mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-mute">
+            Cocktailbar und Club unter einem Dach — im Nordosten Berlins,
+            nicht in der Innenstadt. Genau das ist der Punkt.
+          </p>
+
+          <dl className="mt-9 space-y-4 border-t border-ivory/12 pt-6 text-sm">
+            <div>
+              <dt className="label text-[0.625rem]">Adresse</dt>
+              <dd className="mt-1.5">
+                <Pending>{club.address}</Pending>
               </dd>
             </div>
-            <div className="border-b border-ivory/10 py-5">
-              <dt className="eyebrow text-[0.5625rem]">ÖFFNUNGSZEITEN</dt>
-              <dd className="mt-2 text-sm font-semibold tracking-[0.06em]">
-                <Placeholder>{club.hours}</Placeholder>
+            <div>
+              <dt className="label text-[0.625rem]">Öffnungszeiten</dt>
+              <dd className="mt-1.5">
+                <Pending>{club.hours}</Pending>
               </dd>
             </div>
-            <div className="border-b border-ivory/10 py-5">
-              <dt className="eyebrow text-[0.5625rem]">INSTAGRAM</dt>
-              <dd className="mt-2 text-sm font-semibold tracking-[0.06em]">
+            <div>
+              <dt className="label text-[0.625rem]">Instagram</dt>
+              <dd className="mt-1.5">
                 <a
                   href={club.instagramUrl}
                   target="_blank"
@@ -76,20 +79,9 @@ export default function Location() {
                 </a>
               </dd>
             </div>
-            <div className="py-5">
-              <dt className="eyebrow text-[0.5625rem]">TISCHRESERVIERUNG</dt>
-              <dd className="mt-4">
-                <ReserveButton className="w-full sm:w-auto" />
-              </dd>
-            </div>
           </dl>
-
-          <p className="mt-8 max-w-sm font-mono text-[0.625rem] leading-relaxed tracking-[0.16em] text-mute">
-            PLATZHALTER — HIER FOLGEN ANFAHRT, KARTE UND ÖFFNUNGSZEITEN, SOBALD
-            DIE ANGABEN VOM BETREIBER VORLIEGEN.
-          </p>
         </Reveal>
       </div>
-    </Section>
+    </section>
   );
 }

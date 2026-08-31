@@ -23,12 +23,10 @@ const CUE = {
   depthIn: 0.3,
   eventLabel: 0.42,
   eventTitle: 0.45,
-  eventText: 0.56,
-  eventFacts: 0.6,
-  countdown: 0.69,
-  cta: 0.77,
-  note: 0.84,
-  interrupt: 0.8,
+  eventFacts: 0.58,
+  countdown: 0.68,
+  cta: 0.78,
+  interrupt: 0.82,
 };
 
 export default function Hero() {
@@ -135,7 +133,7 @@ export default function Hero() {
           .fromTo(
             veil,
             { opacity: 0 },
-            { opacity: isDesktop ? 0.5 : 0.8, duration: 0.3 },
+            { opacity: isDesktop ? 0.5 : 0.86, duration: 0.3 },
             CUE.videoRecedes + 0.04,
           )
           .fromTo(
@@ -189,11 +187,9 @@ export default function Hero() {
           CUE.eventTitle,
         );
 
-        reveal("[data-reveal='intro']", CUE.eventText, { y: 18 });
-        reveal("[data-fact]", CUE.eventFacts, { y: 16 }, 0.07);
+        reveal("[data-reveal='meta']", CUE.eventFacts, { y: 16 }, 0.08);
         reveal("[data-reveal='countdown']", CUE.countdown, { y: 16 });
         reveal("[data-reveal='cta']", CUE.cta, { y: 20 }, 0.1);
-        reveal("[data-reveal='note']", CUE.note, { y: 10 }, 0.06);
 
         /* Parallaxe: Inhalt läuft minimal langsamer als das Bild. */
         tl.fromTo(
@@ -290,7 +286,7 @@ export default function Hero() {
           className="pointer-events-none absolute inset-x-0 bottom-6 z-40 flex flex-col items-center gap-3"
           aria-hidden="true"
         >
-          <span className="eyebrow text-[0.5625rem]">SCROLLEN</span>
+          <span className="label text-[0.5625rem]">SCROLLEN</span>
           <span className="block h-10 w-px bg-gradient-to-b from-ivory/60 to-transparent" />
         </div>
       </div>

@@ -12,17 +12,20 @@ export default function Reveal({
   delay = 0,
   y = 22,
   className = "",
+  style,
 }: {
   children: React.ReactNode;
   delay?: number;
   y?: number;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const reduced = useReducedMotion();
 
   return (
     <motion.div
       className={className}
+      style={style}
       initial={reduced ? false : { opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-90px" }}

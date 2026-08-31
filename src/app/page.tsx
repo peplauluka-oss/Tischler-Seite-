@@ -1,16 +1,25 @@
 import SmoothScroll from "@/components/SmoothScroll";
 import SiteNav from "@/components/nav/SiteNav";
 import Hero from "@/components/hero/Hero";
-import EventDetails from "@/components/sections/EventDetails";
-import Artists from "@/components/sections/Artists";
-import Experience from "@/components/sections/Experience";
-import Gallery from "@/components/sections/Gallery";
+import EventStage from "@/components/sections/EventStage";
+import Room from "@/components/sections/Room";
+import Music from "@/components/sections/Music";
+import ReservationSection from "@/components/sections/ReservationSection";
 import Location from "@/components/sections/Location";
 import Footer from "@/components/layout/Footer";
-import MobileCtaBar from "@/components/MobileCtaBar";
+import ReserveDock from "@/components/ReserveDock";
 import ReservationOverlay from "@/components/reservation/ReservationOverlay";
 import { ReservationProvider } from "@/lib/reservation";
 
+/**
+ * Der Ablauf der Seite ist die Dramaturgie des Abends:
+ *
+ *   Clip  →  Event  →  Raum  →  Sound  →  Tisch  →  Weg dorthin
+ *
+ * Jeder Abschnitt hat eine eigene Komposition. Zusammengehalten wird das
+ * nicht durch ein wiederholtes Kartenbauteil, sondern durch Typografie,
+ * Dunkelheit und ein einziges Rot.
+ */
 export default function Page() {
   return (
     <ReservationProvider>
@@ -19,15 +28,15 @@ export default function Page() {
 
       <main>
         <Hero />
-        <EventDetails />
-        <Artists />
-        <Experience />
-        <Gallery />
+        <EventStage />
+        <Room />
+        <Music />
+        <ReservationSection />
         <Location />
       </main>
 
       <Footer />
-      <MobileCtaBar />
+      <ReserveDock />
       <ReservationOverlay />
     </ReservationProvider>
   );

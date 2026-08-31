@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Manrope, Oswald } from "next/font/google";
+import { Bebas_Neue, Manrope } from "next/font/google";
 import "./globals.css";
 
-/* Display: Bebas Neue Pro ist lizenzpflichtig — Oswald ist der im Briefing
-   vorgesehene Ersatz (condensed, versal, Plakat-Charakter). */
-const oswald = Oswald({
+/* Display: Bebas Neue — die frei lizenzierte Schwester der im Briefing
+   gewünschten Bebas Neue Pro. Versal, schmal, Plakat-Charakter. */
+const bebas = Bebas_Neue({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-oswald",
+  weight: ["400"],
+  variable: "--font-bebas",
   display: "swap",
 });
 
@@ -16,14 +16,6 @@ const manrope = Manrope({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-manrope",
-  display: "swap",
-});
-
-/* Technische Mikrotypografie: Countdown, Daten, Nummerierungen */
-const plexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-plex-mono",
   display: "swap",
 });
 
@@ -51,7 +43,7 @@ export default function RootLayout({
   return (
     <html
       lang="de"
-      className={`${oswald.variable} ${manrope.variable} ${plexMono.variable}`}
+      className={`${bebas.variable} ${manrope.variable}`}
     >
       <body>
         {/* Läuft vor dem ersten Paint: Nur wenn Bewegung erwünscht ist,
@@ -64,7 +56,7 @@ export default function RootLayout({
           }}
         />
         <a
-          href="#events"
+          href="#event"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] focus:bg-ember focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white"
         >
           Zum Inhalt springen

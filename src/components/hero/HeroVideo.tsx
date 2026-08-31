@@ -125,7 +125,7 @@ export default function HeroVideo() {
         <div
           data-hero-veil
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-void opacity-[0.8] md:opacity-[0.5]"
+          className="pointer-events-none absolute inset-0 bg-void opacity-[0.86] md:opacity-[0.5]"
         />
       </div>
 
@@ -134,9 +134,9 @@ export default function HeroVideo() {
         type="button"
         onClick={toggle}
         data-hero-videoctl
-        className="absolute bottom-5 left-3 z-40 flex h-11 items-center gap-2 px-3
-                   font-mono text-[0.625rem] tracking-[0.25em] text-mute
-                   transition-colors hover:text-ivory md:bottom-7 md:left-auto md:right-7"
+        className="absolute right-2 top-[4.25rem] z-40 flex h-11 items-center gap-2 px-3
+                   text-[0.625rem] font-bold tracking-[0.2em] text-mute
+                   transition-colors hover:text-ivory md:bottom-7 md:right-7 md:top-auto"
       >
         <span
           aria-hidden="true"

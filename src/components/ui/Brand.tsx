@@ -74,7 +74,7 @@ export function Wordmark({
         >
           BLACK MEDUSA
         </span>
-        <span className="eyebrow mt-1.5 block" style={{ letterSpacing: "0.5em" }}>
+        <span className="label mt-1.5 block text-[0.625rem]" style={{ letterSpacing: "0.42em" }}>
           BERLIN
         </span>
       </span>
