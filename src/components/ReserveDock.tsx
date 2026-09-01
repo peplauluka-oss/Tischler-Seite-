@@ -9,39 +9,35 @@ import { useReservation } from "@/lib/reservation";
  * Die Reservierung auf dem Telefon — unten, mit einer Hand erreichbar.
  *
  * Ersetzt das Menü in der Kopfzeile: Oben steht die Marke, unten die einzige
- * Aktion, die zählt. Erscheint erst nach dem Hero (dort steht die Aktion
- * ohnehin groß im Bild) und verschwindet, sobald die Reservierung offen ist.
+ * Aktion, die zählt. Sie erscheint erst, wenn der Hero durch ist — dort trägt
+ * erst die Clubwelt und dann der Event-Zustand die Aktion ohnehin selbst, und
+ * über dem Creative würde der Balken genau die Zeile verdecken, die
+ * Tischbuchung und Adresse trägt.
  */
 export default function ReserveDock() {
   const { isOpen } = useReservation();
   const [visible, setVisible] = useState(false);
-  const [overEvent, setOverEvent] = useState(false);
 
   useEffect(() => {
-    const onScroll = () =>
-      setVisible(window.scrollY > window.innerHeight * 2.2);
+    const hero = document.getElementById("top");
+    const onScroll = () => {
+      const passed = hero
+        ? hero.offsetHeight - window.innerHeight
+        : window.innerHeight * 2.2;
+      setVisible(window.scrollY > passed);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  /* Über dem Event-Creative tritt der Balken zurück: Dort steht die
-     Reservierung ohnehin direkt unter dem Clip — und er würde genau die
-     Zeile verdecken, die Tischbuchung und Adresse trägt. */
-  useEffect(() => {
-    const stage = document.querySelector("[data-event-stage]");
-    if (!stage) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setOverEvent(entry.intersectionRatio > 0.4),
-      { threshold: [0, 0.4, 0.7] },
-    );
-    observer.observe(stage);
-    return () => observer.disconnect();
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   return (
     <AnimatePresence>
-      {visible && !isOpen && !overEvent && (
+      {visible && !isOpen && (
         <motion.div
           initial={{ y: "120%" }}
           animate={{ y: 0 }}

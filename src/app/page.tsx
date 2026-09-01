@@ -1,7 +1,7 @@
 import SmoothScroll from "@/components/SmoothScroll";
 import SiteNav from "@/components/nav/SiteNav";
 import Hero from "@/components/hero/Hero";
-import EventStage from "@/components/sections/EventStage";
+import EventCountdown from "@/components/sections/EventCountdown";
 import Room from "@/components/sections/Room";
 import Music from "@/components/sections/Music";
 import ReservationSection from "@/components/sections/ReservationSection";
@@ -14,7 +14,7 @@ import { ReservationProvider } from "@/lib/reservation";
 /**
  * Der Ablauf der Seite ist die Dramaturgie des Abends:
  *
- *   Clip  →  Event  →  Raum  →  Sound  →  Tisch  →  Weg dorthin
+ *   Hero → Event (derselbe Screen) → Raum → Sound → Tisch → Weg dorthin
  *
  * Jeder Abschnitt hat eine eigene Komposition. Zusammengehalten wird das
  * nicht durch ein wiederholtes Kartenbauteil, sondern durch Typografie,
@@ -28,7 +28,7 @@ export default function Page() {
 
       <main>
         <Hero />
-        <EventStage />
+        <EventCountdown />
         <Room />
         <Music />
         <ReservationSection />
