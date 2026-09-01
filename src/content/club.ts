@@ -97,20 +97,28 @@ export const heroVideo = {
 export const roomStory = [
   {
     id: "flaeche",
+    no: "01",
     image: images.ambiente,
     kicker: "DIE FLÄCHE",
-    line: "Sternenhimmel, rotes Lichtband, sonst Dunkelheit.",
+    /* Inhaltlich unverändert, nur in Zeilen gesetzt: In der Bildkomposition
+       trägt der kurze Umbruch mehr als ein durchlaufender Satz. */
+    lines: ["Sternenhimmel.", "Rotes Lichtband.", "Sonst Dunkelheit."],
   },
   {
     id: "boxen",
+    no: "02",
     image: images.sitzbereich,
     kicker: "DIE BOXEN",
-    line: "Weiße Lederbänke mit eigenem Tisch — das, was eine Reservierung sichert.",
+    lines: [
+      "Weiße Lederbänke mit eigenem Tisch —",
+      "das, was eine Reservierung sichert.",
+    ],
   },
   {
     id: "bar",
+    no: "03",
     image: images.tresen,
     kicker: "DIE BAR",
-    line: "Voll bestückter Tresen. Cocktails sind der Ursprung des Hauses.",
+    lines: ["Voll bestückter Tresen.", "Cocktails sind der Ursprung des Hauses."],
   },
 ] as const;
