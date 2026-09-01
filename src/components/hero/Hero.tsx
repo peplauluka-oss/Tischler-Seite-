@@ -22,11 +22,8 @@ const CUE = {
   videoRecedes: 0.2,
   depthIn: 0.3,
   eventLabel: 0.42,
-  eventTitle: 0.45,
-  eventFacts: 0.58,
-  countdown: 0.68,
-  cta: 0.78,
-  interrupt: 0.82,
+  cta: 0.52,
+  interrupt: 0.7,
 };
 
 export default function Hero() {
@@ -174,19 +171,6 @@ export default function Hero() {
           );
 
         reveal("[data-reveal='label']", CUE.eventLabel, { x: -20 }, 0.07);
-
-        tl.fromTo(
-          q("[data-reveal='title'] .hero-reveal"),
-          { opacity: 0 },
-          { opacity: 1, duration: 0.02 },
-          CUE.eventTitle,
-        ).fromTo(
-          q("[data-reveal='title-inner']"),
-          { yPercent: 108 },
-          { yPercent: 0, duration: 0.13, ease: "power3.out" },
-          CUE.eventTitle,
-        );
-
         reveal("[data-reveal='cta']", CUE.cta, { y: 20 }, 0.1);
 
         /* Parallaxe: Inhalt läuft minimal langsamer als das Bild. */
@@ -213,7 +197,7 @@ export default function Hero() {
     <section
       id="top"
       ref={root}
-      className="hero-scroll relative h-[320svh] md:h-[380svh]"
+      className="hero-scroll relative h-[230svh] md:h-[260svh]"
     >
       <div
         ref={stage}

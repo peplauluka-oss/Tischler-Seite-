@@ -5,18 +5,19 @@ import { event } from "@/content/event";
 import { asset } from "@/lib/asset";
 
 /**
- * Das Event-Creative als Bewegtbild — bildschirmfüllender Moment, kein
- * eingebettetes Video.
+ * Das Event-Creative als Bewegtbild — der Moment selbst, kein eingebettetes
+ * Video.
  *
- * Auf dem Telefon nimmt der Clip die volle Breite, auf großen Schirmen die
- * volle Höhe. Beschnitten wird er nie: Das Creative trägt bis an den unteren
- * Rand Text (Tischbuchung, Adresse). Was neben dem Hochformat frei bleibt,
- * füllt der Clip mit seinem eigenen Licht — nicht mit Layout.
+ * Der Clip bleibt verdeckt, solange die Bühne noch hereinschiebt: Schwarz,
+ * volle Fläche. Erst wenn der Bildschirm ihm gehört, steht er da und läuft
+ * von der ersten Sekunde an. Der goldene Impact des Creatives ist damit der
+ * Übergang aus dem Hero — es braucht keinen zweiten, nachgebauten Effekt und
+ * keine halb abgespielte Animation im Anschnitt.
  *
- * Er läuft einmal und bleibt auf dem Schlussbild stehen. Bewusst ohne
+ * Nach dem einen ungeteilten Durchlauf geht er in die Schleife. Bewusst ohne
  * Bedienelemente: Vier Sekunden liegen unter der Schwelle, ab der bewegte
  * Inhalte eine Pausiermöglichkeit brauchen. Bei `prefers-reduced-motion`
- * steht das Schlussbild sofort da — ohne Informationsverlust.
+ * steht das Motiv sofort da — ohne Informationsverlust.
  */
 export default function EventClip() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -40,22 +41,50 @@ export default function EventClip() {
     };
     video.addEventListener("ended", onEnded);
 
+    let started = false;
+    let safety: number | undefined;
+
+    const start = () => {
+      if (!started) {
+        started = true;
+        window.clearTimeout(safety);
+        video.dataset.armed = "true";
+        try {
+          video.currentTime = 0;
+        } catch {
+          /* Noch keine Metadaten: Der Browser startet ohnehin bei 0. */
+        }
+      }
+      void video.play().catch(() => {
+        /* Blockiert der Browser die Wiedergabe, bleibt das Standbild stehen —
+           es trägt dieselbe Information wie die Animation. */
+      });
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          void video.play().catch(() => {
-            /* Blockiert der Browser die Wiedergabe, bleibt das Schlussbild
-               stehen — es trägt dieselbe Information wie die Animation. */
-          });
-        } else {
+        /* Ab hier gehört der Bildschirm dem Creative — jetzt, und keinen
+           Pixel früher, schlägt es auf. */
+        if (entry.intersectionRatio >= 0.8 || entry.boundingClientRect.top <= 2) {
+          start();
+          return;
+        }
+        /* Ungewöhnliche Viewports (Browserleisten, Zoom) erreichen die
+           Schwelle womöglich nie — dann zählt schlicht, dass die Bühne den
+           Blick hat. */
+        if (entry.intersectionRatio >= 0.5 && !started && safety === undefined) {
+          safety = window.setTimeout(start, 2500);
+        }
+        if (entry.intersectionRatio <= 0.15) {
           video.pause();
         }
       },
-      { threshold: 0.35 },
+      { threshold: [0, 0.15, 0.5, 0.8, 1] },
     );
 
     observer.observe(video);
     return () => {
+      window.clearTimeout(safety);
       video.removeEventListener("ended", onEnded);
       observer.disconnect();
     };
@@ -65,7 +94,7 @@ export default function EventClip() {
      zuerst an die Bildschirmkante stößt. `object-contain` garantiert, dass
      nichts abgeschnitten wird, falls beides einmal knapp wird. */
   const stage =
-    "relative mx-auto block h-full w-full object-contain md:w-auto";
+    "relative z-10 mx-auto block h-full w-full object-contain md:w-auto";
 
   if (reduced || (!clip.mp4 && !clip.webm)) {
     return (
@@ -77,11 +106,10 @@ export default function EventClip() {
   return (
     <video
       ref={videoRef}
-      className={stage}
-      poster={asset(clip.poster)}
+      className={`event-clip ${stage}`}
       muted
       playsInline
-      preload="metadata"
+      preload="auto"
       aria-label={clip.description}
     >
       {clip.webm && <source src={asset(clip.webm)} type="video/webm" />}
