@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-ivory/10 px-5 pb-28 pt-16 md:px-[7vw] md:pb-20 md:pt-20">
       <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-        <Wordmark markSize={38} className="[&_.display]:text-lg" />
+        <Wordmark width={190} className="items-start" />
 
         <nav aria-label="Fußzeile">
           <ul className="flex flex-wrap gap-x-8 gap-y-3">

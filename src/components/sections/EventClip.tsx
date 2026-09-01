@@ -32,6 +32,14 @@ export default function EventClip() {
     const video = videoRef.current;
     if (!video) return;
 
+    /* Erst der eine große Durchlauf, danach die Schleife: Der Impact soll
+       einmal ungeteilt wirken, das Plakat danach in Bewegung bleiben. */
+    const onEnded = () => {
+      video.loop = true;
+      void video.play().catch(() => {});
+    };
+    video.addEventListener("ended", onEnded);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -41,22 +49,23 @@ export default function EventClip() {
           });
         } else {
           video.pause();
-          video.currentTime = 0;
         }
       },
-      { threshold: 0.5 },
+      { threshold: 0.35 },
     );
 
     observer.observe(video);
-    return () => observer.disconnect();
+    return () => {
+      video.removeEventListener("ended", onEnded);
+      observer.disconnect();
+    };
   }, []);
 
   /* Breite führt auf dem Telefon, Höhe auf dem Desktop — je nachdem, was
      zuerst an die Bildschirmkante stößt. `object-contain` garantiert, dass
      nichts abgeschnitten wird, falls beides einmal knapp wird. */
   const stage =
-    "relative mx-auto block aspect-[9/16] w-full max-h-[100svh] object-contain " +
-    "md:h-[100svh] md:w-auto";
+    "relative mx-auto block h-full w-full object-contain md:w-auto";
 
   if (reduced || (!clip.mp4 && !clip.webm)) {
     return (

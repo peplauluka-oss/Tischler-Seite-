@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { navItems } from "@/content/club";
-import { MedusaMark } from "@/components/ui/Brand";
+import { Logo } from "@/components/ui/Brand";
 import { ReserveButton } from "@/components/ui/Cta";
 import { scrollToSection } from "@/lib/scroll";
 
@@ -47,13 +47,13 @@ export default function SiteNav() {
      Die Deckkraft liegt auf einer inneren Ebene — die äußere gehört der
      Hero-Timeline (GSAP), die hier nicht überschrieben werden darf. */
   useEffect(() => {
-    const section = document.getElementById("event");
-    if (!section) return;
+    const stage = document.querySelector("[data-event-stage]");
+    if (!stage) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setOverEvent(entry.intersectionRatio > 0.5),
-      { threshold: [0, 0.5, 0.75] },
+      ([entry]) => setOverEvent(entry.intersectionRatio > 0.6),
+      { threshold: [0, 0.4, 0.6, 0.8] },
     );
-    observer.observe(section);
+    observer.observe(stage);
     return () => observer.disconnect();
   }, []);
 
@@ -79,14 +79,8 @@ export default function SiteNav() {
           onClick={() => scrollToSection("top")}
           className="flex items-center gap-3 text-ivory transition-opacity hover:opacity-70"
         >
-          <MedusaMark size={24} />
-          <span
-            className="display text-[1.05rem] leading-none"
-            style={{ letterSpacing: "0.14em" }}
-          >
-            BLACK MEDUSA
-          </span>
-          <span className="sr-only">Zum Seitenanfang</span>
+          <Logo width={148} />
+          <span className="sr-only">Black Medusa — zum Seitenanfang</span>
         </button>
 
         <nav aria-label="Hauptnavigation" className="hidden md:block">

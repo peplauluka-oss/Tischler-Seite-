@@ -27,7 +27,7 @@ export default function HeroBrandBar() {
       />
       <div className="relative flex h-full items-center justify-center px-5">
         <span data-hero-lockup className="block">
-          <Wordmark markSize={30} className="[&_.display]:text-[0.95rem]" />
+          <Wordmark width={210} priority />
         </span>
       </div>
     </div>

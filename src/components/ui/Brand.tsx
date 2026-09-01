@@ -1,82 +1,60 @@
-/* ---------------------------------------------------------------------------
-   Markenzeichen.
+import Image from "next/image";
+import { asset } from "@/lib/asset";
 
-   Hinweis für die Übergabe: Das Haus führt ein Medusa-Signet im griechischen
-   Mäanderring (siehe Fotomaterial). Bis die Originaldatei des Betreibers
-   vorliegt, steht hier ein eigenes Zeichen aus demselben Formenkanon —
-   Mäanderring + Monogramm. Austausch = nur diese Datei.
+/* ---------------------------------------------------------------------------
+   DIE WORTMARKE.
+
+   Kein nachgebautes Zeichen mehr: Das Logo ist aus dem Event-Creative des
+   Clubs extrahiert (BLACK + Schlangenkopf im Mäanderring + MEDUSA), auf
+   Transparenz freigestellt und unverändert übernommen.
+
+   Die native Breite beträgt 365 px. Deutlich darüber hinaus sollte es nicht
+   skaliert werden — mehr Auflösung als das Ausgangsmaterial gibt es nicht.
 --------------------------------------------------------------------------- */
 
-/** Ein Mäander-Element (griechischer Schlüssel), das rund um den Ring rotiert. */
-const KEY_UNIT = "M -5.4 4.6 v -6.2 h 8.2 v 4.2 h -4.4 v -2 h 2.4";
+const LOGO = { src: "/media/logo-black-medusa.png", width: 365, height: 66 };
 
-export function MedusaMark({
+export function Logo({
+  width = 200,
   className = "",
-  size = 40,
+  priority = false,
 }: {
+  width?: number;
   className?: string;
-  size?: number;
+  priority?: boolean;
 }) {
-  const units = 22;
   return (
-    <svg
-      viewBox="-50 -50 100 100"
-      width={size}
-      height={size}
+    <Image
+      src={asset(LOGO.src)}
+      alt="Black Medusa"
+      width={LOGO.width}
+      height={LOGO.height}
+      priority={priority}
+      sizes={`${width}px`}
       className={className}
-      aria-hidden="true"
-      focusable="false"
-    >
-      <circle r="45.5" fill="none" stroke="currentColor" strokeWidth="1.4" opacity="0.9" />
-      <circle r="30" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.55" />
-      <g stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="square">
-        {Array.from({ length: units }, (_, i) => (
-          <g key={i} transform={`rotate(${(360 / units) * i}) translate(0 -38)`}>
-            <path d={KEY_UNIT} />
-          </g>
-        ))}
-      </g>
-      <text
-        x="0"
-        y="9"
-        textAnchor="middle"
-        fill="currentColor"
-        fontSize="30"
-        fontFamily="var(--font-display)"
-        fontWeight="600"
-        letterSpacing="0.5"
-      >
-        M
-      </text>
-    </svg>
+      style={{ width, height: "auto" }}
+    />
   );
 }
 
-/** Volle Wortmarke — Hero-Brandingleiste und Footer. */
+/** Wortmarke mit Ortszusatz — Fußzeile und Ankunftszustand des Hero. */
 export function Wordmark({
+  width = 220,
   className = "",
-  markSize = 44,
-  stacked = false,
+  priority = false,
 }: {
+  width?: number;
   className?: string;
-  markSize?: number;
-  stacked?: boolean;
+  priority?: boolean;
 }) {
   return (
-    <span
-      className={`flex items-center ${stacked ? "flex-col gap-4" : "gap-3 sm:gap-4"} ${className}`}
-    >
-      <MedusaMark size={markSize} className="shrink-0 text-ivory" />
-      <span className={stacked ? "text-center" : ""}>
-        <span
-          className="display block text-ivory"
-          style={{ letterSpacing: "0.22em", lineHeight: 1 }}
-        >
-          BLACK MEDUSA
-        </span>
-        <span className="label mt-1.5 block text-[0.625rem]" style={{ letterSpacing: "0.42em" }}>
-          BERLIN
-        </span>
+    <span className={`inline-flex flex-col items-center ${className}`}>
+      <Logo width={width} priority={priority} />
+      <span
+        className="label mt-2.5 block text-[0.625rem]"
+        style={{ letterSpacing: "0.42em" }}
+      >
+        BERLIN
       </span>
     </span>
   );

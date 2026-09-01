@@ -1,24 +1,66 @@
+"use client";
+
+import { useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import EventClip from "@/components/sections/EventClip";
+import Countdown from "@/components/hero/Countdown";
 import Reveal from "@/components/ui/Reveal";
 import { ReserveButton } from "@/components/ui/Cta";
 import { event } from "@/content/event";
-import { asset } from "@/lib/asset";
+import { useIsomorphicLayoutEffect } from "@/lib/useIsomorphicLayoutEffect";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
- * DER EVENT-MOMENT — direkt aus dem Hero heraus.
+ * DER EVENT-MOMENT.
  *
- * Keine Sektion mit einem Video darin, sondern ein Bildschirm, den das
- * Creative übernimmt: volle Höhe, kein Rahmen, keine Überschrift, kein Text
- * davor oder daneben. Navigation und mobiler Aktionsbalken treten für diesen
- * Moment zurück (siehe SiteNav und ReserveDock) — deshalb wirkt es wie ein
- * kurzes Aufgehen des Events und nicht wie ein eingebettetes Video.
+ * Beim Verlassen des Hero öffnet sich das Creative auf den ganzen Bildschirm
+ * — es wird nicht eingeblendet, sondern aufgezogen: Der Rahmen wächst von
+ * einem kleineren, abgedunkelten Feld auf den vollen Viewport, während die
+ * Animation startet.
  *
- * Was neben dem Hochformat frei bleibt, füllt der Clip mit seinem eigenen,
- * stark unscharfen Licht. Das ist kein Designelement, sondern dasselbe Bild.
+ * Danach hält der Moment: Die Bühne klebt für knapp einen weiteren
+ * Bildschirm am oberen Rand, der Clip läuft ab und geht anschließend in die
+ * Schleife. Weiterscrollen ist jederzeit möglich — nur eben nicht in einem
+ * Wimpernschlag vorbei. Am Ende der Strecke wandert der Bereich normal aus
+ * dem Bild; er schwebt nicht über der restlichen Seite.
  *
- * Erst danach, als eigener Streifen, die Handlung.
+ * Erst danach kommen Handlung und Countdown — in dieser Reihenfolge.
  */
 export default function EventStage() {
+  const track = useRef<HTMLDivElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!track.current || !panel.current) return;
+
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      /* Das Aufziehen ist an den Scroll gekoppelt: Der Nutzer öffnet es
+         selbst, deshalb fühlt es sich wie ein Moment an und nicht wie eine
+         abgespielte Animation. */
+      gsap.fromTo(
+        panel.current,
+        { scale: 0.72, opacity: 0.25, filter: "brightness(0.4)" },
+        {
+          scale: 1,
+          opacity: 1,
+          filter: "brightness(1)",
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: track.current,
+            start: "top bottom",
+            end: "top top",
+            scrub: 0.5,
+          },
+        },
+      );
+    });
+
+    return () => mm.revert();
+  }, []);
+
   if (!event.active) {
     return (
       <section id="event" className="scroll-mt-16 px-5 py-28 md:px-[7vw]">
@@ -32,49 +74,48 @@ export default function EventStage() {
 
   return (
     <section id="event" className="relative">
-      {/* Die vollständige Information einmal maschinenlesbar: Ein Video ist
+      {/* Die vollständige Information einmal maschinenlesbar — ein Video ist
           für Screenreader und Suchmaschinen sonst stumm. Sichtbar steht sie
-          nirgends doppelt — das Creative zeigt sie. */}
+          nirgends doppelt: Das Creative zeigt sie. */}
       <h2 className="sr-only">
         {event.title} — {event.role} {event.headliner}, {event.dateLong},
         Einlass {event.doors} Uhr
       </h2>
 
-      {/* Der Bildschirm gehört für diesen Moment dem Creative. */}
-      <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-black">
+      {/* Scrollstrecke: Der Bildschirm gehört dem Creative, bis der Nutzer
+          fast einen weiteren Viewport weitergescrollt ist. */}
+      <div ref={track} className="relative h-[185svh]">
         <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: `url(${asset(event.clip.poster)})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            filter: "blur(90px) saturate(1.3) brightness(0.45)",
-            transform: "scale(1.3)",
-            opacity: 0.6,
-          }}
-        />
-        {/* Weicher Übergang aus dem Hero heraus und in die Seite zurück. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-void to-transparent"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-void to-transparent"
-        />
-
-        <Reveal y={12} className="relative w-full md:w-auto">
-          <EventClip />
-        </Reveal>
+          data-event-stage
+          className="sticky top-0 flex h-[100svh] items-center justify-center overflow-hidden bg-black"
+        >
+          {/* Ein Hauch Gold aus dem Clip, damit die Ränder auf breiten
+              Schirmen nicht wie eine leere Fläche wirken. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-40"
+            style={{
+              background:
+                "radial-gradient(circle at 50% 45%, rgba(191,150,63,0.28) 0%, transparent 62%)",
+            }}
+          />
+          <div ref={panel} className="relative h-full w-full md:w-auto" style={{ willChange: "transform" }}>
+            <EventClip />
+          </div>
+        </div>
       </div>
 
-      {/* Unmittelbar danach: nur noch die Handlung. */}
-      <Reveal className="mx-auto flex w-full max-w-[26rem] flex-col items-center gap-4 px-5 pb-16 pt-9 text-center md:max-w-none md:pb-24 md:pt-12">
+      {/* Erst jetzt die Handlung … */}
+      <Reveal className="mx-auto flex w-full max-w-[26rem] flex-col items-center gap-4 px-5 pt-12 text-center md:max-w-none md:pt-16">
         <ReserveButton className="w-full sm:w-auto" />
         <span className="text-[0.6875rem] font-bold tracking-[0.16em] text-mute">
           {event.admission.toUpperCase()} · {event.minAge}
         </span>
+      </Reveal>
+
+      {/* … und danach, nachrangig, die Zeit bis dahin. */}
+      <Reveal delay={0.08} className="flex justify-center px-5 pb-20 pt-12 md:pb-28 md:pt-16">
+        <Countdown className="text-center" />
       </Reveal>
     </section>
   );

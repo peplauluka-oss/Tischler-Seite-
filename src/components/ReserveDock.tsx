@@ -29,13 +29,13 @@ export default function ReserveDock() {
      Reservierung ohnehin direkt unter dem Clip — und er würde genau die
      Zeile verdecken, die Tischbuchung und Adresse trägt. */
   useEffect(() => {
-    const section = document.getElementById("event");
-    if (!section) return;
+    const stage = document.querySelector("[data-event-stage]");
+    if (!stage) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setOverEvent(entry.isIntersecting),
-      { threshold: 0.12 },
+      ([entry]) => setOverEvent(entry.intersectionRatio > 0.4),
+      { threshold: [0, 0.4, 0.7] },
     );
-    observer.observe(section);
+    observer.observe(stage);
     return () => observer.disconnect();
   }, []);
 

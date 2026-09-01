@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import ReservationFlow from "@/components/reservation/ReservationFlow";
-import { MedusaMark } from "@/components/ui/Brand";
+import { Logo } from "@/components/ui/Brand";
 import { useReservation } from "@/lib/reservation";
 import { lockScroll, unlockScroll } from "@/lib/scroll";
 
@@ -92,7 +92,7 @@ export default function ReservationOverlay() {
           >
             <header className="flex shrink-0 items-center justify-between gap-4 px-5 pt-5 md:px-10 md:pt-8">
               <span className="flex items-center gap-3">
-                <MedusaMark size={24} className="text-ivory" />
+                <Logo width={116} />
                 <span id="reservation-title" className="label">
                   Tisch reservieren
                 </span>
