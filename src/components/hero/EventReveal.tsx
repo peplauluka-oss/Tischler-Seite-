@@ -2,58 +2,33 @@
 
 import Countdown from "@/components/hero/Countdown";
 import { QuietLink, ReserveButton } from "@/components/ui/Cta";
-import { event } from "@/content/event";
-import { club } from "@/content/club";
 
 /**
- * Der Hero-Abschluss — Kampagne statt Datenblatt.
+ * Der Hero-Abschluss — Erwartung, nicht Ankündigung.
  *
- * Die erste Fassung stapelte hier Fließtext, ein Vier-Felder-Raster und zwei
- * gleich laute Knöpfe. Übrig bleibt, was eine Entscheidung trägt: wer,
- * wann, wie lange noch, und eine Aktion. Alles Weitere steht auf der
- * Event-Bühne direkt darunter.
+ * Bis V3 stand hier das Event mit Name, Datum, Einlass und Ort. Genau das
+ * zeigt jetzt das Creative direkt darunter — und zwar besser. Zweimal
+ * dasselbe wäre eine doppelte Informationshierarchie.
+ *
+ * Übrig bleibt, was das Creative NICHT leisten kann: der laufende Countdown
+ * als Spannung und der Weg zur Handlung. Wer das Event sehen will, scrollt
+ * eine Bewegung weiter — und bekommt den goldenen Impact.
  */
 export default function EventReveal() {
   return (
     <div className="w-full max-w-[36rem]">
       <div data-reveal="label" className="hero-reveal flex items-center gap-3">
         <span className="h-px w-7 bg-ember" aria-hidden="true" />
-        <span className="label label-accent">{event.role}</span>
+        <span className="label label-accent">Nächste Nacht</span>
       </div>
 
-      <h1
-        data-reveal="title"
-        className="display mt-4 text-ivory"
-        style={{ fontSize: "clamp(4.5rem, 17vw, 14rem)" }}
-      >
+      {/* Der Countdown übernimmt die Bühne, die vorher der Eventname hatte. */}
+      <div data-reveal="title" className="mt-4">
         <span className="hero-reveal block overflow-hidden pb-[0.06em]">
           <span data-reveal="title-inner" className="block">
-            {event.headliner}
+            <Countdown size="hero" />
           </span>
         </span>
-      </h1>
-
-      {/* Eine Zeile Eckdaten statt eines Rasters aus Feldern. */}
-      <p
-        data-reveal="meta"
-        className="hero-reveal mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.8125rem] font-bold tracking-[0.14em] text-ivory"
-      >
-        <span>{event.dateShort}</span>
-        <span className="text-ember" aria-hidden="true">
-          ·
-        </span>
-        <span>EINLASS {event.doors}</span>
-        <span className="text-ember" aria-hidden="true">
-          ·
-        </span>
-        <span className="text-mute">{club.district.toUpperCase()}</span>
-        <span className="text-[0.5625rem] tracking-[0.16em] text-ember-soft/85">
-          TBC
-        </span>
-      </p>
-
-      <div data-reveal="countdown" className="hero-reveal mt-8">
-        <Countdown />
       </div>
 
       <div

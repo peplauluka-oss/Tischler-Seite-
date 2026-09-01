@@ -187,8 +187,6 @@ export default function Hero() {
           CUE.eventTitle,
         );
 
-        reveal("[data-reveal='meta']", CUE.eventFacts, { y: 16 }, 0.08);
-        reveal("[data-reveal='countdown']", CUE.countdown, { y: 16 });
         reveal("[data-reveal='cta']", CUE.cta, { y: 20 }, 0.1);
 
         /* Parallaxe: Inhalt läuft minimal langsamer als das Bild. */

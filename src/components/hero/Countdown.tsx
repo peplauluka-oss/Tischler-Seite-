@@ -20,11 +20,16 @@ export default function Countdown({
   size = "sm",
 }: {
   className?: string;
-  size?: "sm" | "lg";
+  size?: "sm" | "lg" | "hero";
 }) {
   const cd = useCountdown(event.startsAt, event.endsAfterHours);
 
-  const numberSize = size === "lg" ? "text-[3.25rem] md:text-[4rem]" : "text-[2.25rem]";
+  const numberSize =
+    size === "hero"
+      ? "text-[4.5rem] md:text-[6rem]"
+      : size === "lg"
+        ? "text-[3.25rem] md:text-[4rem]"
+        : "text-[2.25rem]";
   const label =
     cd.status === "live"
       ? "LÄUFT GERADE"
@@ -34,14 +39,20 @@ export default function Countdown({
           ? "HEUTE NACHT"
           : "NOCH";
 
+  /* Im Hero rahmt bereits „Nächste Nacht“ den Zähler — ein zweites
+     Kleinlabel direkt darüber wäre doppelt gemoppelt. */
+  const showLabel = size !== "hero" || cd.status !== "counting";
+
   return (
     <div className={className}>
-      <span className={`label ${cd.status === "live" ? "label-accent" : ""}`}>
-        {label}
-      </span>
+      {showLabel && (
+        <span className={`label ${cd.status === "live" ? "label-accent" : ""}`}>
+          {label}
+        </span>
+      )}
 
       {cd.status === "counting" ? (
-        <div className="mt-2 flex items-baseline gap-5" role="timer">
+        <div className={`flex items-baseline ${size === "hero" ? "gap-6" : "mt-2 gap-5"}`} role="timer">
           {UNITS.map((u) => (
             <span key={u.key} className="flex items-baseline gap-1.5">
               <span className={`display leading-none text-ivory ${numberSize}`}>

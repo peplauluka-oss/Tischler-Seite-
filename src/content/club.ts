@@ -14,9 +14,10 @@ export const club = {
   /** Aus dem Wasserzeichen des Clubclips übernommen. */
   instagram: "blackmedusaberlin",
   instagramUrl: "https://instagram.com/blackmedusaberlin",
-  /* PLATZHALTER — vom Betreiber ergänzen. */
-  address: "Adresse folgt",
-  addressStatus: "tbc" as const,
+  /* Vom Event-Creative des Clubs übernommen. */
+  address: "Grevesmühlener Str. 26",
+  postcode: "13059 Berlin",
+  addressStatus: "confirmed" as const,
   hours: "Öffnungszeiten folgen",
   hoursStatus: "tbc" as const,
   phone: null as string | null,

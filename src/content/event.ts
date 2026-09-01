@@ -16,13 +16,17 @@
 
 export type FactStatus = "confirmed" | "tbc";
 
-export type EventArtwork = {
-  /** Pfad unter /public. `null` → die Bühne zeigt den Platzhalter. */
-  src: string | null;
-  /** Beschreibung des Bildinhalts für Screenreader — Pflicht, sobald gesetzt. */
-  alt: string;
-  /** Seitenverhältnis des Creatives. Instagram-Post: 4/5, Story: 9/16. */
-  ratio: "4/5" | "1/1" | "9/16";
+export type EventClip = {
+  /** Bewegtes Creative. `null` → das Standbild (poster) trägt allein. */
+  mp4: string | null;
+  webm: string | null;
+  /** Schlussbild der Animation — trägt die vollständige Eventinformation.
+      Dient als Poster, als Fallback bei reduzierter Bewegung und ohne Video. */
+  poster: string;
+  /** Seitenverhältnis des Creatives — bestimmt die Bühne, nie ein Beschnitt. */
+  ratio: "9/16" | "4/5" | "1/1";
+  /** Was zu sehen ist — für Screenreader, die die Animation nicht sehen. */
+  description: string;
 };
 
 export const event = {
@@ -31,22 +35,31 @@ export const event = {
 
   headliner: "SINAN",
   role: "SPECIAL GUEST",
-  title: "SINAN LIVE",
+  title: "BIRTHDAY BASH — 4 YEARS OF BLACK MEDUSA",
 
   /**
-   * Das Kampagnenbild. Sobald hier das Instagram-Creative liegt, übernimmt
-   * es die gesamte visuelle Arbeit — die Bühne drumherum bleibt unverändert.
+   * DAS EVENT-CREATIVE als Animation.
+   *
+   * Es trägt bereits alles: Name, Line-up, Datum, Einlass, Tischbuchung,
+   * Adresse. Deshalb wiederholt die Seite darunter NICHTS davon — sie führt
+   * nur noch zur Handlung. Neues Event = drei Dateien tauschen.
    */
-  artwork: {
-    src: null,
-    alt: "",
-    ratio: "4/5",
-  } as EventArtwork,
+  clip: {
+    mp4: "/media/event-clip.mp4",
+    webm: "/media/event-clip.webm",
+    poster: "/media/event-poster.jpg",
+    ratio: "9/16",
+    description:
+      "Event-Ankündigung des Black Medusa: Birthday Bash, vier Jahre Black Medusa, " +
+      "mit Special Guest Sinan, DJ Maky, DJ Pasa, Tupan Show und Belly Dance Show. " +
+      "Samstag, 5. September 2026, Einlass 22 Uhr. Tischbuchung unter 0176 28278840. " +
+      "Grevesmühlener Straße 26, 13059 Berlin. Ab 18 Jahren.",
+  } as EventClip,
 
-  /** PLATZHALTER — Termin bestätigen lassen. Countdown und Reservierung
-      ziehen aus dieser einen Zeile (ISO mit Zeitzonen-Offset Berlin). */
+  /** Vom Event-Creative des Clubs bestätigt (Samstag 05.09.2026, Einlass 22 Uhr).
+      Countdown und Reservierung ziehen aus dieser einen Zeile. */
   startsAt: "2026-09-05T23:00:00+02:00",
-  dateStatus: "tbc" as FactStatus,
+  dateStatus: "confirmed" as FactStatus,
 
   /* Anzeige-Strings als Literale: keine Locale-Differenz zwischen Server-
      und Client-Rendering, damit die Hydration stabil bleibt. */
@@ -66,6 +79,9 @@ export const event = {
 
   /** Kein Onlineverkauf: Einlass läuft über die Abendkasse. */
   admission: "Eintritt an der Abendkasse",
+
+  /** Altersfreigabe laut Creative. */
+  minAge: "18+",
 } as const;
 
 /* ---------------------------------------------------------------------------

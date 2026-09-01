@@ -15,6 +15,7 @@ import { useReservation } from "@/lib/reservation";
 export default function ReserveDock() {
   const { isOpen } = useReservation();
   const [visible, setVisible] = useState(false);
+  const [overEvent, setOverEvent] = useState(false);
 
   useEffect(() => {
     const onScroll = () =>
@@ -24,9 +25,23 @@ export default function ReserveDock() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* Über dem Event-Creative tritt der Balken zurück: Dort steht die
+     Reservierung ohnehin direkt unter dem Clip — und er würde genau die
+     Zeile verdecken, die Tischbuchung und Adresse trägt. */
+  useEffect(() => {
+    const section = document.getElementById("event");
+    if (!section) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setOverEvent(entry.isIntersecting),
+      { threshold: 0.12 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <AnimatePresence>
-      {visible && !isOpen && (
+      {visible && !isOpen && !overEvent && (
         <motion.div
           initial={{ y: "120%" }}
           animate={{ y: 0 }}
