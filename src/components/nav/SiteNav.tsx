@@ -20,6 +20,7 @@ import { scrollToSection } from "@/lib/scroll";
  */
 export default function SiteNav() {
   const [active, setActive] = useState<string | null>(null);
+  const [overEvent, setOverEvent] = useState(false);
 
   useEffect(() => {
     const sections = navItems
@@ -40,6 +41,22 @@ export default function SiteNav() {
     return () => observer.disconnect();
   }, []);
 
+  /* Während der Event-Clip den Bildschirm hat, tritt die Leiste zurück:
+     Sie läge sonst über dem Logo im Creative und würde aus dem Moment
+     wieder ein eingebettetes Video machen. Danach kommt sie zurück.
+     Die Deckkraft liegt auf einer inneren Ebene — die äußere gehört der
+     Hero-Timeline (GSAP), die hier nicht überschrieben werden darf. */
+  useEffect(() => {
+    const section = document.getElementById("event");
+    if (!section) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setOverEvent(entry.intersectionRatio > 0.5),
+      { threshold: [0, 0.5, 0.75] },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <header
       data-nav-shell
@@ -47,9 +64,14 @@ export default function SiteNav() {
       style={{ willChange: "opacity, transform" }}
     >
       <div
-        data-nav-bg
-        className="absolute inset-0 border-b border-ivory/10 bg-void/70 backdrop-blur-xl"
-      />
+        className={`transition-opacity duration-500 ${
+          overEvent ? "pointer-events-none opacity-0" : "opacity-100"
+        }`}
+      >
+        <div
+          data-nav-bg
+          className="absolute inset-0 border-b border-ivory/10 bg-void/70 backdrop-blur-xl"
+        />
 
       <div className="relative mx-auto flex h-14 max-w-[1560px] items-center justify-between gap-6 px-5 md:h-[72px] md:px-8">
         <button
@@ -93,6 +115,7 @@ export default function SiteNav() {
           label="Tisch"
           className="hidden min-h-10 gap-3 px-4 py-2.5 text-[0.6875rem] md:inline-flex"
         />
+      </div>
       </div>
     </header>
   );

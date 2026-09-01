@@ -5,18 +5,18 @@ import { event } from "@/content/event";
 import { asset } from "@/lib/asset";
 
 /**
- * Das Event-Creative als Bewegtbild.
+ * Das Event-Creative als Bewegtbild — bildschirmfüllender Moment, kein
+ * eingebettetes Video.
  *
- * Kein Hintergrundvideo und kein Videoplayer: eine Motion-Graphic, die im
- * Vordergrund steht, einmal läuft und danach auf ihrem Schlussbild stehen
- * bleibt — dem Bild mit der vollständigen Eventinformation.
+ * Auf dem Telefon nimmt der Clip die volle Breite, auf großen Schirmen die
+ * volle Höhe. Beschnitten wird er nie: Das Creative trägt bis an den unteren
+ * Rand Text (Tischbuchung, Adresse). Was neben dem Hochformat frei bleibt,
+ * füllt der Clip mit seinem eigenen Licht — nicht mit Layout.
  *
- * Deshalb bewusst ohne Bedienelemente: Vier Sekunden liegen unter der
- * Schwelle, ab der bewegte Inhalte eine Pausiermöglichkeit brauchen. Wer
- * zurückscrollt, sieht die Animation erneut von vorn.
- *
- * Bei `prefers-reduced-motion` läuft nichts — dann steht das Schlussbild
- * sofort da, ohne Informationsverlust.
+ * Er läuft einmal und bleibt auf dem Schlussbild stehen. Bewusst ohne
+ * Bedienelemente: Vier Sekunden liegen unter der Schwelle, ab der bewegte
+ * Inhalte eine Pausiermöglichkeit brauchen. Bei `prefers-reduced-motion`
+ * steht das Schlussbild sofort da — ohne Informationsverlust.
  */
 export default function EventClip() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -36,44 +36,39 @@ export default function EventClip() {
       ([entry]) => {
         if (entry.isIntersecting) {
           void video.play().catch(() => {
-            /* Blockiert der Browser das Abspielen, bleibt das Poster stehen —
-               es trägt dieselbe Information wie die Animation. */
+            /* Blockiert der Browser die Wiedergabe, bleibt das Schlussbild
+               stehen — es trägt dieselbe Information wie die Animation. */
           });
         } else {
           video.pause();
           video.currentTime = 0;
         }
       },
-      { threshold: 0.55 },
+      { threshold: 0.5 },
     );
 
     observer.observe(video);
     return () => observer.disconnect();
   }, []);
 
-  /* Die Bühne wird über die HÖHE bemessen, nicht über die Breite: Das
-     Creative trägt bis an den unteren Rand Text (Tischbuchung, Adresse).
-     Randlos über die volle Breite wäre auf dem Telefon zwar größer, würde
-     dieses Ende aber aus dem Bild schieben. Nie beschnitten, nie verzerrt. */
+  /* Breite führt auf dem Telefon, Höhe auf dem Desktop — je nachdem, was
+     zuerst an die Bildschirmkante stößt. `object-contain` garantiert, dass
+     nichts abgeschnitten wird, falls beides einmal knapp wird. */
   const stage =
-    "relative mx-auto aspect-[9/16] h-[min(calc(100svh-5rem),40rem)] w-auto bg-black " +
-    "md:h-[min(78svh,46rem)] md:shadow-[0_60px_140px_-50px_rgba(0,0,0,0.95)]";
+    "relative mx-auto block aspect-[9/16] w-full max-h-[100svh] object-contain " +
+    "md:h-[100svh] md:w-auto";
 
   if (reduced || (!clip.mp4 && !clip.webm)) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={asset(clip.poster)}
-        alt={clip.description}
-        className={`${stage} object-contain`}
-      />
+      <img src={asset(clip.poster)} alt={clip.description} className={stage} />
     );
   }
 
   return (
     <video
       ref={videoRef}
-      className={`${stage} object-contain`}
+      className={stage}
       poster={asset(clip.poster)}
       muted
       playsInline
