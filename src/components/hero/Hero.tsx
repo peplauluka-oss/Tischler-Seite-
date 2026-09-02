@@ -25,11 +25,14 @@ const CUE = {
   scrollCueOut: 0.02,
   brandOut: 0.07,
   navIn: 0.12,
-  videoRecedes: 0.18,
-  depthIn: 0.28,
-  caption: 0.36,
-  navOut: 0.46,
-  dissolve: 0.5,
+  videoRecedes: 0.16,
+  depthIn: 0.24,
+  kicker: 0.3,
+  claim: 0.33,
+  sub: 0.41,
+  cta: 0.45,
+  navOut: 0.5,
+  dissolve: 0.54,
   navBack: 0.99,
 };
 
@@ -60,8 +63,8 @@ export default function Hero() {
 
     mm.add(
       {
-        isDesktop: "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
-        isMobile: "(max-width: 767px) and (prefers-reduced-motion: no-preference)",
+        isDesktop: "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
+        isMobile: "(max-width: 1023px) and (prefers-reduced-motion: no-preference)",
       },
       (context) => {
         const { isDesktop } = context.conditions as { isDesktop: boolean };
@@ -152,7 +155,7 @@ export default function Hero() {
           .fromTo(
             veil,
             { opacity: 0 },
-            { opacity: isDesktop ? 0.5 : 0.86, duration: 0.3 },
+            { opacity: isDesktop ? 0.5 : 0.62, duration: 0.3 },
             CUE.videoRecedes + 0.04,
           )
           .fromTo(
@@ -178,13 +181,45 @@ export default function Hero() {
           );
         }
 
-        /* 05 — DER ORT tritt auf. */
+        /* 05 — DIE AUSSAGE BAUT SICH AUF.
+               Erst wer und wo, dann die Behauptung — zeilenweise von unten
+               aufgedeckt, nicht eingeblendet: Das ist Satz, keine Animation.
+               Danach die Sprachen, zuletzt die Handlung. */
         tl.fromTo(
-          q("[data-reveal='caption']"),
+          q("[data-reveal='kicker']"),
           { opacity: 0, x: -20 },
-          { opacity: 1, x: 0, duration: 0.07, stagger: 0.018 },
-          CUE.caption,
-        );
+          { opacity: 1, x: 0, duration: 0.055 },
+          CUE.kicker,
+        )
+          .fromTo(
+            q("[data-reveal='claim'] .hero-reveal"),
+            { opacity: 0 },
+            { opacity: 1, duration: 0.015, stagger: 0.035 },
+            CUE.claim,
+          )
+          .fromTo(
+            q("[data-claim-line]"),
+            { yPercent: 112 },
+            {
+              yPercent: 0,
+              duration: 0.1,
+              ease: "power3.out",
+              stagger: 0.035,
+            },
+            CUE.claim,
+          )
+          .fromTo(
+            q("[data-reveal='sub']"),
+            { opacity: 0, x: -14 },
+            { opacity: 1, x: 0, duration: 0.06 },
+            CUE.sub,
+          )
+          .fromTo(
+            q("[data-reveal='cta']"),
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.07 },
+            CUE.cta,
+          );
 
         /* Parallaxe: Inhalt läuft minimal langsamer als das Bild. */
         tl.fromTo(
@@ -357,7 +392,7 @@ export default function Hero() {
           <div
             data-hero-depth
             aria-hidden="true"
-            className="absolute right-[24vw] top-[15svh] z-10 hidden h-[54svh] w-[34svh] opacity-30 md:block"
+            className="absolute right-[24vw] top-[15svh] z-10 hidden h-[54svh] w-[34svh] opacity-30 lg:block"
             style={{
               willChange: "transform",
               maskImage:
@@ -382,7 +417,7 @@ export default function Hero() {
           <div
             data-hero-scrim
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-25 hidden md:block"
+            className="pointer-events-none absolute inset-0 z-25 hidden lg:block"
             style={{
               background:
                 "linear-gradient(90deg, rgba(5,4,6,0.96) 0%, rgba(5,4,6,0.82) 34%, rgba(5,4,6,0.25) 58%, transparent 78%)",
@@ -391,10 +426,10 @@ export default function Hero() {
           <div
             data-hero-scrim
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-25 md:hidden"
+            className="pointer-events-none absolute inset-0 z-25 lg:hidden"
             style={{
               background:
-                "linear-gradient(0deg, rgba(5,4,6,0.97) 6%, rgba(5,4,6,0.72) 46%, rgba(5,4,6,0.35) 72%, rgba(5,4,6,0.55) 100%)",
+                "linear-gradient(0deg, rgba(5,4,6,0.97) 0%, rgba(5,4,6,0.94) 34%, rgba(5,4,6,0.68) 50%, rgba(5,4,6,0.2) 72%, rgba(5,4,6,0.5) 100%)",
             }}
           />
 
@@ -402,10 +437,10 @@ export default function Hero() {
 
           <div
             data-hero-content
-            className="absolute inset-0 z-30 flex items-end pb-14 pt-20 md:items-center md:pb-0 md:pt-0"
+            className="absolute inset-0 z-30 flex items-end pb-14 pt-20 lg:items-center lg:pb-0 lg:pt-0"
             style={{ willChange: "transform" }}
           >
-            <div className="w-full px-5 md:px-[7vw]">
+            <div className="w-full px-5 md:px-[6vw] lg:px-[7vw]">
               <HeroCaption />
             </div>
           </div>

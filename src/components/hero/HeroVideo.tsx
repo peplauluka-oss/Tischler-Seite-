@@ -73,7 +73,7 @@ export default function HeroVideo() {
       <div
         data-hero-ambient
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 hidden md:block"
+        className="pointer-events-none absolute inset-0 z-0 hidden lg:block"
         style={{
           backgroundImage: `url(${asset(heroVideo.ambient)})`,
           backgroundSize: "cover",
@@ -90,10 +90,10 @@ export default function HeroVideo() {
         data-hero-video-panel
         className="absolute z-20 overflow-hidden
                    inset-0
-                   md:inset-auto md:top-[18svh] md:right-[7vw] md:h-[64svh] md:w-[36svh]
-                   md:rounded-[3px]
-                   md:shadow-[0_40px_120px_-30px_rgba(0,0,0,0.9)]
-                   md:ring-1 md:ring-ivory/12"
+                   lg:inset-auto lg:top-[18svh] lg:right-[7vw] lg:h-[64svh] lg:w-[36svh]
+                   lg:rounded-[3px]
+                   lg:shadow-[0_40px_120px_-30px_rgba(0,0,0,0.9)]
+                   lg:ring-1 lg:ring-ivory/12"
         style={{ willChange: "transform" }}
       >
         <video
@@ -136,7 +136,7 @@ export default function HeroVideo() {
         data-hero-videoctl
         className="absolute right-2 top-[4.25rem] z-40 flex h-11 items-center gap-2 px-3
                    text-[0.625rem] font-bold tracking-[0.2em] text-mute
-                   transition-colors hover:text-ivory md:bottom-7 md:right-7 md:top-auto"
+                   transition-colors hover:text-ivory lg:bottom-7 lg:right-7 lg:top-auto"
       >
         <span
           aria-hidden="true"

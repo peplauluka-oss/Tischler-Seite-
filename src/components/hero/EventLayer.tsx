@@ -33,6 +33,27 @@ export default function EventLayer({ active }: { active: boolean }) {
       </h2>
 
       <EventClip active={active} />
+
+      {/* Die Einordnung — mehr braucht es auf dem Plakat nicht. Sie sitzt im
+          weichen Rand über dem Motiv, damit sie nichts verdeckt, und sagt in
+          zwei Worten, was hier gerade den Bildschirm hat. Alles Weitere steht
+          eine Scrollbewegung später in der Schrift der Seite. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center
+                   px-5 pb-8 pt-[max(1.1rem,3.5svh)]"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(5,4,6,0.82) 0%, rgba(5,4,6,0.42) 45%, rgba(5,4,6,0) 100%)",
+        }}
+      >
+        <span className="flex items-center gap-3">
+          <span className="h-px w-6 bg-ember" />
+          <span className="label" style={{ color: "var(--color-ivory)" }}>
+            Nächste Nacht
+          </span>
+        </span>
+      </div>
     </div>
   );
 }
