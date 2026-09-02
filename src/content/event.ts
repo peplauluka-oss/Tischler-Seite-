@@ -23,8 +23,6 @@ export type EventClip = {
   /** Schlussbild der Animation — trägt die vollständige Eventinformation.
       Dient als Poster, als Fallback bei reduzierter Bewegung und ohne Video. */
   poster: string;
-  /** Seitenverhältnis des Creatives — bestimmt die Bühne, nie ein Beschnitt. */
-  ratio: "9/16" | "4/5" | "1/1";
   /** Was zu sehen ist — für Screenreader, die die Animation nicht sehen. */
   description: string;
 };
@@ -44,11 +42,17 @@ export const event = {
    * Adresse. Deshalb wiederholt die Seite darunter NICHTS davon — sie führt
    * nur noch zur Handlung. Neues Event = drei Dateien tauschen.
    */
+  /* Das Creative liegt im Original als 9:16 vor. Ein Telefon ist schmaler
+     als das — formatfüllend fielen rund neun Prozent je Seite weg, und darin
+     liegen der Medusakopf im Logo und der rechte Rand des Datumsfelds.
+     Deshalb wird hier eine 9:20-Fassung ausgeliefert: Sie trägt oben und
+     unten ein Stück des eigenen Bildes, an der Kante gespiegelt und weich
+     gezeichnet. Damit deckt der Clip jedes Telefonformat vollflächig ab,
+     ohne dass am Plakat etwas fehlt. Quelle bleibt event-clip.mp4. */
   clip: {
-    mp4: "/media/event-clip.mp4",
-    webm: "/media/event-clip.webm",
-    poster: "/media/event-poster.jpg",
-    ratio: "9/16",
+    mp4: "/media/event-clip-full.mp4",
+    webm: "/media/event-clip-full.webm",
+    poster: "/media/event-poster-full.jpg",
     description:
       "Event-Ankündigung des Black Medusa: Birthday Bash, vier Jahre Black Medusa, " +
       "mit Special Guest Sinan, DJ Maky, DJ Pasa, Tupan Show und Belly Dance Show. " +

@@ -213,6 +213,29 @@ html.motion-on .hero-reveal {
   opacity: 0;
 }
 
+/* --- Der Event-Clip deckt den Bildschirm ---------------------------------
+   Auf dem Telefon formatfüllend: Die ausgelieferte Fassung ist 9:20 und
+   bringt ihre weichen Ränder selbst mit, es fehlt nichts vom Plakat.
+
+   Ab einem Seitenverhältnis von 52:100 reicht das nicht mehr — dort stünde
+   vom Hochformat nur noch ein Streifen. Von da an steht das Creative in
+   voller Höhe, und die Fläche daneben füllt ein stark unscharfer Abzug
+   desselben Bildes. Ein schwarzer Rahmen entsteht so nirgends. */
+.event-fill {
+  object-fit: cover;
+}
+.event-spill {
+  display: none;
+}
+@media (min-aspect-ratio: 52 / 100) {
+  .event-fill {
+    object-fit: contain;
+  }
+  .event-spill {
+    display: block;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

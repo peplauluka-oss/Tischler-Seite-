@@ -30,7 +30,6 @@ const CUE = {
   caption: 0.36,
   navOut: 0.46,
   dissolve: 0.5,
-  cta: 0.78,
   navBack: 0.95,
 };
 
@@ -78,7 +77,6 @@ export default function Hero() {
         const brandbar = q("[data-hero-brandbar]");
         const cue = q("[data-hero-cue]");
         const content = q("[data-hero-content]");
-        const eventCta = q("[data-event-cta]");
 
         // Die Navigation liegt außerhalb des Hero — sie wird bewusst von
         // derselben Timeline gesteuert, damit die Übergabe Logo → Navigation
@@ -242,14 +240,6 @@ export default function Hero() {
             { opacity: 0, duration: DISSOLVE * 0.3 },
             CUE.dissolve + DISSOLVE * 0.7,
           );
-
-        /* 07 — DIE HANDLUNG, nachrangig: erst Sinan, dann der Tisch. */
-        tl.fromTo(
-          eventCta,
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.08 },
-          CUE.cta,
-        );
 
         /* Am Ende der Strecke ist die Navigation wieder da — die Seite geht
            danach normal weiter. */

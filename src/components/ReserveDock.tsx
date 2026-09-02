@@ -21,9 +21,12 @@ export default function ReserveDock() {
   useEffect(() => {
     const hero = document.getElementById("top");
     const onScroll = () => {
+      /* Erst hinter Handlung und Countdown: Direkt nach dem Hero stünde der
+         Balken über derselben Schaltfläche, die dort ohnehin gerade groß
+         im Bild steht. */
       const passed = hero
-        ? hero.offsetHeight - window.innerHeight
-        : window.innerHeight * 2.2;
+        ? hero.offsetHeight + window.innerHeight * 0.55
+        : window.innerHeight * 3;
       setVisible(window.scrollY > passed);
     };
     onScroll();

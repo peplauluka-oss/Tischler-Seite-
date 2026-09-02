@@ -5,7 +5,11 @@ import { event } from "@/content/event";
 import { asset } from "@/lib/asset";
 
 /**
- * Das Event-Creative als Bewegtbild.
+ * Das Event-Creative als Bewegtbild — bildschirmfüllend wie der Clubclip
+ * im Hero, nicht als Videoelement mit Rändern.
+ *
+ * Die ausgelieferte Fassung ist 9:20 und bringt ihre weichen Ränder selbst
+ * mit (siehe content/event.ts), deshalb deckt sie jedes Telefon vollflächig.
  *
  * Der Clip wird nicht von seiner eigenen Sichtbarkeit gestartet, sondern von
  * der Hero-Choreografie: Genau in dem Moment, in dem die Hero-Welt zu
@@ -63,29 +67,49 @@ export default function EventClip({ active }: { active: boolean }) {
     });
   }, [active, reduced]);
 
-  /* Das Creative bleibt unbeschnitten — es trägt bis an den unteren Rand
-     Text (Tischbuchung, Adresse). Was daneben frei bleibt, ist das Schwarz
-     des Assets selbst und damit Teil der Komposition. */
-  const stage = "absolute inset-0 h-full w-full object-contain";
+  /* Wie der Bildschirm gedeckt wird, entscheidet das Seitenverhältnis des
+     Geräts — die Regeln dazu stehen in globals.css bei `.event-fill`. */
+  const stage = "event-fill absolute inset-0 z-10 h-full w-full";
+
+  /** Der Lichtabdruck neben dem Hochformat: kein Hintergrund, das Bild selbst. */
+  const spill = (
+    <div
+      aria-hidden="true"
+      className="event-spill pointer-events-none absolute inset-0"
+      style={{
+        backgroundImage: `url(${asset(clip.poster)})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        filter: "blur(90px) saturate(1.2) brightness(0.42)",
+        transform: "scale(1.5)",
+      }}
+    />
+  );
 
   if (reduced || (!clip.mp4 && !clip.webm)) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img src={asset(clip.poster)} alt={clip.description} className={stage} />
+      <>
+        {spill}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={asset(clip.poster)} alt={clip.description} className={stage} />
+      </>
     );
   }
 
   return (
-    <video
-      ref={videoRef}
-      className={stage}
-      muted
-      playsInline
-      preload="auto"
-      aria-label={clip.description}
-    >
-      {clip.webm && <source src={asset(clip.webm)} type="video/webm" />}
-      {clip.mp4 && <source src={asset(clip.mp4)} type="video/mp4" />}
-    </video>
+    <>
+      {spill}
+      <video
+        ref={videoRef}
+        className={stage}
+        muted
+        playsInline
+        preload="auto"
+        aria-label={clip.description}
+      >
+        {clip.webm && <source src={asset(clip.webm)} type="video/webm" />}
+        {clip.mp4 && <source src={asset(clip.mp4)} type="video/mp4" />}
+      </video>
+    </>
   );
 }
