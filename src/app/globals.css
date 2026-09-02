@@ -214,20 +214,22 @@ html.motion-on .hero-reveal {
 }
 
 /* --- Der Event-Clip deckt den Bildschirm ---------------------------------
-   Auf dem Telefon formatfüllend: Die ausgelieferte Fassung ist 9:20 und
-   bringt ihre weichen Ränder selbst mit, es fehlt nichts vom Plakat.
+   Die ausgelieferte Fassung ist 768x1440 und trägt auf allen vier Seiten ein
+   Stück des eigenen Bildes. Dadurch bleibt das Plakat bei `cover` von einem
+   Seitenverhältnis von 0,40 bis 0,75 vollständig sichtbar — also auf jedem
+   Telefon im Hochformat, auch mit Adress- und Werkzeugleiste des Browsers,
+   die die sichtbare Fläche deutlich breiter machen als das Gerät selbst.
 
-   Ab einem Seitenverhältnis von 52:100 reicht das nicht mehr — dort stünde
-   vom Hochformat nur noch ein Streifen. Von da an steht das Creative in
-   voller Höhe, und die Fläche daneben füllt ein stark unscharfer Abzug
-   desselben Bildes. Ein schwarzer Rahmen entsteht so nirgends. */
+   Erst darüber — Tablet quer, Desktop — bliebe vom Hochformat ein Streifen.
+   Von da an steht das Creative in voller Höhe, und die Fläche daneben füllt
+   ein unscharfer Abzug desselben Bildes. Schwarze Ränder gibt es nirgends. */
 .event-fill {
   object-fit: cover;
 }
 .event-spill {
   display: none;
 }
-@media (min-aspect-ratio: 52 / 100) {
+@media (min-aspect-ratio: 76 / 100) {
   .event-fill {
     object-fit: contain;
   }

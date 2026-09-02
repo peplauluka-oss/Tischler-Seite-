@@ -30,7 +30,7 @@ const CUE = {
   caption: 0.36,
   navOut: 0.46,
   dissolve: 0.5,
-  navBack: 0.95,
+  navBack: 0.99,
 };
 
 /** Dauer der Verpuffung in Fortschritt — kurz, damit sie wie ein Impact wirkt. */
@@ -241,9 +241,10 @@ export default function Hero() {
             CUE.dissolve + DISSOLVE * 0.7,
           );
 
-        /* Am Ende der Strecke ist die Navigation wieder da — die Seite geht
-           danach normal weiter. */
-        tl.to(navShell, { opacity: 1, duration: 0.04 }, CUE.navBack);
+        /* Erst wenn die Bühne weiterzieht, ist die Navigation wieder da:
+           Solange das Creative den Bildschirm hat, läge sie über dessen
+           eigenem Logo. */
+        tl.to(navShell, { opacity: 1, duration: 0.01 }, CUE.navBack);
 
         /* Der Zustandswechsel selbst: Er startet den Clip und nimmt der
            verpufften Welt Zeiger und Tastatur ab. */
