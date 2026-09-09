@@ -1,42 +1,64 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { event } from "@/content/event";
+import type { EventArtwork } from "@/content/events";
 import { asset } from "@/lib/asset";
 
 /**
- * Das Event-Creative als Bewegtbild — bildschirmfüllend wie der Clubclip
- * im Hero, nicht als Videoelement mit Rändern.
+ * Das Event-Artwork als Bewegtbild — bildschirmfüllend wie der Clubclip im
+ * Hero, nicht als Videoelement mit Rändern.
  *
- * Die ausgelieferte Fassung ist 9:20 und bringt ihre weichen Ränder selbst
- * mit (siehe content/event.ts), deshalb deckt sie jedes Telefon vollflächig.
+ * Wie der Bildschirm gedeckt wird, entscheidet das Seitenverhältnis des
+ * Geräts; die Regeln stehen in globals.css bei `.event-fill`.
  *
- * Der Clip wird nicht von seiner eigenen Sichtbarkeit gestartet, sondern von
- * der Hero-Choreografie: Genau in dem Moment, in dem die Hero-Welt zu
- * verpuffen beginnt, läuft er ab Sekunde null los. So fällt der goldene
- * Impact mit dem Übergang zusammen — er ist der Übergang und kündigt ihn
- * nicht an. Scrollt man zurück, beginnt er beim nächsten Mal wieder von vorn.
- *
- * Nach dem einen ungeteilten Durchlauf geht er in die Schleife. Bewusst ohne
- * Bedienelemente: Vier Sekunden liegen unter der Schwelle, ab der bewegte
- * Inhalte eine Pausiermöglichkeit brauchen. Bei `prefers-reduced-motion`
- * steht das Motiv sofort da — ohne Informationsverlust.
+ * Gestartet wird der Clip nicht von seiner eigenen Sichtbarkeit, sondern von
+ * der Hero-Choreografie: genau dann, wenn die Clubwelt zu verpuffen beginnt.
+ * So fällt der Impact mit dem Übergang zusammen, statt ihn anzukündigen.
  */
-export default function EventClip({ active }: { active: boolean }) {
+export default function EventClip({
+  artwork,
+  active,
+}: {
+  artwork: EventArtwork;
+  active: boolean;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [reduced, setReduced] = useState(false);
-  const { clip } = event;
+  const warmed = useRef(false);
 
   useEffect(() => {
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }, []);
 
+  /* ERSTLAST.
+     Der Clip liegt eine Bildschirmhöhe tiefer und wird erst beim Verlassen
+     des Hero gebraucht — trotzdem zöge er als `preload="auto"` rund ein
+     Megabyte in genau dem Moment, in dem das Hero-Video die Leitung
+     braucht. Deshalb kommt er, wenn der Browser Luft hat: Dann ist er
+     gepuffert, bevor jemand dort ankommt, ohne den ersten Bildschirm zu
+     verzögern. */
   useEffect(() => {
     const video = videoRef.current;
     if (!video || reduced) return;
 
-    /* Erst der eine große Durchlauf, danach die Schleife: Der Impact soll
-       einmal ungeteilt wirken, das Plakat danach in Bewegung bleiben. */
+    const warm = () => {
+      if (warmed.current || !videoRef.current) return;
+      warmed.current = true;
+      videoRef.current.preload = "auto";
+      videoRef.current.load();
+    };
+
+    /* Zwei Sekunden: Bis dahin hat das Hero-Video seinen Vorlauf und der
+       erste Bildschirm steht. Bewusst ein einfacher Timer statt
+       requestIdleCallback — der ist nicht überall da, und diese Entscheidung
+       ist es nicht wert, dafür eine Fallunterscheidung zu pflegen. */
+    const id = window.setTimeout(warm, 2200);
+    return () => window.clearTimeout(id);
+  }, [reduced]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || reduced) return;
     const onEnded = () => {
       video.loop = true;
       void video.play().catch(() => {});
@@ -48,13 +70,16 @@ export default function EventClip({ active }: { active: boolean }) {
   useEffect(() => {
     const video = videoRef.current;
     if (!video || reduced) return;
-
     if (!active) {
       video.pause();
       video.loop = false;
       return;
     }
-
+    /* Wer schneller unten ist als der Leerlauf: jetzt sofort laden. */
+    if (!warmed.current) {
+      warmed.current = true;
+      video.preload = "auto";
+    }
     video.loop = false;
     try {
       video.currentTime = 0;
@@ -67,8 +92,6 @@ export default function EventClip({ active }: { active: boolean }) {
     });
   }, [active, reduced]);
 
-  /* Wie der Bildschirm gedeckt wird, entscheidet das Seitenverhältnis des
-     Geräts — die Regeln dazu stehen in globals.css bei `.event-fill`. */
   const stage = "event-fill absolute inset-0 z-10 h-full w-full";
 
   /** Der Lichtabdruck neben dem Hochformat: kein Hintergrund, das Bild selbst. */
@@ -77,7 +100,7 @@ export default function EventClip({ active }: { active: boolean }) {
       aria-hidden="true"
       className="event-spill pointer-events-none absolute inset-0"
       style={{
-        backgroundImage: `url(${asset(clip.poster)})`,
+        backgroundImage: `url(${asset(artwork.poster)})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         filter: "blur(90px) saturate(1.2) brightness(0.42)",
@@ -86,12 +109,12 @@ export default function EventClip({ active }: { active: boolean }) {
     />
   );
 
-  if (reduced || (!clip.mp4 && !clip.webm)) {
+  if (reduced || (!artwork.mp4 && !artwork.webm)) {
     return (
       <>
         {spill}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={asset(clip.poster)} alt={clip.description} className={stage} />
+        <img src={asset(artwork.poster)} alt={artwork.description} className={stage} />
       </>
     );
   }
@@ -104,11 +127,11 @@ export default function EventClip({ active }: { active: boolean }) {
         className={stage}
         muted
         playsInline
-        preload="auto"
-        aria-label={clip.description}
+        preload="metadata"
+        aria-label={artwork.description}
       >
-        {clip.webm && <source src={asset(clip.webm)} type="video/webm" />}
-        {clip.mp4 && <source src={asset(clip.mp4)} type="video/mp4" />}
+        {artwork.webm && <source src={asset(artwork.webm)} type="video/webm" />}
+        {artwork.mp4 && <source src={asset(artwork.mp4)} type="video/mp4" />}
       </video>
     </>
   );

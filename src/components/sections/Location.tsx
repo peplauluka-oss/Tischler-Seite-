@@ -15,6 +15,16 @@ function Pending({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * LOCATION — praktisch, nicht als Kontaktseite.
+ *
+ * Die Botschaft ist nicht „hier sind unsere Daten“, sondern: Du weißt, wo es
+ * ist und wie du hinkommst. Deshalb steht die Route als Handlung da und nicht
+ * als Fußnote.
+ *
+ * Welche Linien wirklich halten, ist nicht belegt. Bis der Club es bestätigt,
+ * steht dort nichts — eine falsche Verbindung wäre schlimmer als keine.
+ */
 export default function Location() {
   return (
     <section id="location" className="scroll-mt-16 py-24 md:py-32">
@@ -42,28 +52,58 @@ export default function Location() {
           <span className="label">Location</span>
           {/* Ein einziges langes Wort: Trennung erlauben und die Größe an die
               Spalte binden, sonst schiebt es die Seite seitlich auf. */}
-          <p
+          <h2
             className="display mt-4 hyphens-auto break-words text-ivory"
             style={{ fontSize: "clamp(2.25rem, 4.6vw, 3.75rem)" }}
           >
             {club.district}
-          </p>
+          </h2>
           <p className="mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-mute">
             Cocktailbar und Club unter einem Dach — im Nordosten Berlins,
             nicht in der Innenstadt. Genau das ist der Punkt.
           </p>
 
+          <address className="mt-8 not-italic">
+            <p className="display text-[clamp(1.5rem,3.4vw,2.25rem)] leading-tight text-ivory">
+              {club.address}
+              <br />
+              {club.postcode}
+            </p>
+            <a
+              href={club.mapsUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="cta-quiet mt-5"
+            >
+              Route öffnen
+              <svg viewBox="0 0 18 10" width="18" height="10" aria-hidden="true">
+                <path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </a>
+          </address>
+
           <dl className="mt-9 space-y-4 border-t border-ivory/12 pt-6 text-sm">
-            <div>
-              <dt className="label text-[0.625rem]">Adresse</dt>
-              <dd className="mt-1.5">
-                <Pending>{club.address}</Pending>
-              </dd>
-            </div>
             <div>
               <dt className="label text-[0.625rem]">Öffnungszeiten</dt>
               <dd className="mt-1.5">
                 <Pending>{club.hours}</Pending>
+              </dd>
+            </div>
+            {club.transit && (
+              <div>
+                <dt className="label text-[0.625rem]">ÖPNV</dt>
+                <dd className="mt-1.5 text-mute">{club.transit}</dd>
+              </div>
+            )}
+            <div>
+              <dt className="label text-[0.625rem]">Kontakt</dt>
+              <dd className="mt-1.5">
+                <a
+                  href={club.phoneHref}
+                  className="text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
+                >
+                  {club.phone}
+                </a>
               </dd>
             </div>
             <div>

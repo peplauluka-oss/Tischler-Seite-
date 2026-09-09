@@ -2,28 +2,23 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ReserveButton } from "@/components/ui/Cta";
-import { useReservation } from "@/lib/reservation";
+import { GuestlistButton } from "@/components/ui/Cta";
+import { useBooking } from "@/lib/booking";
 
 /**
- * Die Reservierung auf dem Telefon — unten, mit einer Hand erreichbar.
+ * Die wichtigste Handlung auf dem Telefon — unten, in Daumenreichweite.
  *
- * Ersetzt das Menü in der Kopfzeile: Oben steht die Marke, unten die einzige
- * Aktion, die zählt. Sie erscheint erst, wenn der Hero durch ist — dort trägt
- * erst die Clubwelt und dann der Event-Zustand die Aktion ohnehin selbst, und
- * über dem Creative würde der Balken genau die Zeile verdecken, die
- * Tischbuchung und Adresse trägt.
+ * Sie erscheint erst hinter dem Hero: Dort trägt erst die Clubwelt und dann
+ * das Artwork den Bildschirm, und über dem Artwork würde der Balken genau die
+ * Zeile verdecken, die Tischbuchung und Adresse trägt.
  */
-export default function ReserveDock() {
-  const { isOpen } = useReservation();
+export default function GuestlistDock({ eventSlug = null }: { eventSlug?: string | null }) {
+  const { isOpen } = useBooking();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const hero = document.getElementById("top");
     const onScroll = () => {
-      /* Erst hinter Handlung und Countdown: Direkt nach dem Hero stünde der
-         Balken über derselben Schaltfläche, die dort ohnehin gerade groß
-         im Bild steht. */
       const passed = hero
         ? hero.offsetHeight + window.innerHeight * 0.55
         : window.innerHeight * 3;
@@ -46,13 +41,13 @@ export default function ReserveDock() {
           animate={{ y: 0 }}
           exit={{ y: "120%" }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-x-0 bottom-0 z-90 px-4 pb-[max(0.85rem,env(safe-area-inset-bottom))] pt-3 md:hidden"
+          className="fixed inset-x-0 bottom-0 z-90 px-4 pb-[max(0.85rem,env(safe-area-inset-bottom))] pt-3 lg:hidden"
           style={{
             background:
               "linear-gradient(0deg, rgba(5,4,6,0.97) 55%, rgba(5,4,6,0) 100%)",
           }}
         >
-          <ReserveButton className="w-full" />
+          <GuestlistButton className="w-full" eventSlug={eventSlug} />
         </motion.div>
       )}
     </AnimatePresence>

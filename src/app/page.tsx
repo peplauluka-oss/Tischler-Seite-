@@ -1,43 +1,84 @@
+import type { Metadata } from "next";
 import SmoothScroll from "@/components/SmoothScroll";
 import SiteNav from "@/components/nav/SiteNav";
 import Hero from "@/components/hero/Hero";
-import EventCountdown from "@/components/sections/EventCountdown";
-import Room from "@/components/sections/Room";
-import Music from "@/components/sections/Music";
-import ReservationSection from "@/components/sections/ReservationSection";
+import NextEvent from "@/components/sections/NextEvent";
+import MedusaNights from "@/components/sections/MedusaNights";
+import UpcomingEvents from "@/components/sections/UpcomingEvents";
+import InsideMedusa from "@/components/sections/InsideMedusa";
 import Location from "@/components/sections/Location";
+import TableSection from "@/components/sections/TableSection";
 import Footer from "@/components/layout/Footer";
-import ReserveDock from "@/components/ReserveDock";
-import ReservationOverlay from "@/components/reservation/ReservationOverlay";
-import { ReservationProvider } from "@/lib/reservation";
+import GuestlistDock from "@/components/GuestlistDock";
+import BookingOverlay from "@/components/booking/BookingOverlay";
+import { ClubSchema } from "@/components/StructuredData";
+import { BookingProvider } from "@/lib/booking";
+import { club } from "@/content/club";
+import {
+  eventDate,
+  eventFullTitle,
+  featuredEvent,
+  upcomingEvents,
+} from "@/content/events";
+
+export function generateMetadata(): Metadata {
+  const featured = featuredEvent();
+  const next =
+    featured?.upcoming
+      ? `Nächstes Event: ${eventFullTitle(featured.event)}, ${eventDate(featured.event).short}. `
+      : "";
+  const description =
+    `${club.nameFull} — Club und Cocktailbar in Berlin-${club.district}. ` +
+    `${next}Gästeliste und Tischreservierung direkt über WhatsApp.`;
+
+  return {
+    title: `${club.nameFull} — Club in Berlin-${club.district}`,
+    description,
+    alternates: { canonical: "/" },
+    openGraph: {
+      title: `${club.nameFull} · Berlin`,
+      description,
+      type: "website",
+      locale: "de_DE",
+    },
+  };
+}
 
 /**
- * Der Ablauf der Seite ist die Dramaturgie des Abends:
+ * Der Ablauf der Seite ist der Ablauf einer Nacht:
  *
- *   Hero → Event (derselbe Screen) → Raum → Sound → Tisch → Weg dorthin
+ *   Spür es → Was kommt? → Das könntest du sein → Was kommt danach?
+ *   → Wie sieht es aus? → Wo ist es? → Kommst du mit Leuten? → Los.
  *
- * Jeder Abschnitt hat eine eigene Komposition. Zusammengehalten wird das
- * nicht durch ein wiederholtes Kartenbauteil, sondern durch Typografie,
- * Dunkelheit und ein einziges Rot.
+ * Jeder Abschnitt hat genau eine Aufgabe. Zusammengehalten wird das nicht
+ * durch ein wiederkehrendes Kartenbauteil, sondern durch Dunkelheit,
+ * Typografie und ein einziges Rot.
  */
 export default function Page() {
+  const featured = featuredEvent();
+  const upcoming = upcomingEvents();
+
   return (
-    <ReservationProvider>
+    <BookingProvider>
       <SmoothScroll />
-      <SiteNav />
+      <ClubSchema />
+      <SiteNav heroDriven />
 
       <main>
-        <Hero />
-        <EventCountdown />
-        <Room />
-        <Music />
-        <ReservationSection />
+        <Hero featured={featured} />
+        {featured && (
+          <NextEvent event={featured.event} upcoming={featured.upcoming} />
+        )}
+        <MedusaNights />
+        <UpcomingEvents events={upcoming} />
+        <InsideMedusa />
         <Location />
+        <TableSection eventSlug={featured?.event.slug ?? null} />
       </main>
 
       <Footer />
-      <ReserveDock />
-      <ReservationOverlay />
-    </ReservationProvider>
+      <GuestlistDock eventSlug={featured?.event.slug ?? null} />
+      <BookingOverlay />
+    </BookingProvider>
   );
 }

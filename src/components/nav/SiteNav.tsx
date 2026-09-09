@@ -1,27 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { navItems } from "@/content/club";
 import { Logo } from "@/components/ui/Brand";
-import { ReserveButton } from "@/components/ui/Cta";
+import { GuestlistButton, TableButton } from "@/components/ui/Cta";
 import { scrollToSection } from "@/lib/scroll";
 
 /**
- * Navigation — bewusst klein gehalten.
+ * Navigation — durchsichtig, damit sie in der Seite liegt statt darauf.
  *
- * Auf dem Telefon gibt es kein Menü und keine Vollbild-Ebene mehr: Bei einer
- * Seite, die man ohnehin durchscrollt, ist ein Hamburger-Overlay nur eine
- * zusätzliche Hürde. Oben bleibt die Marke, die Reservierung sitzt unten in
- * Daumenreichweite (siehe ReserveDock). Auf großen Schirmen vier Ziele und
- * die Aktion.
+ * Sichtbarkeit steuert die Hero-Timeline über `data-nav-shell`: Die Leiste
+ * entsteht aus der Brandingleiste des Videos und tritt wieder zurück,
+ * während sich der Hero in das Event verwandelt — sie läge sonst über dessen
+ * eigenem Logo.
  *
- * Sichtbarkeit steuert die Hero-Timeline über `data-nav-shell` — die Leiste
- * entsteht aus der Brandingleiste des Videos und tritt wieder zurück, während
- * sich der Hero in das Event verwandelt: Sie läge sonst über dem Logo im
- * Creative und machte aus dem Moment wieder ein Video in einer Website.
+ * Auf dem Telefon steht neben der Marke nur die Gästeliste und ein
+ * Menüzeichen: Die wichtigste Handlung ist immer mit einem Daumen erreichbar,
+ * alles Übrige liegt eine Berührung tiefer.
  */
-export default function SiteNav() {
+export default function SiteNav({
+  /** Auf der Startseite blendet die Hero-Timeline die Leiste ein und wieder
+      aus. Auf allen anderen Seiten gibt es keinen Hero — dort steht sie. */
+  heroDriven = false,
+}: {
+  heroDriven?: boolean;
+}) {
   const [active, setActive] = useState<string | null>(null);
+  const [menu, setMenu] = useState(false);
 
   useEffect(() => {
     const sections = navItems
@@ -42,36 +48,49 @@ export default function SiteNav() {
     return () => observer.disconnect();
   }, []);
 
+  /* Das Menü darf keinen Scroll hinter sich zulassen und muss auf Escape zu. */
+  useEffect(() => {
+    if (!menu) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenu(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [menu]);
+
+  const go = (id: string) => {
+    setMenu(false);
+    scrollToSection(id);
+  };
+
   return (
     <header
       data-nav-shell
-      className="hero-reveal fixed inset-x-0 top-0 z-100"
+      className={`fixed inset-x-0 top-0 z-100 ${heroDriven ? "hero-reveal" : ""}`}
       style={{ willChange: "opacity, transform" }}
     >
       <div
         data-nav-bg
-        className="absolute inset-0 border-b border-ivory/10 bg-void/70 backdrop-blur-xl"
+        className="absolute inset-0 border-b border-ivory/10 bg-void/55 backdrop-blur-xl"
       />
 
-      <div className="relative mx-auto flex h-14 max-w-[1560px] items-center justify-between gap-6 px-5 md:h-[72px] md:px-8">
+      <div className="relative mx-auto flex h-14 max-w-[1560px] items-center justify-between gap-4 px-5 md:h-[72px] md:px-8">
         <button
           type="button"
-          onClick={() => scrollToSection("top")}
-          className="flex items-center gap-3 text-ivory transition-opacity hover:opacity-70"
+          onClick={() => go("top")}
+          className="flex shrink-0 items-center text-ivory transition-opacity hover:opacity-70"
         >
-          <Logo width={148} />
+          <Logo width={136} className="md:!w-[148px]" />
           <span className="sr-only">Black Medusa — zum Seitenanfang</span>
         </button>
 
-        <nav aria-label="Hauptnavigation" className="hidden md:block">
-          <ul className="flex items-center gap-8">
+        <nav aria-label="Hauptnavigation" className="hidden lg:block">
+          <ul className="flex items-center gap-7">
             {navItems.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    scrollToSection(item.id);
+                    go(item.id);
                   }}
                   aria-current={active === item.id ? "true" : undefined}
                   className={`block py-2 text-[0.6875rem] font-bold tracking-[0.2em] transition-colors ${
@@ -85,11 +104,74 @@ export default function SiteNav() {
           </ul>
         </nav>
 
-        <ReserveButton
-          label="Tisch"
-          className="hidden min-h-10 gap-3 px-4 py-2.5 text-[0.6875rem] md:inline-flex"
-        />
+        <div className="flex shrink-0 items-center gap-2.5">
+          <TableButton
+            label="TISCH"
+            className="hidden min-h-10 gap-3 px-4 py-2.5 text-[0.6875rem] lg:inline-flex"
+          />
+          <GuestlistButton
+            label="GÄSTELISTE"
+            className="min-h-10 gap-2.5 px-3.5 py-2.5 text-[0.625rem] md:gap-3 md:px-4 md:text-[0.6875rem]"
+          />
+
+          <button
+            type="button"
+            onClick={() => setMenu((v) => !v)}
+            aria-expanded={menu}
+            aria-controls="site-menu"
+            className="-mr-2 flex h-11 w-11 items-center justify-center text-ivory lg:hidden"
+          >
+            <span className="sr-only">{menu ? "Menü schließen" : "Menü öffnen"}</span>
+            <svg viewBox="0 0 20 14" width="20" height="14" aria-hidden="true">
+              {menu ? (
+                <path d="M2 2l16 10M18 2L2 12" stroke="currentColor" strokeWidth="1.6" />
+              ) : (
+                <path d="M0 1h20M0 7h20M0 13h13" stroke="currentColor" strokeWidth="1.6" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
+
+      {/* Menü: eine Liste, keine Vollbildwelt — vier Ziele brauchen keine. */}
+      <AnimatePresence>
+        {menu && (
+          <motion.nav
+            id="site-menu"
+            aria-label="Menü"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="relative border-b border-ivory/10 bg-void/95 backdrop-blur-xl lg:hidden"
+          >
+            <ul className="px-5 py-3">
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      go(item.id);
+                    }}
+                    className="block border-b border-ivory/8 py-4 text-[0.8125rem] font-bold tracking-[0.2em] text-ivory last:border-0"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a
+                  href="/events"
+                  className="block py-4 text-[0.8125rem] font-bold tracking-[0.2em] text-mute"
+                >
+                  ALLE EVENTS
+                </a>
+              </li>
+            </ul>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

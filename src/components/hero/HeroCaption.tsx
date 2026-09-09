@@ -1,8 +1,7 @@
 "use client";
 
-import { QuietLink, ReserveButton } from "@/components/ui/Cta";
+import { GuestlistButton, TableButton } from "@/components/ui/Cta";
 import { club } from "@/content/club";
-import { event } from "@/content/event";
 
 /**
  * DIE AUSSAGE IM HERO.
@@ -49,15 +48,15 @@ export default function HeroCaption() {
         data-reveal="sub"
         className="hero-reveal mt-5 text-[0.75rem] font-bold uppercase tracking-[0.3em] text-mute md:mt-6 md:text-[0.8125rem]"
       >
-        {event.music}
+        {club.music}
       </p>
 
       <div
         data-reveal="cta"
-        className="hero-reveal mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-8 md:mt-10"
+        className="hero-reveal mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-4 md:mt-10"
       >
-        <ReserveButton className="w-full sm:w-auto" />
-        <QuietLink target="event" label="Zum Event" />
+        <GuestlistButton className="w-full sm:w-auto" />
+        <TableButton className="w-full sm:w-auto" />
       </div>
     </div>
   );

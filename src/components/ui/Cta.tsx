@@ -1,6 +1,6 @@
 "use client";
 
-import { useReservation } from "@/lib/reservation";
+import { useBooking } from "@/lib/booking";
 import { scrollToSection } from "@/lib/scroll";
 
 export function Arrow({ className = "" }: { className?: string }) {
@@ -19,27 +19,58 @@ export function Arrow({ className = "" }: { className?: string }) {
 }
 
 /**
- * Primäraktion der Seite. Bewusst kein rotes Rechteck: Die hellste Fläche
- * im dunklen Raum zieht den Blick, beim Hover kippt sie in das Rot der
- * Fassade. Es gibt pro Bildschirmbereich nur eine davon.
+ * GÄSTELISTE — die Primäraktion der ganzen Seite.
+ *
+ * Sie ist die hellste Fläche im dunklen Raum und trägt als einzige einen
+ * Schimmer aus dem Rot der Fassade. Kein zweiter Knopf auf der Seite sieht
+ * so aus; daran erkennt man sie, ohne dass sie größer sein müsste.
  */
-export function ReserveButton({
+export function GuestlistButton({
   className = "",
-  label = "TISCH RESERVIEREN",
+  label = "GÄSTELISTE",
+  eventSlug = null,
 }: {
   className?: string;
   label?: string;
+  eventSlug?: string | null;
 }) {
-  const { open } = useReservation();
+  const { open } = useBooking();
   return (
-    <button type="button" onClick={() => open()} className={`cta ${className}`}>
+    <button
+      type="button"
+      onClick={() => open("guestlist", eventSlug)}
+      className={`cta cta-glow ${className}`}
+    >
       {label}
       <Arrow />
     </button>
   );
 }
 
-/** Nachrangige Aktion — reine Typo mit Haarlinie, nie ein zweiter Kasten. */
+/** TISCH — nachrangig: gleiche Form, aber nur Kontur statt Fläche. */
+export function TableButton({
+  className = "",
+  label = "TISCH RESERVIEREN",
+  eventSlug = null,
+}: {
+  className?: string;
+  label?: string;
+  eventSlug?: string | null;
+}) {
+  const { open } = useBooking();
+  return (
+    <button
+      type="button"
+      onClick={() => open("table", eventSlug)}
+      className={`cta cta-ghost ${className}`}
+    >
+      {label}
+      <Arrow />
+    </button>
+  );
+}
+
+/** Nachrangige Navigation — reine Typo mit Haarlinie, nie ein dritter Kasten. */
 export function QuietLink({
   target,
   label,

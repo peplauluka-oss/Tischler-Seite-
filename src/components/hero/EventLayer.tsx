@@ -1,7 +1,11 @@
 "use client";
 
 import EventClip from "@/components/sections/EventClip";
-import { event } from "@/content/event";
+import {
+  eventDate,
+  eventFullTitle,
+  type MedusaEvent,
+} from "@/content/events";
 
 /**
  * DER EVENT-ZUSTAND DES HERO.
@@ -9,14 +13,23 @@ import { event } from "@/content/event";
  * Keine eigene Section: Diese Ebene liegt im selben Hero-Viewport wie das
  * Clubvideo, nur darunter. Die Hero-Welt verpufft beim Scrollen — und was
  * darunter zum Vorschein kommt, ist bereits fertig gezeichnet. Deshalb gibt
- * es zwischen beiden Zuständen keinen schwarzen Frame, keine Lücke und
- * keinen Layoutsprung: Es ist dieselbe Bühne, nur ein anderer Inhalt.
+ * es zwischen beiden Zuständen keinen schwarzen Frame und keinen Sprung:
+ * dieselbe Bühne, anderer Inhalt.
  *
- * Der Bildschirm gehört hier ausschließlich dem Creative — kein Rahmen,
- * keine Leiste, keine Aktion daneben. Handlung und Countdown kommen eine
- * Scrollbewegung später.
+ * Der Bildschirm gehört hier dem Artwork. Darüber steht nur, worauf man
+ * schaut — zwei Worte im weichen Rand, die nichts verdecken.
  */
-export default function EventLayer({ active }: { active: boolean }) {
+export default function EventLayer({
+  event,
+  upcoming,
+  active,
+}: {
+  event: MedusaEvent;
+  upcoming: boolean;
+  active: boolean;
+}) {
+  const date = eventDate(event);
+
   return (
     <div
       data-event-layer
@@ -25,19 +38,13 @@ export default function EventLayer({ active }: { active: boolean }) {
       }`}
     >
       {/* Die vollständige Information einmal maschinenlesbar — ein Video ist
-          für Screenreader und Suchmaschinen sonst stumm. Sichtbar steht sie
-          nirgends doppelt: Das Creative zeigt sie. */}
+          für Screenreader und Suchmaschinen sonst stumm. */}
       <h2 className="sr-only">
-        {event.title} — {event.role} {event.headliner}, {event.dateLong},
-        Einlass {event.doors} Uhr
+        {eventFullTitle(event)} — {date.long}, Einlass {date.time} Uhr
       </h2>
 
-      <EventClip active={active} />
+      <EventClip artwork={event.artwork} active={active} />
 
-      {/* Die Einordnung — mehr braucht es auf dem Plakat nicht. Sie sitzt im
-          weichen Rand über dem Motiv, damit sie nichts verdeckt, und sagt in
-          zwei Worten, was hier gerade den Bildschirm hat. Alles Weitere steht
-          eine Scrollbewegung später in der Schrift der Seite. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center
@@ -50,7 +57,7 @@ export default function EventLayer({ active }: { active: boolean }) {
         <span className="flex items-center gap-3">
           <span className="h-px w-6 bg-ember" />
           <span className="label" style={{ color: "var(--color-ivory)" }}>
-            Nächste Nacht
+            {upcoming ? "Next Event" : "Letzte Nacht"}
           </span>
         </span>
       </div>

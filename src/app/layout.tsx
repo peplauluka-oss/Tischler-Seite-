@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { SITE_URL } from "@/lib/site";
 import { Bebas_Neue, Manrope } from "next/font/google";
 import "./globals.css";
 
@@ -20,16 +21,21 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "BLACK MEDUSA BERLIN — Club & Cocktailbar",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "BLACK MEDUSA — Club in Berlin-Hohenschönhausen",
+    template: "%s",
+  },
   description:
-    "Black Medusa Berlin: Balkan, Türkçe Pop und Club-Sound in Berlin. Nächstes Event mit Special Guest Sinan — Tisch direkt online reservieren.",
+    "Black Medusa — Club und Cocktailbar in Berlin-Hohenschönhausen. " +
+    "Balkan, Türkçe und Arabic. Gästeliste und Tischreservierung über WhatsApp.",
+  applicationName: "Black Medusa",
   openGraph: {
-    title: "BLACK MEDUSA BERLIN",
-    description:
-      "Nächstes Event: Special Guest SINAN. Tisch reservieren — Tickets an der Abendkasse.",
+    siteName: "Black Medusa",
     locale: "de_DE",
     type: "website",
   },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
@@ -56,7 +62,7 @@ export default function RootLayout({
           }}
         />
         <a
-          href="#event"
+          href="#top"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] focus:bg-ember focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white"
         >
           Zum Inhalt springen

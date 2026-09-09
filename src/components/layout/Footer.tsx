@@ -1,14 +1,34 @@
-import { Wordmark } from "@/components/ui/Brand";
+import Link from "next/link";
+import { Logo } from "@/components/ui/Brand";
+import { GuestlistButton, TableButton } from "@/components/ui/Cta";
 import { club, navItems } from "@/content/club";
 
+/**
+ * Fußzeile — kompakt. Adresse, Kontakt, Wege, Aktionen. Keine zweite
+ * Marketingfläche: Wer hier ankommt, hat die Seite gesehen.
+ */
 export default function Footer() {
   return (
     <footer className="border-t border-ivory/10 px-5 pb-28 pt-16 md:px-[7vw] md:pb-20 md:pt-20">
-      <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-        <Wordmark width={190} className="items-start" />
+      <div className="grid gap-12 md:grid-cols-12 md:gap-8">
+        <div className="md:col-span-4">
+          <Logo width={190} />
+          <address className="mt-6 not-italic text-[0.9375rem] leading-relaxed text-mute">
+            {club.address}
+            <br />
+            {club.postcode}
+            <br />
+            <a
+              href={club.phoneHref}
+              className="mt-2 inline-block text-ivory transition-colors hover:text-ember-soft"
+            >
+              {club.phone}
+            </a>
+          </address>
+        </div>
 
-        <nav aria-label="Fußzeile">
-          <ul className="flex flex-wrap gap-x-8 gap-y-3">
+        <nav aria-label="Fußzeile" className="md:col-span-4">
+          <ul className="space-y-3">
             {navItems.map((item) => (
               <li key={item.id}>
                 <a
@@ -19,6 +39,14 @@ export default function Footer() {
                 </a>
               </li>
             ))}
+            <li>
+              <Link
+                href="/events"
+                className="text-[0.6875rem] font-bold tracking-[0.2em] text-mute transition-colors hover:text-ivory"
+              >
+                ALLE EVENTS
+              </Link>
+            </li>
             <li>
               <a
                 href={club.instagramUrl}
@@ -31,11 +59,19 @@ export default function Footer() {
             </li>
           </ul>
         </nav>
+
+        <div className="md:col-span-4">
+          <span className="label">Kommst du?</span>
+          <div className="mt-4 flex flex-col gap-3">
+            <GuestlistButton className="w-full" />
+            <TableButton className="w-full" />
+          </div>
+        </div>
       </div>
 
-      <p className="mt-12 border-t border-ivory/10 pt-6 text-[0.6875rem] leading-relaxed text-mute">
+      <p className="mt-14 border-t border-ivory/10 pt-6 text-[0.6875rem] leading-relaxed text-mute">
         © {new Date().getFullYear()} {club.nameFull} · {club.district}, Berlin —
-        Impressum und Datenschutz folgen (Pflichtangaben vor Livegang).
+        Impressum und Datenschutzerklärung folgen (Pflichtangaben vor Livegang).
       </p>
     </footer>
   );

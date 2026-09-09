@@ -13,6 +13,7 @@
   --color-mute: #9a939c; /* Sekundärtext (AA auf --color-void)               */
   --color-ember: #e01b0f; /* das Rot der Leuchtschrift — sparsam             */
   --color-ember-soft: #ff4a37; /* Fokus, Hover auf dunklem Grund             */
+  --color-gold: #cfa049; /* aus dem Event-Artwork — nur für Eventmarken      */
 
   --font-display: var(--font-bebas), "Bebas Neue", "Oswald", sans-serif;
   --font-sans: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -115,6 +116,31 @@
       color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
       transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
+  /* Nur die Gästeliste glimmt: ein Schimmer aus dem Rot der Fassade, der die
+     Primäraktion auszeichnet, ohne sie größer zu machen. */
+  .cta-glow {
+    box-shadow:
+      0 0 0 1px rgba(224, 27, 15, 0.35),
+      0 0 34px -8px rgba(224, 27, 15, 0.55);
+  }
+  .cta-glow:hover {
+    box-shadow:
+      0 0 0 1px rgba(255, 74, 55, 0.6),
+      0 0 46px -6px rgba(224, 27, 15, 0.85);
+  }
+
+  /* Der Tisch ist dieselbe Form ohne Fläche — nachrangig, nicht schwächer. */
+  .cta-ghost {
+    background: transparent;
+    color: var(--color-ivory);
+    box-shadow: inset 0 0 0 1px rgba(244, 241, 236, 0.28);
+  }
+  .cta-ghost:hover {
+    background: transparent;
+    color: var(--color-ivory);
+    box-shadow: inset 0 0 0 1px rgba(244, 241, 236, 0.7);
+  }
+
   .cta:hover {
     background: var(--color-ember);
     color: #fff;
@@ -177,9 +203,23 @@
     border-color: color-mix(in srgb, var(--color-ivory) 45%, transparent);
     background: color-mix(in srgb, var(--color-ivory) 4%, transparent);
   }
-  .choice[data-selected="true"] {
+  .choice[data-selected="true"],
+  .choice[aria-pressed="true"] {
     border-color: var(--color-ivory);
     background: color-mix(in srgb, var(--color-ivory) 8%, transparent);
+  }
+
+  /* Kompakte Fassung für kurze Antworten wie „3–5“: Die volle Zeilenbreite
+     ist für vier Zahlen unangemessen und lässt eine Frage nach vier Fragen
+     aussehen. */
+  .choice-sm {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 5rem;
+    min-height: 3.25rem;
+    padding: 0.8rem 1.1rem;
+    justify-content: center;
+    text-align: center;
   }
 
   .field {

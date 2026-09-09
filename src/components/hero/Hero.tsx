@@ -9,7 +9,7 @@ import HeroBrandBar from "@/components/hero/HeroBrandBar";
 import HeroCaption from "@/components/hero/HeroCaption";
 import EventLayer from "@/components/hero/EventLayer";
 import { images } from "@/content/club";
-import { event } from "@/content/event";
+import type { MedusaEvent } from "@/content/events";
 import { asset } from "@/lib/asset";
 import { useIsomorphicLayoutEffect } from "@/lib/useIsomorphicLayoutEffect";
 
@@ -43,11 +43,16 @@ const DISSOLVE = 0.11;
 const MASK =
   "radial-gradient(circle at 50% 46%, transparent calc(var(--reveal) - 13%), #000 var(--reveal))";
 
-export default function Hero() {
+export default function Hero({
+  featured,
+}: {
+  /** Die Nacht, in die sich der Hero verwandelt. `null` → er bleibt Hero. */
+  featured: { event: MedusaEvent; upcoming: boolean } | null;
+}) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const [eventOn, setEventOn] = useState(false);
-  const hasEvent = event.active;
+  const hasEvent = featured !== null;
 
   useIsomorphicLayoutEffect(() => {
     const section = root.current;
@@ -369,7 +374,13 @@ export default function Hero() {
         {/* ---- ZUSTAND 2: DAS EVENT ------------------------------------
             Liegt unter der Clubwelt und ist fertig gezeichnet, bevor sie
             verpufft. Deshalb gibt es keinen Übergangsscreen. */}
-        {hasEvent && <EventLayer active={eventOn} />}
+        {featured && (
+          <EventLayer
+            event={featured.event}
+            upcoming={featured.upcoming}
+            active={eventOn}
+          />
+        )}
 
         {/* ---- ZUSTAND 1: DIE CLUBWELT ---------------------------------
             Eine geschlossene, deckende Ebene: Sie wird als Ganzes unscharf
