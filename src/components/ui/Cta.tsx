@@ -79,6 +79,30 @@ export function TableButton({
   );
 }
 
+/** Tisch als Zeile — im Hero, wo zwei gleich schwere Knöpfe nebeneinander
+    wie ein Formular aussähen statt wie der Anfang einer Nacht. */
+export function TableLink({
+  className = "",
+  label = "Tisch reservieren",
+  eventSlug = null,
+}: {
+  className?: string;
+  label?: string;
+  eventSlug?: string | null;
+}) {
+  const { open } = useBooking();
+  return (
+    <button
+      type="button"
+      onClick={() => open("table", eventSlug)}
+      className={`cta-quiet ${className}`}
+    >
+      {label}
+      <Arrow />
+    </button>
+  );
+}
+
 /** Gästeliste als Zeile — dort, wo sie nicht die Hauptsache ist. */
 export function GuestlistLink({
   className = "",

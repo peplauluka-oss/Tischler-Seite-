@@ -60,7 +60,7 @@ function Shot({
 
 export default function MedusaNights() {
   return (
-    <section id="nights" className="relative overflow-hidden py-20 md:py-28">
+    <section id="nights" className="relative overflow-hidden pb-20 pt-10 md:pb-28 md:pt-14">
       {/* 01 — Ein breites Bild, das rechts aus der Seite läuft. */}
       <Reveal>
         <Drift amount={20} className="ml-5 md:ml-[7vw]">

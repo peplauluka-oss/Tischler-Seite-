@@ -22,17 +22,18 @@ gsap.registerPlugin(ScrollTrigger);
    Clubwelt und das Event. Der Scroll navigiert zwischen ihnen nicht, er
    blendet sie ineinander — derselbe Viewport, anderer Inhalt. */
 const CUE = {
-  scrollCueOut: 0.02,
-  brandOut: 0.07,
-  navIn: 0.12,
-  videoRecedes: 0.16,
-  depthIn: 0.24,
-  kicker: 0.3,
-  claim: 0.33,
-  sub: 0.41,
-  cta: 0.45,
-  navOut: 0.5,
-  dissolve: 0.54,
+  scrollCueOut: 0.015,
+  brandOut: 0.05,
+  navIn: 0.09,
+  videoRecedes: 0.12,
+  depthIn: 0.18,
+  kicker: 0.23,
+  claim: 0.26,
+  cta: 0.35,
+  navOut: 0.44,
+  dissolve: 0.48,
+  /** Das Artwork tritt zurück, die Angaben zur Nacht steigen darüber auf. */
+  eventInfo: 0.72,
   navBack: 0.99,
 };
 
@@ -85,6 +86,10 @@ export default function Hero({
         const brandbar = q("[data-hero-brandbar]");
         const cue = q("[data-hero-cue]");
         const content = q("[data-hero-content]");
+        const videoCtl = q("[data-hero-videoctl]");
+        const eventArt = q("[data-event-art]");
+        const eventTag = q("[data-event-tag]");
+        const eventInfo = q("[data-event-info]");
 
         // Die Navigation liegt außerhalb des Hero — sie wird bewusst von
         // derselben Timeline gesteuert, damit die Übergabe Logo → Navigation
@@ -115,8 +120,15 @@ export default function Hero({
           },
         });
 
-        /* 01 — ANKUNFT: nur der Scrollhinweis verabschiedet sich. */
-        tl.to(cue, { opacity: 0, y: 12, duration: 0.08 }, CUE.scrollCueOut);
+        /* 01 — ANKUNFT: Bild, sonst nichts. Das Bedienelement für den Clip
+               kommt erst mit der Navigation; in den ersten Sekunden soll der
+               Bildschirm nur die Nacht zeigen. */
+        tl.fromTo(
+          videoCtl,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.05 },
+          CUE.navIn,
+        ).to(cue, { opacity: 0, y: 12, duration: 0.08 }, CUE.scrollCueOut);
 
         /* 02 — LOGO → NAVIGATION: die Wortmarke wandert nach links und
                verblasst, während die Navigation an derselben Kante erscheint. */
@@ -160,7 +172,7 @@ export default function Hero({
           .fromTo(
             veil,
             { opacity: 0 },
-            { opacity: isDesktop ? 0.5 : 0.62, duration: 0.3 },
+            { opacity: isDesktop ? 0.38 : 0.46, duration: 0.3 },
             CUE.videoRecedes + 0.04,
           )
           .fromTo(
@@ -212,12 +224,6 @@ export default function Hero({
               stagger: 0.035,
             },
             CUE.claim,
-          )
-          .fromTo(
-            q("[data-reveal='sub']"),
-            { opacity: 0, x: -14 },
-            { opacity: 1, x: 0, duration: 0.06 },
-            CUE.sub,
           )
           .fromTo(
             q("[data-reveal='cta']"),
@@ -279,6 +285,25 @@ export default function Hero({
             world,
             { opacity: 0, duration: DISSOLVE * 0.3 },
             CUE.dissolve + DISSOLVE * 0.7,
+          );
+
+        /* 07 — DIE NACHT BEKOMMT IHRE ANGABEN.
+               Erst gehört der Bildschirm dem Artwork allein. Dann tritt es
+               einen Schritt zurück — nur Licht, kein Maßstab, damit keine
+               Ränder entstehen — und die Angaben steigen darüber auf. Es ist
+               derselbe Viewport: kein Abschnitt danach, kein Schnitt. */
+        tl.fromTo(
+          eventArt,
+          { filter: "brightness(1)" },
+          { filter: "brightness(0.32)", duration: 0.09, immediateRender: false },
+          CUE.eventInfo,
+        )
+          .to(eventTag, { opacity: 0, duration: 0.04 }, CUE.eventInfo)
+          .fromTo(
+            eventInfo,
+            { opacity: 0, y: 44 },
+            { opacity: 1, y: 0, duration: 0.1, ease: "power2.out", immediateRender: false },
+            CUE.eventInfo + 0.01,
           );
 
         /* Erst wenn die Bühne weiterzieht, ist die Navigation wieder da:
@@ -354,7 +379,7 @@ export default function Hero({
       id="top"
       ref={root}
       className={`hero-scroll relative ${
-        hasEvent ? "h-[300svh] md:h-[340svh]" : "h-[200svh] md:h-[230svh]"
+        hasEvent ? "h-[380svh] md:h-[420svh]" : "h-[200svh] md:h-[230svh]"
       }`}
     >
       {/* Sprungmarke für „EVENT“: kein eigener Abschnitt, sondern der
@@ -431,7 +456,7 @@ export default function Hero({
             className="pointer-events-none absolute inset-0 z-25 hidden lg:block"
             style={{
               background:
-                "linear-gradient(90deg, rgba(5,4,6,0.96) 0%, rgba(5,4,6,0.82) 34%, rgba(5,4,6,0.25) 58%, transparent 78%)",
+                "linear-gradient(90deg, rgba(5,4,6,0.9) 0%, rgba(5,4,6,0.7) 34%, rgba(5,4,6,0.2) 58%, transparent 78%)",
             }}
           />
           <div
@@ -440,7 +465,7 @@ export default function Hero({
             className="pointer-events-none absolute inset-0 z-25 lg:hidden"
             style={{
               background:
-                "linear-gradient(0deg, rgba(5,4,6,0.97) 0%, rgba(5,4,6,0.94) 34%, rgba(5,4,6,0.68) 50%, rgba(5,4,6,0.2) 72%, rgba(5,4,6,0.5) 100%)",
+                "linear-gradient(0deg, rgba(5,4,6,0.92) 0%, rgba(5,4,6,0.82) 30%, rgba(5,4,6,0.45) 50%, rgba(5,4,6,0.12) 72%, rgba(5,4,6,0.42) 100%)",
             }}
           />
 

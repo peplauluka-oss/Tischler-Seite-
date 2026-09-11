@@ -26,6 +26,11 @@ export default function Countdown({
   const cd = useCountdown(event.entryAt, event.endsAfterHours);
   const date = eventDate(event);
 
+  /* Vor dem ersten Tick auf dem Client steht noch keine Zahl fest. Ein
+     Platzhalter wie „–– TAGE“ wäre ein kaputter Zustand, also steht dort
+     nichts — der Zähler erscheint eine Bildwiederholung später. */
+  if (!cd.ready) return null;
+
   const label =
     cd.status === "live"
       ? "GOING ON NOW"

@@ -1,6 +1,8 @@
 "use client";
 
 import EventClip from "@/components/sections/EventClip";
+import Countdown from "@/components/hero/Countdown";
+import { GuestlistButton, TableLink } from "@/components/ui/Cta";
 import {
   eventDate,
   eventFullTitle,
@@ -10,14 +12,18 @@ import {
 /**
  * DER EVENT-ZUSTAND DES HERO.
  *
- * Keine eigene Section: Diese Ebene liegt im selben Hero-Viewport wie das
- * Clubvideo, nur darunter. Die Hero-Welt verpufft beim Scrollen — und was
+ * Keine eigene Section: Diese Ebene liegt im selben Viewport wie das
+ * Clubvideo, nur darunter. Die Hero-Welt reißt beim Scrollen auf — und was
  * darunter zum Vorschein kommt, ist bereits fertig gezeichnet. Deshalb gibt
- * es zwischen beiden Zuständen keinen schwarzen Frame und keinen Sprung:
- * dieselbe Bühne, anderer Inhalt.
+ * es zwischen beiden Zuständen keinen schwarzen Frame und keinen Sprung.
  *
- * Der Bildschirm gehört hier dem Artwork. Darüber steht nur, worauf man
- * schaut — zwei Worte im weichen Rand, die nichts verdecken.
+ * Danach bleibt die Bühne stehen und entwickelt sich weiter: Erst gehört der
+ * Bildschirm dem Artwork allein, dann tritt es einen Schritt zurück und die
+ * Angaben zur Nacht steigen darüber auf. Beides passiert in demselben
+ * Viewport — die Information ist Teil des Takeovers, kein Abschnitt danach.
+ *
+ * Gesteuert wird das von der Hero-Timeline (siehe Hero.tsx, CUE.eventInfo);
+ * hier stehen nur die Ebenen und ihre Ruhezustände.
  */
 export default function EventLayer({
   event,
@@ -29,6 +35,8 @@ export default function EventLayer({
   active: boolean;
 }) {
   const date = eventDate(event);
+  const lead = event.occasion ?? event.headliner ?? "Clubnacht";
+  const second = event.occasion ? event.headliner : null;
 
   return (
     <div
@@ -43,9 +51,14 @@ export default function EventLayer({
         {eventFullTitle(event)} — {date.long}, Einlass {date.time} Uhr
       </h2>
 
-      <EventClip artwork={event.artwork} active={active} />
+      <div data-event-art className="absolute inset-0">
+        <EventClip artwork={event.artwork} active={active} />
+      </div>
 
+      {/* Die Einordnung während des reinen Artwork-Moments. Sie sitzt im
+          weichen Rand über dem Motiv und verdeckt nichts. */}
       <div
+        data-event-tag
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center
                    px-5 pb-8 pt-[max(1.1rem,3.5svh)]"
@@ -60,6 +73,58 @@ export default function EventLayer({
             {upcoming ? "Next Event" : "Letzte Nacht"}
           </span>
         </span>
+      </div>
+
+      {/* DIE ANGABEN ZUR NACHT.
+          Reihenfolge nach dem, was den Gast zuerst interessiert: Anlass,
+          dann wer spielt, dann wann. Das Line-up steht klein darunter, die
+          Handlung zuletzt — und der Countdown ganz am Rand, weil er ein
+          Lebenszeichen ist und keine Überschrift. */}
+      <div
+        data-event-info
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-30 px-5
+                   pb-[max(1.4rem,env(safe-area-inset-bottom))] pt-28 md:px-[7vw] md:pb-10 md:pt-32"
+        style={{
+          background:
+            "linear-gradient(0deg, rgba(5,4,6,0.97) 0%, rgba(5,4,6,0.93) 42%, rgba(5,4,6,0.6) 70%, rgba(5,4,6,0) 100%)",
+        }}
+      >
+        <div className="pointer-events-auto mx-auto w-full max-w-[1560px]">
+          <span className="label label-accent">
+            {upcoming ? "Next Event" : "Letzte Nacht"}
+          </span>
+
+          <h3 className="display display-stack mt-2 max-w-[16ch] text-[clamp(2.25rem,9vw,5rem)] text-ivory">
+            {lead}
+          </h3>
+
+          {second && (
+            <p
+              className="display mt-1 text-[clamp(1.5rem,6vw,3rem)] leading-[0.9]"
+              style={{ color: "var(--color-gold)" }}
+            >
+              mit {second}
+            </p>
+          )}
+
+          <p className="display mt-3 text-[clamp(1rem,3.6vw,1.5rem)] text-mute">
+            <time dateTime={date.iso}>{date.short}</time> · Einlass {date.time}
+          </p>
+
+          {event.support.length > 0 && (
+            <p className="mt-3 max-w-[42ch] text-[0.75rem] leading-relaxed text-mute md:text-[0.8125rem]">
+              {event.support.join(" · ")}
+            </p>
+          )}
+
+          <div className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-4 md:mt-7">
+            {upcoming && event.guestlist && (
+              <GuestlistButton eventSlug={event.slug} />
+            )}
+            {upcoming && event.tables && <TableLink eventSlug={event.slug} />}
+            {upcoming && <Countdown event={event} className="md:ml-auto" />}
+          </div>
+        </div>
       </div>
     </div>
   );

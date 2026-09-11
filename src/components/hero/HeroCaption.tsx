@@ -1,6 +1,6 @@
 "use client";
 
-import { GuestlistButton, TableButton } from "@/components/ui/Cta";
+import { GuestlistButton, TableLink } from "@/components/ui/Cta";
 import { club } from "@/content/club";
 
 /**
@@ -45,10 +45,10 @@ export default function HeroCaption() {
 
       <div
         data-reveal="cta"
-        className="hero-reveal mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-4 md:mt-11"
+        className="hero-reveal mt-9 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7 md:mt-11"
       >
-        <GuestlistButton className="w-full sm:w-auto" />
-        <TableButton className="w-full sm:w-auto" />
+        <GuestlistButton />
+        <TableLink />
       </div>
     </div>
   );

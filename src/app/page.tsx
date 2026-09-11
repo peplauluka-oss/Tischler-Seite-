@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import SmoothScroll from "@/components/SmoothScroll";
 import SiteNav from "@/components/nav/SiteNav";
 import Hero from "@/components/hero/Hero";
-import NextEvent from "@/components/sections/NextEvent";
 import MedusaNights from "@/components/sections/MedusaNights";
 import UpcomingEvents from "@/components/sections/UpcomingEvents";
 import InsideMedusa from "@/components/sections/InsideMedusa";
@@ -65,9 +64,6 @@ export default function Page() {
 
       <main>
         <Hero featured={featured} />
-        {featured && (
-          <NextEvent event={featured.event} upcoming={featured.upcoming} />
-        )}
         <MedusaNights />
         <UpcomingEvents events={upcoming} />
         <InsideMedusa />

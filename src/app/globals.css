@@ -253,6 +253,12 @@ html.motion-on .hero-reveal {
   opacity: 0;
 }
 
+/* Die Angaben zur Nacht liegen im Ruhezustand über dem Artwork. Nur wenn
+   die Timeline sie hebt, starten sie unsichtbar. */
+html.motion-on [data-event-info] {
+  opacity: 0;
+}
+
 /* --- Der Event-Clip deckt den Bildschirm ---------------------------------
    Die ausgelieferte Fassung ist 768x1440 und trägt auf allen vier Seiten ein
    Stück des eigenen Bildes. Dadurch bleibt das Plakat bei `cover` von einem
