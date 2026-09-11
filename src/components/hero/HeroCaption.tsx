@@ -4,17 +4,16 @@ import { GuestlistButton, TableButton } from "@/components/ui/Cta";
 import { club } from "@/content/club";
 
 /**
- * DIE AUSSAGE IM HERO.
+ * DER HERO-ABSCHLUSS — Marke, Satz, Handlung. Sonst nichts.
  *
- * Der Clip allein macht noch keinen Auftritt — ohne Worte bleibt er ein
- * Video, das zufällig oben steht. Deshalb liegt hier eine Behauptung drin,
- * und zwar die einzige, die dieser Laden wirklich von anderen unterscheidet:
- * Balkan, Türkçe, Arabic. „Drei Sprachen“ ist kein Bild, das erfunden wurde
- * — die Zeile darunter nennt sie beim Namen.
+ * Hier stand zuletzt „Die Nacht spricht drei Sprachen“ mit der Zeile
+ * „Balkan · Türkçe · Arabic“ darunter. Das war eine Behauptung über die
+ * musikalische Identität des Clubs, die so nicht stimmt: Was läuft,
+ * entscheidet die einzelne Nacht mit ihren Artists — nicht eine Formel auf
+ * der Startseite. Sie ist ersatzlos raus; ein neuer Slogan an derselben
+ * Stelle wäre derselbe Fehler mit anderen Worten.
  *
- * Reihenfolge: Wer wir sind und wo → die Aussage → woraus sie besteht →
- * die Handlung. Nichts davon ist ein Textblock über dem Video; die Zeilen
- * sitzen in der dunklen Hälfte des Bildes und gehören zur Komposition.
+ * Geblieben ist der Satz, mit dem der Abend anfängt, und die Handlung.
  */
 export default function HeroCaption() {
   return (
@@ -22,7 +21,7 @@ export default function HeroCaption() {
       <div data-reveal="kicker" className="hero-reveal flex items-center gap-3">
         <span className="h-px w-7 bg-ember" aria-hidden="true" />
         <span className="label">
-          {club.name} · {club.district}
+          {club.city} · {club.district}
         </span>
       </div>
 
@@ -32,10 +31,10 @@ export default function HeroCaption() {
            steht sie neben der Videofläche — dort begrenzt deren Kante die
            Spalte, nicht der Bildschirm. */
         className="display display-stack mt-5 text-ivory md:mt-7
-                   text-[clamp(2.6rem,10.5vw,5.25rem)]
-                   lg:text-[clamp(3rem,7.3vw,6.5rem)]"
+                   text-[clamp(3rem,13vw,6rem)]
+                   lg:text-[clamp(3.5rem,8.4vw,7.5rem)]"
       >
-        {["Die Nacht spricht", "drei Sprachen."].map((line) => (
+        {["Tonight", "starts here."].map((line) => (
           <span key={line} className="hero-reveal block overflow-hidden pb-[0.05em]">
             <span data-claim-line className="block">
               {line}
@@ -44,16 +43,9 @@ export default function HeroCaption() {
         ))}
       </h1>
 
-      <p
-        data-reveal="sub"
-        className="hero-reveal mt-5 text-[0.75rem] font-bold uppercase tracking-[0.3em] text-mute md:mt-6 md:text-[0.8125rem]"
-      >
-        {club.music}
-      </p>
-
       <div
         data-reveal="cta"
-        className="hero-reveal mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-4 md:mt-10"
+        className="hero-reveal mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-4 md:mt-11"
       >
         <GuestlistButton className="w-full sm:w-auto" />
         <TableButton className="w-full sm:w-auto" />

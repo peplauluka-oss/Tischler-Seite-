@@ -1,52 +1,72 @@
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
-import { insideStory } from "@/content/club";
+import { club, images, insideStory } from "@/content/club";
 import { asset } from "@/lib/asset";
 
 type Story = (typeof insideStory)[number];
 
-/**
- * Beschriftung als Teil der Bildkomposition: Nummer, Kicker, Zeilen — ohne
- * sichtbaren Kasten. Lesbar wird sie durch einen Verlauf im Bild selbst,
- * nicht durch eine Fläche darüber.
- */
-function Caption({ item, className = "" }: { item: Story; className?: string }) {
-  const long = item.lines.some((line) => line.length > 24);
-
+/** Nur eine Ortsmarke im Bild — Nummer und Ort, kein Satz darüber. */
+function Mark({ item, className = "" }: { item: Story; className?: string }) {
   return (
-    <figcaption className={`absolute z-10 ${className}`}>
-      <span className="flex items-center gap-3">
-        <span className="display text-lg leading-none text-ember">{item.no}</span>
-        <span className="label text-ivory/70">{item.kicker}</span>
-      </span>
-      <p
-        className="display display-stack mt-3 text-ivory"
-        style={{
-          fontSize: long
-            ? "clamp(1.25rem, 3.8vw, 2.25rem)"
-            : "clamp(1.75rem, 5.5vw, 3.25rem)",
-        }}
-      >
-        {item.lines.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </p>
+    <figcaption className={`absolute z-10 flex items-center gap-3 ${className}`}>
+      <span className="display text-lg leading-none text-ember">{item.no}</span>
+      <span className="label text-ivory/80">{item.kicker}</span>
     </figcaption>
+  );
+}
+
+function Frame({
+  item,
+  ratio,
+  sizes,
+  className = "",
+  position = "50% 50%",
+}: {
+  item: Story;
+  ratio: string;
+  sizes: string;
+  className?: string;
+  position?: string;
+}) {
+  return (
+    <figure className={`relative w-full ${ratio} ${className}`}>
+      <Image
+        src={asset(item.image.src)}
+        alt={item.image.alt}
+        fill
+        sizes={sizes}
+        loading="lazy"
+        className="graded object-cover"
+        style={{ objectPosition: position }}
+        placeholder="blur"
+        blurDataURL={item.image.lqip}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(5,4,6,0.82) 0%, rgba(5,4,6,0.18) 32%, transparent 58%)",
+        }}
+      />
+      <Mark item={item} className="bottom-5 left-5 md:bottom-7 md:left-7" />
+    </figure>
   );
 }
 
 /**
  * INSIDE MEDUSA.
  *
- * Keine Geschichte, keine Philosophie, kein „Über uns“ — der Club zeigt sich,
- * statt sich zu erklären. Vier Ausschnitte in vier verschiedenen
- * Kompositionen; die Wiederholung „Bild, Bildunterschrift, Bild“ wäre ein
- * Katalog, kein Blick hinein.
+ * Keine Geschichte, keine Philosophie, kein „Über uns“ — die Frage lautet
+ * „wie sieht es dort aus“, und die beantworten Bilder. Text gibt es nur, wo
+ * er Orientierung schafft: vier Ortsmarken und am Ende die Adresse.
+ *
+ * Die Location ist bewusst kein eigener Hauptabschnitt mehr. Wo der Laden
+ * steht, gehört zu der Frage, wie er aussieht — und eine Kontaktseite
+ * mitten im Ablauf hätte den Sog gebrochen.
  */
 export default function InsideMedusa() {
-  const [saal, voll, boxen, bar] = insideStory;
+  const [raum, flaeche, boxen, bar] = insideStory;
 
   return (
     <section id="inside" className="scroll-mt-16 pb-24 pt-20 md:pb-32 md:pt-28">
@@ -57,109 +77,105 @@ export default function InsideMedusa() {
         </h2>
       </Reveal>
 
-      {/* 01 + 02 — leer und voll nebeneinander. Das ist der ganze Satz. */}
       <div className="mt-8 grid grid-cols-12 gap-3 md:mt-12 md:gap-4">
         <Reveal className="col-span-12 md:col-span-7">
-          <figure className="relative aspect-[4/3] w-full md:aspect-[5/4]">
-            <Image
-              src={asset(saal.image.src)}
-              alt={saal.image.alt}
-              fill
-              sizes="(max-width: 768px) 100vw, 58vw"
-              loading="lazy"
-              className="graded object-cover"
-              placeholder="blur"
-              blurDataURL={saal.image.lqip}
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(5,4,6,0.92) 0%, rgba(5,4,6,0.3) 40%, transparent 66%)",
-              }}
-            />
-            <Caption item={saal} className="bottom-6 left-5 right-5 md:bottom-9 md:left-8 md:right-8" />
-          </figure>
+          <Frame item={raum} ratio="aspect-[4/3] md:aspect-[5/4]" sizes="(max-width: 768px) 100vw, 58vw" />
         </Reveal>
-
         <Reveal delay={0.08} className="col-span-12 md:col-span-5">
-          <figure className="relative aspect-[4/3] w-full md:aspect-[5/4]">
-            <Image
-              src={asset(voll.image.src)}
-              alt={voll.image.alt}
-              fill
-              sizes="(max-width: 768px) 100vw, 42vw"
-              loading="lazy"
-              className="graded object-cover"
-              placeholder="blur"
-              blurDataURL={voll.image.lqip}
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(5,4,6,0.92) 0%, rgba(5,4,6,0.3) 40%, transparent 66%)",
-              }}
-            />
-            <Caption item={voll} className="bottom-6 left-5 right-5 md:bottom-9 md:left-8 md:right-8" />
-          </figure>
+          <Frame
+            item={flaeche}
+            ratio="aspect-[4/3] md:aspect-[5/4]"
+            sizes="(max-width: 768px) 100vw, 42vw"
+            position="50% 45%"
+          />
         </Reveal>
       </div>
 
-      {/* 03 — die Boxen: nach rechts versetzt, Text greift von links hinein. */}
-      <Reveal className="mt-14 md:mt-24">
-        <figure className="relative ml-10 aspect-[3/4] sm:ml-[18%] sm:aspect-[4/5] md:ml-[26%] md:mr-[7vw] md:aspect-[16/11]">
-          <Image
-            src={asset(boxen.image.src)}
-            alt={boxen.image.alt}
-            fill
-            sizes="(max-width: 768px) 90vw, 67vw"
-            loading="lazy"
-            className="graded object-cover"
-            placeholder="blur"
-            blurDataURL={boxen.image.lqip}
+      <div className="mt-3 grid grid-cols-12 gap-3 md:mt-4 md:gap-4">
+        <Reveal className="col-span-12 md:col-span-5">
+          <Frame item={boxen} ratio="aspect-[4/3]" sizes="(max-width: 768px) 100vw, 42vw" />
+        </Reveal>
+        <Reveal delay={0.08} className="col-span-12 md:col-span-7">
+          <Frame
+            item={bar}
+            ratio="aspect-[4/3] md:aspect-[16/9]"
+            sizes="(max-width: 768px) 100vw, 58vw"
+            position="50% 35%"
           />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to right, rgba(5,4,6,0.95) 0%, rgba(5,4,6,0.55) 34%, transparent 68%)",
-            }}
-          />
-          <Caption
-            item={boxen}
-            className="-left-10 bottom-6 max-w-[20rem] pl-5 pr-5 sm:-left-[18%] sm:top-1/2 sm:max-w-[24rem] sm:-translate-y-1/2 md:-left-[26%] md:max-w-[32rem] md:pl-[7vw]"
-          />
-        </figure>
-      </Reveal>
+        </Reveal>
+      </div>
 
-      {/* 04 — die Bar: randlos, Text oben. */}
-      <Reveal className="mt-14 md:mt-28">
-        <figure className="relative aspect-[5/6] w-full sm:aspect-[3/2] md:aspect-[2/1]">
-          <Image
-            src={asset(bar.image.src)}
-            alt={bar.image.alt}
-            fill
-            sizes="100vw"
-            loading="lazy"
-            className="graded object-cover object-[50%_35%]"
-            placeholder="blur"
-            blurDataURL={bar.image.lqip}
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to bottom, rgba(5,4,6,0.9) 0%, rgba(5,4,6,0.3) 42%, transparent 70%)",
-            }}
-          />
-          <Caption item={bar} className="left-5 right-5 top-7 md:left-[7vw] md:right-[7vw] md:top-12" />
-        </figure>
-      </Reveal>
+      {/* WO ES IST.
+          Praktisch, nicht als Kontaktseite: Adresse, Route, Telefon,
+          Instagram. Welche Linien halten, ist nicht belegt — also steht
+          hier keine Verbindung. */}
+      <div id="location" className="scroll-mt-16 grid gap-8 px-5 pt-16 md:grid-cols-12 md:gap-10 md:px-[7vw] md:pt-24">
+        <Reveal className="md:col-span-6">
+          <span className="label">Location</span>
+          <h3 className="display mt-3 hyphens-auto break-words text-[clamp(2rem,4.4vw,3.5rem)] text-ivory">
+            {club.district}
+          </h3>
+          <address className="mt-5 not-italic">
+            <p className="display text-[clamp(1.375rem,3.2vw,2rem)] leading-tight text-ivory">
+              {club.address}
+              <br />
+              {club.postcode}
+            </p>
+            <a
+              href={club.mapsUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="cta-quiet mt-5"
+            >
+              Route öffnen
+              <svg viewBox="0 0 18 10" width="18" height="10" aria-hidden="true">
+                <path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </a>
+          </address>
+        </Reveal>
+
+        <Reveal delay={0.08} className="md:col-span-5 md:col-start-8">
+          <figure className="relative aspect-[4/3] w-full">
+            <Image
+              src={asset(images.eingang.src)}
+              alt={images.eingang.alt}
+              fill
+              sizes="(max-width: 768px) 100vw, 40vw"
+              loading="lazy"
+              className="graded-night object-cover"
+              placeholder="blur"
+              blurDataURL={images.eingang.lqip}
+            />
+          </figure>
+          <dl className="mt-6 space-y-4 border-t border-ivory/12 pt-5 text-sm">
+            <div>
+              <dt className="label text-[0.625rem]">Kontakt</dt>
+              <dd className="mt-1.5">
+                <a
+                  href={club.phoneHref}
+                  className="text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
+                >
+                  {club.phone}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt className="label text-[0.625rem]">Instagram</dt>
+              <dd className="mt-1.5">
+                <a
+                  href={club.instagramUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
+                >
+                  @{club.instagram}
+                </a>
+              </dd>
+            </div>
+          </dl>
+        </Reveal>
+      </div>
     </section>
   );
 }

@@ -38,6 +38,7 @@ export function GuestlistButton({
   return (
     <button
       type="button"
+      data-guestlist-cta
       onClick={() => open("guestlist", eventSlug)}
       className={`cta cta-glow ${className}`}
     >
@@ -47,10 +48,41 @@ export function GuestlistButton({
   );
 }
 
-/** TISCH — nachrangig: gleiche Form, aber nur Kontur statt Fläche. */
+/**
+ * TISCH — nachrangig: gleiche Form, aber nur Kontur statt Fläche.
+ *
+ * `filled` kehrt das im Tisch-Abschnitt um: Dort ist der Tisch die Handlung,
+ * und die Gästeliste steht daneben als Zeile. Den Schimmer trägt sie trotzdem
+ * nirgends — der bleibt der Primäraktion der Seite vorbehalten.
+ */
 export function TableButton({
   className = "",
   label = "TISCH RESERVIEREN",
+  eventSlug = null,
+  filled = false,
+}: {
+  className?: string;
+  label?: string;
+  eventSlug?: string | null;
+  filled?: boolean;
+}) {
+  const { open } = useBooking();
+  return (
+    <button
+      type="button"
+      onClick={() => open("table", eventSlug)}
+      className={`cta ${filled ? "" : "cta-ghost"} ${className}`}
+    >
+      {label}
+      <Arrow />
+    </button>
+  );
+}
+
+/** Gästeliste als Zeile — dort, wo sie nicht die Hauptsache ist. */
+export function GuestlistLink({
+  className = "",
+  label = "Nur auf die Gästeliste",
   eventSlug = null,
 }: {
   className?: string;
@@ -61,8 +93,8 @@ export function TableButton({
   return (
     <button
       type="button"
-      onClick={() => open("table", eventSlug)}
-      className={`cta cta-ghost ${className}`}
+      onClick={() => open("guestlist", eventSlug)}
+      className={`cta-quiet ${className}`}
     >
       {label}
       <Arrow />

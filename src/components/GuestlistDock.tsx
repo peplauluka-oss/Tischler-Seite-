@@ -15,6 +15,7 @@ import { useBooking } from "@/lib/booking";
 export default function GuestlistDock({ eventSlug = null }: { eventSlug?: string | null }) {
   const { isOpen } = useBooking();
   const [visible, setVisible] = useState(false);
+  const [ctaInView, setCtaInView] = useState(false);
 
   useEffect(() => {
     const hero = document.getElementById("top");
@@ -33,9 +34,32 @@ export default function GuestlistDock({ eventSlug = null }: { eventSlug?: string
     };
   }, []);
 
+  /* Steht der Gästelisten-Knopf gerade selbst im Bild, tritt der Balken
+     zurück: Zweimal dieselbe Handlung übereinander ist keine Betonung,
+     sondern Rauschen. */
+  useEffect(() => {
+    const ctas = document.querySelectorAll("[data-guestlist-cta]");
+    if (ctas.length === 0) return;
+
+    const shown = new Set<Element>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) shown.add(e.target);
+          else shown.delete(e.target);
+        });
+        setCtaInView(shown.size > 0);
+      },
+      { rootMargin: "-15% 0px -15% 0px" },
+    );
+
+    ctas.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <AnimatePresence>
-      {visible && !isOpen && (
+      {visible && !isOpen && !ctaInView && (
         <motion.div
           initial={{ y: "120%" }}
           animate={{ y: 0 }}

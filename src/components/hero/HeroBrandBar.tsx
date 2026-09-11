@@ -28,12 +28,11 @@ export default function HeroBrandBar() {
       <div className="relative flex h-full items-center justify-center px-5">
         <span data-hero-lockup className="flex flex-col items-center">
           <Logo width={210} priority />
-          {/* Der erste Satz der Nacht — klein, mittig, unter der Marke. */}
           <span
-            className="label mt-2.5 block text-[0.5625rem] text-ivory/70"
-            style={{ letterSpacing: "0.34em" }}
+            className="label mt-2.5 block text-[0.5625rem]"
+            style={{ letterSpacing: "0.42em" }}
           >
-            TONIGHT STARTS HERE
+            BERLIN
           </span>
         </span>
       </div>

@@ -6,7 +6,6 @@ import NextEvent from "@/components/sections/NextEvent";
 import MedusaNights from "@/components/sections/MedusaNights";
 import UpcomingEvents from "@/components/sections/UpcomingEvents";
 import InsideMedusa from "@/components/sections/InsideMedusa";
-import Location from "@/components/sections/Location";
 import TableSection from "@/components/sections/TableSection";
 import Footer from "@/components/layout/Footer";
 import GuestlistDock from "@/components/GuestlistDock";
@@ -28,8 +27,8 @@ export function generateMetadata(): Metadata {
       ? `Nächstes Event: ${eventFullTitle(featured.event)}, ${eventDate(featured.event).short}. `
       : "";
   const description =
-    `${club.nameFull} — Club und Cocktailbar in Berlin-${club.district}. ` +
-    `${next}Gästeliste und Tischreservierung direkt über WhatsApp.`;
+    `${club.nameFull} — Club in Berlin-${club.district}. ` +
+    `${next}Gästeliste und Tischreservierung über WhatsApp.`;
 
   return {
     title: `${club.nameFull} — Club in Berlin-${club.district}`,
@@ -48,7 +47,7 @@ export function generateMetadata(): Metadata {
  * Der Ablauf der Seite ist der Ablauf einer Nacht:
  *
  *   Spür es → Was kommt? → Das könntest du sein → Was kommt danach?
- *   → Wie sieht es aus? → Wo ist es? → Kommst du mit Leuten? → Los.
+ *   → Wie sieht es dort aus (und wo ist es) → Kommst du mit Leuten? → Los.
  *
  * Jeder Abschnitt hat genau eine Aufgabe. Zusammengehalten wird das nicht
  * durch ein wiederkehrendes Kartenbauteil, sondern durch Dunkelheit,
@@ -72,7 +71,6 @@ export default function Page() {
         <MedusaNights />
         <UpcomingEvents events={upcoming} />
         <InsideMedusa />
-        <Location />
         <TableSection eventSlug={featured?.event.slug ?? null} />
       </main>
 

@@ -100,8 +100,7 @@ export default function UpcomingEvents({ events }: { events: MedusaEvent[] }) {
             Der nächste Termin steht noch nicht fest.
           </p>
           <p className="mt-4 max-w-[46ch] text-[0.9375rem] leading-relaxed text-mute">
-            Angekündigt wird jede Nacht zuerst auf Instagram — dort steht das
-            Artwork, sobald das Line-up steht.
+            Neue Termine stehen auf Instagram.
           </p>
           <a
             href={club.instagramUrl}

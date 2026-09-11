@@ -37,7 +37,8 @@ export type MedusaEvent = {
   headliner: string | null;
   /** Weitere Namen: DJs, Shows. */
   support: readonly string[];
-  /** Musikrichtung, wenn sie von der Hausrichtung abweicht oder sie schärft. */
+  /** Musikrichtung — nur wenn der Club sie für diese Nacht angibt. Es gibt
+      keine Hausrichtung, die hier gälte: Was läuft, entscheidet der Abend. */
   music: string | null;
   /** Einlass als ISO-Zeitpunkt mit Zonenversatz. Quelle für alles Zeitliche. */
   entryAt: string;
@@ -56,7 +57,8 @@ export const events: readonly MedusaEvent[] = [
     occasion: "4 Jahre Black Medusa",
     headliner: "SINAN",
     support: ["DJ Maky", "DJ Pasa", "Tupan Show", "Belly Dance Show"],
-    music: "Balkan · Türkçe · Arabic",
+    /* Im Artwork steht keine Genreangabe — also steht hier keine. */
+    music: null,
     entryAt: "2026-09-05T22:00:00+02:00",
     endsAfterHours: 7,
     artwork: {

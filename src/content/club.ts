@@ -18,11 +18,6 @@ export const club = {
   address: "Grevesmühlener Str. 26",
   postcode: "13059 Berlin",
   addressStatus: "confirmed" as const,
-  hours: "Öffnungszeiten folgen",
-  hoursStatus: "tbc" as const,
-
-  /** Die Hausrichtung — knapp, zur Wiedererkennung. */
-  music: "BALKAN · TÜRKÇE · ARABIC",
 
   /* Vom Event-Creative des Clubs übernommen („TABLE BOOKING“). Die
      WhatsApp-Adresse ist dieselbe Nummer in internationaler Schreibweise. */
@@ -171,40 +166,14 @@ export const heroVideo = {
 /**
  * INSIDE MEDUSA — vier Blicke, keine Führung.
  *
- * Zuerst der Raum leer, direkt daneben derselbe Raum voll: Das ist die
- * einzige Gegenüberstellung, die man nicht erklären muss. Danach das, was
- * eine Reservierung überhaupt sichert, und der Tresen.
+ * Nur Ortsmarken: Wo bin ich hier? Alles darüber hinaus wäre eine Behauptung
+ * über einen Laden, den die Bilder selbst zeigen. Frühere Fassungen standen
+ * hier mit Sätzen wie „Cocktails sind der Ursprung des Hauses“ — nichts
+ * davon war belegt.
  */
 export const insideStory = [
-  {
-    id: "saal",
-    no: "01",
-    image: images.saal,
-    kicker: "DER RAUM",
-    lines: ["Sternenhimmel.", "Rotes Lichtband.", "Sonst Dunkelheit."],
-  },
-  {
-    id: "voll",
-    no: "02",
-    image: nights.flaeche,
-    kicker: "DERSELBE RAUM",
-    lines: ["Ab 22 Uhr", "sieht er anders aus."],
-  },
-  {
-    id: "boxen",
-    no: "03",
-    image: images.sitzbereich,
-    kicker: "DIE BOXEN",
-    lines: [
-      "Weiße Lederbänke mit eigenem Tisch —",
-      "das, was eine Reservierung sichert.",
-    ],
-  },
-  {
-    id: "bar",
-    no: "04",
-    image: images.tresen,
-    kicker: "DIE BAR",
-    lines: ["Voll bestückter Tresen.", "Cocktails sind der Ursprung des Hauses."],
-  },
+  { id: "raum", no: "01", image: images.saal, kicker: "DER RAUM" },
+  { id: "flaeche", no: "02", image: nights.flaeche, kicker: "DIE FLÄCHE" },
+  { id: "boxen", no: "03", image: images.sitzbereich, kicker: "DIE BOXEN" },
+  { id: "bar", no: "04", image: images.tresen, kicker: "DER TRESEN" },
 ] as const;

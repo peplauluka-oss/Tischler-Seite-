@@ -94,8 +94,8 @@ export default function EventsPage() {
             </ul>
           ) : (
             <p className="mt-6 max-w-[46ch] border-t border-ivory/12 pt-6 text-[0.9375rem] leading-relaxed text-mute">
-              Der nächste Termin steht noch nicht fest. Angekündigt wird jede
-              Nacht zuerst auf{" "}
+              Der nächste Termin steht noch nicht fest. Neue Termine stehen
+              auf{" "}
               <a
                 href={club.instagramUrl}
                 target="_blank"

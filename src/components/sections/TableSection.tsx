@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
-import { TableButton, GuestlistButton } from "@/components/ui/Cta";
+import { TableButton, GuestlistLink } from "@/components/ui/Cta";
 import { club, images } from "@/content/club";
 import { asset } from "@/lib/asset";
 
@@ -11,8 +11,8 @@ import { asset } from "@/lib/asset";
  * ohnehin über WhatsApp, und jede Zwischenstufe kostet Anfragen. Der Knopf
  * öffnet dieselbe Ebene wie überall sonst, nur mit dem Tisch als Anliegen.
  *
- * Bewusst kein VIP-Vokabular. Eine Box ist hier eine Sitzgruppe mit eigenem
- * Tisch — nichts, was man mit Samtseil bewachen müsste.
+ * Bewusst kein VIP-Vokabular und keine Beschreibung dessen, was ein Tisch
+ * hier ist — das zeigt das Bild daneben.
  */
 export default function TableSection({ eventSlug = null }: { eventSlug?: string | null }) {
   return (
@@ -50,18 +50,13 @@ export default function TableSection({ eventSlug = null }: { eventSlug?: string 
             <br />
             your table
           </h2>
-          <p className="mt-6 max-w-[34ch] text-[0.9375rem] leading-relaxed text-mute">
-            Sitzgruppe mit eigenem Tisch, direkt an der Fläche. Sag uns, wie
-            viele ihr seid — die Bestätigung kommt persönlich über WhatsApp.
+          <p className="mt-6 max-w-[32ch] text-[0.9375rem] leading-relaxed text-mute">
+            Sag uns, wie viele ihr seid — die Bestätigung kommt über WhatsApp.
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <TableButton className="w-full sm:w-auto" eventSlug={eventSlug} />
-            <GuestlistButton
-              label="NUR AUF DIE LISTE"
-              className="w-full sm:w-auto"
-              eventSlug={eventSlug}
-            />
+          <div className="mt-9 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8">
+            <TableButton filled className="w-full sm:w-auto" eventSlug={eventSlug} />
+            <GuestlistLink eventSlug={eventSlug} />
           </div>
 
           <p className="mt-6 text-[0.8125rem] text-mute">

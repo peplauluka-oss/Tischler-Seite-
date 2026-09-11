@@ -86,7 +86,8 @@ export default function NextEvent({
           </div>
         </div>
 
-        <Countdown event={event} className="shrink-0" />
+        {/* Ein Zähler auf einen Termin, der hinter uns liegt, zählt nichts. */}
+        {upcoming && <Countdown event={event} className="shrink-0" />}
       </Reveal>
     </section>
   );

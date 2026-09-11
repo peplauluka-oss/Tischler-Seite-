@@ -69,10 +69,23 @@ export default function Footer() {
         </div>
       </div>
 
-      <p className="mt-14 border-t border-ivory/10 pt-6 text-[0.6875rem] leading-relaxed text-mute">
-        © {new Date().getFullYear()} {club.nameFull} · {club.district}, Berlin —
-        Impressum und Datenschutzerklärung folgen (Pflichtangaben vor Livegang).
-      </p>
+      <div className="mt-14 flex flex-col gap-3 border-t border-ivory/10 pt-6 text-[0.6875rem] leading-relaxed text-mute md:flex-row md:items-baseline md:justify-between">
+        <p>
+          © {new Date().getFullYear()} {club.nameFull} · {club.district}, Berlin
+        </p>
+        {/* Beides ist Pflicht und liegt noch nicht vor. Ein erfundener
+            Rechtstext wäre schlimmer als eine offene Angabe. */}
+        <p className="flex flex-wrap gap-x-5 gap-y-1">
+          <span>
+            Impressum
+            <span className="ml-1.5 text-ember-soft/85">folgt</span>
+          </span>
+          <span>
+            Datenschutz
+            <span className="ml-1.5 text-ember-soft/85">folgt</span>
+          </span>
+        </p>
+      </div>
     </footer>
   );
 }

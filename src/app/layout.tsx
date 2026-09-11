@@ -27,8 +27,8 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "Black Medusa — Club und Cocktailbar in Berlin-Hohenschönhausen. " +
-    "Balkan, Türkçe und Arabic. Gästeliste und Tischreservierung über WhatsApp.",
+    "Black Medusa — Club in Berlin-Hohenschönhausen. Events, Gästeliste und " +
+    "Tischreservierung.",
   applicationName: "Black Medusa",
   openGraph: {
     siteName: "Black Medusa",

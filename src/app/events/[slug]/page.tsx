@@ -157,7 +157,9 @@ export default async function EventPage({
               )}
             </div>
 
-            <Countdown event={event} className="mt-10" />
+            {/* Nur solange die Nacht noch bevorsteht. */}
+            {Date.parse(event.entryAt) + event.endsAfterHours * 3_600_000 >
+              Date.now() && <Countdown event={event} className="mt-10" />}
           </Reveal>
         </div>
       </main>
