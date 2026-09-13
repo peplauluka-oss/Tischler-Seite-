@@ -105,7 +105,7 @@ export default function HeroVideo() {
           loop
           playsInline
           preload="metadata"
-          aria-label="Clubaufnahme aus dem Black Medusa: Logowand, DJ-Pult, Tanzfläche und Lichtanlage"
+          aria-label="Clubaufnahme aus dem Black Medusa: Discokugel, volle Tanzfläche, Sänger am Mikrofon und Lichtanlage"
           style={{ filter: "saturate(0.86) contrast(1.12) brightness(0.8)" }}
         >
           <source src={asset(heroVideo.webm)} type="video/webm" />

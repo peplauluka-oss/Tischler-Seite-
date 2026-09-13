@@ -153,10 +153,10 @@ export const nights = {
 } satisfies Record<string, ClubImage>;
 
 export const heroVideo = {
-  webm: "/media/hero-clip.webm",
-  mp4: "/media/hero-clip.mp4",
-  poster: "/media/hero-poster.jpg",
-  ambient: "/media/hero-ambient.jpg",
+  webm: "/media/hero-loop.webm",
+  mp4: "/media/hero-loop.mp4",
+  poster: "/media/hero-loop-poster.jpg",
+  ambient: "/media/hero-loop-ambient.jpg",
 } as const;
 
 /* ---------------------------------------------------------------------------
