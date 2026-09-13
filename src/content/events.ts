@@ -7,8 +7,8 @@
    Wochenende „umschalten“ oder von einer Liste in die andere kopieren.
 
    Ablauf für den Betreiber:
-     1. Das Instagram-Artwork wie gewohnt bauen.
-     2. Datei nach /public/media legen.
+     1. Ein Bild zur Nacht wählen — quer und hochkant beschnitten.
+     2. Dateien nach /public/media legen.
      3. Hier einen Block ergänzen — fertig.
 
    Daraus entstehen automatisch: Hero-Takeover, Countdown, Upcoming-Liste,
@@ -18,12 +18,24 @@
    die Oberfläche lässt sie dann weg, statt Platzhalter zu zeigen.
 --------------------------------------------------------------------------- */
 
+export type EventImage = {
+  src: string;
+  width: number;
+  height: number;
+};
+
+/**
+ * DAS BILD ZUR NACHT.
+ *
+ * Zwei Beschnitte desselben Motivs, weil ein Bildschirm im Hochformat und
+ * eine Bühne im Querformat nicht denselben Ausschnitt vertragen: `quer`
+ * trägt die volle Aufnahme, `hoch` einen Ausschnitt, der die Menschen darin
+ * auch in einer schmalen Spalte ganz zeigt. Kein Format wird erzwungen —
+ * jedes bekommt seinen eigenen.
+ */
 export type EventArtwork = {
-  /** Bewegtes Creative — optional. `null` → das Standbild trägt allein. */
-  mp4: string | null;
-  webm: string | null;
-  /** Das Artwork als Bild. Pflicht: Ohne Bild kein Event-Auftritt. */
-  poster: string;
+  quer: EventImage;
+  hoch: EventImage;
   /** Was darauf zu sehen ist — für Screenreader und Suchmaschinen. */
   description: string;
 };
@@ -62,19 +74,15 @@ export const events: readonly MedusaEvent[] = [
     entryAt: "2026-09-05T22:00:00+02:00",
     endsAfterHours: 7,
     artwork: {
-      /* 768×1440. Das Original liegt als 9:16 vor; diese Fassung trägt auf
-         allen vier Seiten ein Stück des eigenen Bildes, an der Kante
-         gespiegelt und weich gezeichnet, damit sie jedes Telefonformat
-         vollflächig deckt, ohne dass am Plakat etwas fehlt.
-         Quelle: event-clip.mp4. */
-      mp4: "/media/event-clip-full.mp4",
-      webm: "/media/event-clip-full.webm",
-      poster: "/media/event-poster-full.jpg",
+      /* Eine echte Aufnahme aus dem Laden statt eines Plakats: zwei Gäste
+         an ihrem Tisch, mitten in der Nacht. Beide Fassungen stammen aus
+         derselben Datei — quer die ganze Aufnahme, hoch ein 2:3-Ausschnitt
+         um die beiden herum. */
+      quer: { src: "/media/event-nacht-quer.webp", width: 1920, height: 1280 },
+      hoch: { src: "/media/event-nacht-hoch.webp", width: 853, height: 1280 },
       description:
-        "Event-Ankündigung des Black Medusa: Birthday Bash, vier Jahre Black Medusa, " +
-        "mit Special Guest Sinan, DJ Maky, DJ Pasa, Tupan Show und Belly Dance Show. " +
-        "Samstag, 5. September 2026, Einlass 22 Uhr. Tischbuchung unter 0176 28278840. " +
-        "Grevesmühlener Straße 26, 13059 Berlin. Ab 18 Jahren.",
+        "Zwei Gäste an ihrem Tisch im Black Medusa, Sonnenbrillen im "
+        + "Clublicht, Hände in die Kamera gestreckt.",
     },
     guestlist: true,
     tables: true,

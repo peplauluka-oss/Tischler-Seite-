@@ -30,7 +30,7 @@ function Row({ event, past = false }: { event: MedusaEvent; past?: boolean }) {
       <Link href={`/events/${event.slug}`} className="col-span-3 md:col-span-2">
         <span className="relative block aspect-[3/4] w-full overflow-hidden">
           <Image
-            src={asset(event.artwork.poster)}
+            src={asset(event.artwork.hoch.src)}
             alt=""
             fill
             sizes="(max-width: 768px) 25vw, 14vw"

@@ -53,7 +53,7 @@ export default function UpcomingEvents({ events }: { events: MedusaEvent[] }) {
                   >
                     <span className="relative block aspect-[3/4] w-full overflow-hidden">
                       <Image
-                        src={asset(ev.artwork.poster)}
+                        src={asset(ev.artwork.hoch.src)}
                         alt=""
                         fill
                         sizes="(max-width: 768px) 25vw, 14vw"

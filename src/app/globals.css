@@ -259,28 +259,61 @@ html.motion-on [data-event-info] {
   opacity: 0;
 }
 
-/* --- Der Event-Clip deckt den Bildschirm ---------------------------------
-   Die ausgelieferte Fassung ist 768x1440 und trägt auf allen vier Seiten ein
-   Stück des eigenen Bildes. Dadurch bleibt das Plakat bei `cover` von einem
-   Seitenverhältnis von 0,40 bis 0,75 vollständig sichtbar — also auf jedem
-   Telefon im Hochformat, auch mit Adress- und Werkzeugleiste des Browsers,
-   die die sichtbare Fläche deutlich breiter machen als das Gerät selbst.
+/* --- Das Eventbild ------------------------------------------------------
+   Eine Aufnahme mit zwei Menschen darin verträgt keinen erzwungenen
+   Beschnitt: Auf einem Telefon im Hochformat bliebe von einer Querformat-
+   Aufnahme knapp ein Drittel der Breite übrig — und damit von den beiden
+   jeweils ein halbes Gesicht.
 
-   Erst darüber — Tablet quer, Desktop — bliebe vom Hochformat ein Streifen.
-   Von da an steht das Creative in voller Höhe, und die Fläche daneben füllt
-   ein unscharfer Abzug desselben Bildes. Schwarze Ränder gibt es nirgends. */
-.event-fill {
+   Deshalb zwei Zustände. Hochkant trägt der schmale Beschnitt (2:3) die
+   obere Bühnenhälfte in voller Breite und läuft nach unten ins Dunkel aus;
+   nichts wird abgeschnitten, und wo gleich die Angaben aufsteigen, ist das
+   Bild ohnehin schon Nacht. Ab Querformat deckt die ganze Aufnahme die
+   Bühne — dort passt sie von selbst.
+
+   Kein Rahmen, kein Container, kein unscharfer Abzug dahinter: Das Bild
+   berührt die Kanten. */
+.event-frame {
+  position: absolute;
+  inset: 0 0 auto 0;
+  display: block;
+  height: 82%;
+}
+.event-photo {
+  height: 100%;
+  width: 100%;
   object-fit: cover;
+  object-position: 50% 36%;
 }
-.event-spill {
-  display: none;
+/* Der Übergang ins Dunkel — die einzige Zutat. Er ersetzt die Kante, die
+   ein Bild sonst nach unten hätte. */
+.event-scrim {
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 4, 6, 0) 58%,
+    rgba(5, 4, 6, 0.5) 82%,
+    var(--color-void) 100%
+  );
 }
-@media (min-aspect-ratio: 76 / 100) {
-  .event-fill {
-    object-fit: contain;
+@media (min-aspect-ratio: 1 / 1) {
+  .event-frame {
+    inset: 0;
+    height: 100%;
   }
-  .event-spill {
-    display: block;
+  /* Die Gesichter sitzen im oberen Drittel der Aufnahme; bei flachen
+     Fenstern wandert der Ausschnitt deshalb nach oben mit. */
+  .event-photo {
+    object-position: 50% 28%;
+  }
+  .event-scrim {
+    background: linear-gradient(
+      180deg,
+      rgba(5, 4, 6, 0.42) 0%,
+      rgba(5, 4, 6, 0.08) 34%,
+      rgba(5, 4, 6, 0.1) 62%,
+      rgba(5, 4, 6, 0.62) 100%
+    );
   }
 }
 

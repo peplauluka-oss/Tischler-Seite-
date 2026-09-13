@@ -1,8 +1,8 @@
 "use client";
 
-import EventClip from "@/components/sections/EventClip";
 import Countdown from "@/components/hero/Countdown";
 import { GuestlistButton, TableLink } from "@/components/ui/Cta";
+import { asset } from "@/lib/asset";
 import {
   eventDate,
   eventFullTitle,
@@ -45,18 +45,43 @@ export default function EventLayer({
         active ? "" : "pointer-events-none"
       }`}
     >
-      {/* Die vollständige Information einmal maschinenlesbar — ein Video ist
-          für Screenreader und Suchmaschinen sonst stumm. */}
+      {/* Die vollständige Information einmal maschinenlesbar — das Bild
+          allein sagt Screenreadern und Suchmaschinen nichts. */}
       <h2 className="sr-only">
         {eventFullTitle(event)} — {date.long}, Einlass {date.time} Uhr
       </h2>
 
+      {/* DAS BILD DER NACHT.
+          Eine Aufnahme aus dem Laden, randlos — kein Plakat in einem Rahmen,
+          kein zweiter, unscharfer Abzug dahinter. Welchen Beschnitt ein
+          Gerät bekommt, entscheidet sein Seitenverhältnis: Hochkant steht
+          die schmale Fassung oben und läuft nach unten ins Dunkel aus, damit
+          die beiden nicht am Rand abgeschnitten werden; ab Querformat deckt
+          die ganze Aufnahme die Bühne. Geladen wird nur die Fassung, die das
+          Gerät auch zeigt — deshalb <picture> und nicht zwei Bilder. Die
+          Maße stehen in globals.css bei `.event-frame`. */}
       <div data-event-art className="absolute inset-0">
-        <EventClip artwork={event.artwork} active={active} />
+        <picture className="event-frame">
+          <source
+            media="(min-aspect-ratio: 1/1)"
+            srcSet={asset(event.artwork.quer.src)}
+            width={event.artwork.quer.width}
+            height={event.artwork.quer.height}
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={asset(event.artwork.hoch.src)}
+            alt=""
+            width={event.artwork.hoch.width}
+            height={event.artwork.hoch.height}
+            className="event-photo"
+          />
+        </picture>
+        <div aria-hidden="true" className="event-frame event-scrim" />
       </div>
 
-      {/* Die Einordnung während des reinen Artwork-Moments. Sie sitzt im
-          weichen Rand über dem Motiv und verdeckt nichts. */}
+      {/* Die Einordnung während des reinen Bildmoments. Sie sitzt im weichen
+          Rand über dem Motiv und verdeckt nichts. */}
       <div
         data-event-tag
         aria-hidden="true"

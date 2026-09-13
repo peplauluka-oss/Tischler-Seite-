@@ -49,7 +49,7 @@ export async function generateMetadata({
       description,
       type: "website",
       locale: "de_DE",
-      images: [{ url: asset(event.artwork.poster) }],
+      images: [{ url: asset(event.artwork.quer.src) }],
     },
   };
 }
@@ -80,13 +80,13 @@ export default async function EventPage({
         </Reveal>
 
         <div className="mt-8 grid gap-10 md:mt-12 md:grid-cols-12 md:gap-10">
-          {/* Das Artwork trägt — es ist das, was der Club ohnehin gebaut hat. */}
+          {/* Das Bild trägt — eine Aufnahme aus dem Laden, kein Plakat. */}
           <Reveal className="md:col-span-5">
-            {/* Das Seitenverhältnis der ausgelieferten Fassung (768×1440) — so
-                  steht das Plakat unbeschnitten. */}
-              <figure className="relative aspect-[8/15] w-full overflow-hidden md:sticky md:top-28">
+            {/* Das Seitenverhältnis der hochkanten Fassung (853×1280) — so
+                  steht die Aufnahme unbeschnitten. */}
+              <figure className="relative aspect-[2/3] w-full overflow-hidden md:sticky md:top-28">
               <Image
-                src={asset(event.artwork.poster)}
+                src={asset(event.artwork.hoch.src)}
                 alt={event.artwork.description}
                 fill
                 sizes="(max-width: 768px) 100vw, 40vw"

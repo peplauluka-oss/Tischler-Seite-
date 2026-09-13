@@ -49,7 +49,7 @@ export function EventSchema({ event }: { event: MedusaEvent }) {
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     url: absolute(`/events/${event.slug}/`),
-    image: absolute(asset(event.artwork.poster)),
+    image: absolute(asset(event.artwork.quer.src)),
     ...(performers.length ? { performer: performers } : {}),
     location: {
       "@type": "MusicVenue",
