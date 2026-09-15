@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
+import Settle from "@/components/ui/Settle";
+import { WipeLines } from "@/components/ui/Wipe";
 import { TableButton, GuestlistLink } from "@/components/ui/Cta";
 import { club, images } from "@/content/club";
 import { asset } from "@/lib/asset";
@@ -13,15 +15,24 @@ import { asset } from "@/lib/asset";
  *
  * Bewusst kein VIP-Vokabular und keine Beschreibung dessen, was ein Tisch
  * hier ist — das zeigt das Bild daneben.
+ *
+ * DIE ENTSCHEIDUNG. Hier steigt die Intensität ein letztes Mal, aber nicht
+ * durch Lautstärke: Das Bild läuft auf sein Maß zu, während die Schrift
+ * daneben stillsteht — zwei Ebenen, die sich voneinander lösen. Und die
+ * Reihenfolge trägt das Argument: Anlass, Aussage, Bedingung, dann erst
+ * der Knopf. Wer ihn sieht, hat sich das Kommen schon vorgestellt.
+ *
+ * Keine Trennlinie nach oben: Der Übergang aus den Innenaufnahmen soll
+ * eine Fortsetzung sein, kein neuer Abschnitt.
  */
 export default function TableSection({ eventSlug = null }: { eventSlug?: string | null }) {
   return (
     <section
       id="tisch"
-      className="relative scroll-mt-16 overflow-hidden border-t border-ivory/10"
+      className="relative scroll-mt-16 overflow-hidden"
     >
       <div className="grid grid-cols-12 items-stretch">
-        <Reveal className="col-span-12 md:col-span-6">
+        <Settle className="col-span-12 md:col-span-6" from={1.08}>
           <figure className="relative aspect-[4/3] w-full md:aspect-auto md:h-full md:min-h-[32rem]">
             <Image
               src={asset(images.lounge.src)}
@@ -38,27 +49,34 @@ export default function TableSection({ eventSlug = null }: { eventSlug?: string 
               className="absolute inset-0 bg-gradient-to-t from-void via-void/20 to-transparent md:bg-gradient-to-r"
             />
           </figure>
-        </Reveal>
+        </Settle>
 
-        <Reveal
-          delay={0.08}
-          className="col-span-12 flex flex-col justify-center px-5 py-16 md:col-span-6 md:px-[6vw] md:py-24"
-        >
-          <span className="label">Coming with a crew?</span>
-          <h2 className="display display-stack mt-4 text-[clamp(2.75rem,9vw,5.5rem)] text-ivory">
-            Reserve
-            <br />
-            your table
-          </h2>
-          <p className="mt-6 max-w-[32ch] text-[0.9375rem] leading-relaxed text-mute">
-            Sag uns, wie viele ihr seid — die Bestätigung kommt über WhatsApp.
-          </p>
+        <div className="col-span-12 flex flex-col justify-center px-5 py-16 md:col-span-6 md:px-[6vw] md:py-24">
+          <Reveal y={10}>
+            <span className="label">Coming with a crew?</span>
+          </Reveal>
+          <WipeLines
+            lines={["Reserve", "your table"]}
+            delay={0.06}
+            className="display display-stack mt-4 text-[clamp(2.75rem,9vw,5.5rem)] text-ivory"
+          />
+          <Reveal y={12} delay={0.2}>
+            <p className="mt-6 max-w-[32ch] text-[0.9375rem] leading-relaxed text-mute">
+              Sag uns, wie viele ihr seid — die Bestätigung kommt über WhatsApp.
+            </p>
+          </Reveal>
 
-          <div className="mt-9 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8">
-            <TableButton filled className="w-full sm:w-auto" eventSlug={eventSlug} />
-            <GuestlistLink eventSlug={eventSlug} />
-          </div>
+          {/* Der Knopf kommt zuletzt — nach dem Bild, nach der Aussage, nach
+              der Bedingung. Das ist keine Verzögerung, das ist die
+              Reihenfolge, in der man sich entscheidet. */}
+          <Reveal y={14} delay={0.34}>
+            <div className="mt-9 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8">
+              <TableButton filled className="w-full sm:w-auto" eventSlug={eventSlug} />
+              <GuestlistLink eventSlug={eventSlug} />
+            </div>
+          </Reveal>
 
+          <Reveal y={8} delay={0.44}>
           <p className="mt-6 text-[0.8125rem] text-mute">
             Lieber direkt anrufen?{" "}
             <a
@@ -68,7 +86,8 @@ export default function TableSection({ eventSlug = null }: { eventSlug?: string 
               {club.phone}
             </a>
           </p>
-        </Reveal>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

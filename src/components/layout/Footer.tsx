@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Reveal from "@/components/ui/Reveal";
 import { Logo } from "@/components/ui/Brand";
 import { GuestlistButton, TableButton } from "@/components/ui/Cta";
 import { club, navItems } from "@/content/club";
@@ -6,11 +7,15 @@ import { club, navItems } from "@/content/club";
 /**
  * Fußzeile — kompakt. Adresse, Kontakt, Wege, Aktionen. Keine zweite
  * Marketingfläche: Wer hier ankommt, hat die Seite gesehen.
+ *
+ * Und deshalb bewegt sich hier fast nichts mehr: ein einziges, ruhiges
+ * Auftauchen. Eine Seite, die bis zur letzten Zeile etwas vorführt, hat
+ * keinen Schluss, sondern hört nur auf.
  */
 export default function Footer() {
   return (
     <footer className="border-t border-ivory/10 px-5 pb-28 pt-16 md:px-[7vw] md:pb-20 md:pt-20">
-      <div className="grid gap-12 md:grid-cols-12 md:gap-8">
+      <Reveal y={12} className="grid gap-12 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-4">
           <Logo width={190} />
           <address className="mt-6 not-italic text-[0.9375rem] leading-relaxed text-mute">
@@ -67,7 +72,7 @@ export default function Footer() {
             <TableButton className="w-full" />
           </div>
         </div>
-      </div>
+      </Reveal>
 
       <div className="mt-14 flex flex-col gap-3 border-t border-ivory/10 pt-6 text-[0.6875rem] leading-relaxed text-mute md:flex-row md:items-baseline md:justify-between">
         <p>

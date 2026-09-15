@@ -1,16 +1,22 @@
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
+import Settle from "@/components/ui/Settle";
+import Drift from "@/components/ui/Drift";
+import { WipeLines } from "@/components/ui/Wipe";
 import { club, images, insideStory } from "@/content/club";
 import { asset } from "@/lib/asset";
 
 type Story = (typeof insideStory)[number];
 
-/** Nur eine Ortsmarke im Bild — Nummer und Ort, kein Satz darüber. */
+/** Nur eine Ortsmarke im Bild — Nummer und Ort, kein Satz darüber.
+    Sie kommt eine Spur nach ihrem Bild: erst der Raum, dann sein Name. */
 function Mark({ item, className = "" }: { item: Story; className?: string }) {
   return (
-    <figcaption className={`absolute z-10 flex items-center gap-3 ${className}`}>
-      <span className="display text-lg leading-none text-ember">{item.no}</span>
-      <span className="label text-ivory/80">{item.kicker}</span>
+    <figcaption className={`absolute z-10 ${className}`}>
+      <Reveal y={8} delay={0.26} className="flex items-center gap-3">
+        <span className="display text-lg leading-none text-ember">{item.no}</span>
+        <span className="label text-ivory/80">{item.kicker}</span>
+      </Reveal>
     </figcaption>
   );
 }
@@ -21,26 +27,34 @@ function Frame({
   sizes,
   className = "",
   position = "50% 50%",
+  settle = false,
 }: {
   item: Story;
   ratio: string;
   sizes: string;
   className?: string;
   position?: string;
+  /** Die Aufnahme läuft auf ihr Maß zu — Verlauf und Ortsmarke bleiben
+      stehen. Nur so bleibt die Schrift im Bild gestochen. */
+  settle?: boolean;
 }) {
+  const picture = (
+    <Image
+      src={asset(item.image.src)}
+      alt={item.image.alt}
+      fill
+      sizes={sizes}
+      loading="lazy"
+      className="graded object-cover"
+      style={{ objectPosition: position }}
+      placeholder="blur"
+      blurDataURL={item.image.lqip}
+    />
+  );
+
   return (
-    <figure className={`relative w-full ${ratio} ${className}`}>
-      <Image
-        src={asset(item.image.src)}
-        alt={item.image.alt}
-        fill
-        sizes={sizes}
-        loading="lazy"
-        className="graded object-cover"
-        style={{ objectPosition: position }}
-        placeholder="blur"
-        blurDataURL={item.image.lqip}
-      />
+    <figure className={`relative w-full overflow-hidden ${ratio} ${className}`}>
+      {settle ? <Settle layer from={1.07}>{picture}</Settle> : picture}
       <div
         aria-hidden="true"
         className="absolute inset-0"
@@ -64,24 +78,42 @@ function Frame({
  * Die Location ist bewusst kein eigener Hauptabschnitt mehr. Wo der Laden
  * steht, gehört zu der Frage, wie er aussieht — und eine Kontaktseite
  * mitten im Ablauf hätte den Sog gebrochen.
+ *
+ * DIE VIER BILDER sind ein Raster — das ist als Ordnung richtig, als
+ * Auftritt aber die Stelle, an der eine Seite am schnellsten nach Vorlage
+ * aussieht. Deshalb kommen sie nicht gemeinsam und nicht gleich: Die
+ * großen Flächen laufen auf ihr Maß zu, die kleineren rücken seitlich
+ * herein, und zwischen den beiden Reihen liegt eine Pause. Man liest vier
+ * Räume nacheinander statt einer Galerie auf einmal.
  */
 export default function InsideMedusa() {
   const [raum, flaeche, boxen, bar] = insideStory;
 
   return (
-    <section id="inside" className="scroll-mt-16 pb-24 pt-20 md:pb-32 md:pt-28">
-      <Reveal className="px-5 md:px-[7vw]">
-        <span className="label">Inside</span>
-        <h2 className="display display-stack mt-3 max-w-[14ch] text-[clamp(2.75rem,11vw,7rem)] text-ivory">
-          Inside Medusa
-        </h2>
-      </Reveal>
+    <section id="inside" className="scroll-mt-16 pb-24 pt-16 md:pb-32 md:pt-24">
+      <div className="px-5 md:px-[7vw]">
+        <Reveal y={10}>
+          <span className="label">Inside</span>
+        </Reveal>
+        <WipeLines
+          lines={["Inside Medusa"]}
+          delay={0.06}
+          className="display display-stack mt-3 max-w-[14ch] text-[clamp(2.75rem,11vw,7rem)] text-ivory"
+        />
+      </div>
 
       <div className="mt-8 grid grid-cols-12 gap-3 md:mt-12 md:gap-4">
-        <Reveal className="col-span-12 md:col-span-7">
-          <Frame item={raum} ratio="aspect-[4/3] md:aspect-[5/4]" sizes="(max-width: 768px) 100vw, 58vw" />
-        </Reveal>
-        <Reveal delay={0.08} className="col-span-12 md:col-span-5">
+        {/* Der Raum trägt die Reihe: Er läuft auf sein Maß zu. */}
+        <div className="col-span-12 md:col-span-7">
+          <Frame
+            item={raum}
+            ratio="aspect-[4/3] md:aspect-[5/4]"
+            sizes="(max-width: 768px) 100vw, 58vw"
+            settle
+          />
+        </div>
+        {/* Die Fläche rückt von rechts an ihn heran. */}
+        <Reveal x={22} y={0} delay={0.1} className="col-span-12 md:col-span-5">
           <Frame
             item={flaeche}
             ratio="aspect-[4/3] md:aspect-[5/4]"
@@ -92,17 +124,19 @@ export default function InsideMedusa() {
       </div>
 
       <div className="mt-3 grid grid-cols-12 gap-3 md:mt-4 md:gap-4">
-        <Reveal className="col-span-12 md:col-span-5">
+        {/* Zweite Reihe, andere Richtung — sonst wäre es dieselbe Reihe. */}
+        <Reveal x={-22} y={0} className="col-span-12 md:col-span-5">
           <Frame item={boxen} ratio="aspect-[4/3]" sizes="(max-width: 768px) 100vw, 42vw" />
         </Reveal>
-        <Reveal delay={0.08} className="col-span-12 md:col-span-7">
+        <div className="col-span-12 md:col-span-7">
           <Frame
             item={bar}
             ratio="aspect-[4/3] md:aspect-[16/9]"
             sizes="(max-width: 768px) 100vw, 58vw"
             position="50% 35%"
+            settle
           />
-        </Reveal>
+        </div>
       </div>
 
       {/* WO ES IST.
@@ -110,11 +144,17 @@ export default function InsideMedusa() {
           Instagram. Welche Linien halten, ist nicht belegt — also steht
           hier keine Verbindung. */}
       <div id="location" className="scroll-mt-16 grid gap-8 px-5 pt-16 md:grid-cols-12 md:gap-10 md:px-[7vw] md:pt-24">
-        <Reveal className="md:col-span-6">
-          <span className="label">Location</span>
-          <h3 className="display mt-3 hyphens-auto break-words text-[clamp(2rem,4.4vw,3.5rem)] text-ivory">
-            {club.district}
-          </h3>
+        <div className="md:col-span-6">
+          <Reveal y={10}>
+            <span className="label">Location</span>
+          </Reveal>
+          <WipeLines
+            lines={[club.district]}
+            as="h3"
+            delay={0.06}
+            className="display mt-3 hyphens-auto break-words text-[clamp(2rem,4.4vw,3.5rem)] text-ivory"
+          />
+          <Reveal y={12} delay={0.16}>
           <address className="mt-5 not-italic">
             <p className="display text-[clamp(1.375rem,3.2vw,2rem)] leading-tight text-ivory">
               {club.address}
@@ -133,21 +173,24 @@ export default function InsideMedusa() {
               </svg>
             </a>
           </address>
-        </Reveal>
+          </Reveal>
+        </div>
 
         <Reveal delay={0.08} className="md:col-span-5 md:col-start-8">
-          <figure className="relative aspect-[4/3] w-full">
-            <Image
-              src={asset(images.eingang.src)}
-              alt={images.eingang.alt}
-              fill
-              sizes="(max-width: 768px) 100vw, 40vw"
-              loading="lazy"
-              className="graded-night object-cover"
-              placeholder="blur"
-              blurDataURL={images.eingang.lqip}
-            />
-          </figure>
+          <Drift amount={14}>
+            <figure className="relative aspect-[4/3] w-full overflow-hidden">
+              <Image
+                src={asset(images.eingang.src)}
+                alt={images.eingang.alt}
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                loading="lazy"
+                className="graded-night object-cover"
+                placeholder="blur"
+                blurDataURL={images.eingang.lqip}
+              />
+            </figure>
+          </Drift>
           <dl className="mt-6 space-y-4 border-t border-ivory/12 pt-5 text-sm">
             <div>
               <dt className="label text-[0.625rem]">Kontakt</dt>

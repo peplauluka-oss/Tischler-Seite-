@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
+import { WipeLines } from "@/components/ui/Wipe";
 import { GuestlistButton } from "@/components/ui/Cta";
 import { club } from "@/content/club";
 import { eventDate, eventTitle, type MedusaEvent } from "@/content/events";
@@ -15,41 +16,56 @@ import { asset } from "@/lib/asset";
  *
  * Steht nichts an, wird das gesagt und nicht mit erfundenen Terminen
  * überdeckt — der Club kündigt seine Nächte auf Instagram an.
+ *
+ * DIE RUHIGE STELLE. Nach der Bildstrecke ist der Blick voll; hier bewegt
+ * sich deshalb fast nichts — keine Tiefenstaffelung, kein Maßstab, nur
+ * Zeit und Deckkraft. Eine Nacht besteht nicht nur aus Höhepunkten, und
+ * eine Seite, die durchgehend etwas vorführt, hat keine mehr.
+ *
+ * Auch keine Trennlinie mehr nach oben: Das letzte Hochformat der
+ * Bildstrecke ragt in diesen Abschnitt hinein, und eine Haarlinie
+ * quer darüber hätte aus dem Übergang eine Naht gemacht.
  */
 export default function UpcomingEvents({ events }: { events: MedusaEvent[] }) {
   return (
     <section
       id="upcoming"
-      className="scroll-mt-16 border-t border-ivory/10 px-5 py-20 md:px-[7vw] md:py-28"
+      className="scroll-mt-16 px-5 pb-16 pt-14 md:px-[7vw] md:pb-24 md:pt-20"
     >
-      <Reveal className="flex flex-wrap items-end justify-between gap-6">
+      <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <span className="label">Was kommt</span>
-          <h2 className="display display-stack mt-3 text-[clamp(2.5rem,9vw,5.5rem)] text-ivory">
-            Next nights
-          </h2>
+          <Reveal y={10}>
+            <span className="label">Was kommt</span>
+          </Reveal>
+          <WipeLines
+            lines={["Next nights"]}
+            delay={0.06}
+            className="display display-stack mt-3 text-[clamp(2.5rem,9vw,5.5rem)] text-ivory"
+          />
         </div>
-        <Link
-          href="/events"
-          className="cta-quiet"
-        >
-          Alle Events
-          <svg viewBox="0 0 18 10" width="18" height="10" aria-hidden="true">
-            <path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
-        </Link>
-      </Reveal>
+        <Reveal y={10} delay={0.16}>
+          <Link href="/events" className="cta-quiet">
+            Alle Events
+            <svg viewBox="0 0 18 10" width="18" height="10" aria-hidden="true">
+              <path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+          </Link>
+        </Reveal>
+      </div>
 
       {events.length > 0 ? (
         <ul className="mt-10 md:mt-14">
           {events.map((ev, i) => {
             const date = eventDate(ev);
+            /* Nur die ersten Zeilen kommen versetzt: Ein Versatz, der bis
+               zur zehnten Zeile durchgezählt wird, lässt den Besucher auf
+               Termine warten. */
             return (
-              <Reveal key={ev.slug} delay={i * 0.05}>
+              <Reveal key={ev.slug} y={12} delay={Math.min(i, 2) * 0.07}>
                 <li className="grid grid-cols-12 items-center gap-x-4 gap-y-4 border-t border-ivory/12 py-6 md:py-8">
                   <Link
                     href={`/events/${ev.slug}`}
-                    className="col-span-3 md:col-span-2"
+                    className="group col-span-3 md:col-span-2"
                   >
                     <span className="relative block aspect-[3/4] w-full overflow-hidden">
                       <Image
@@ -58,7 +74,7 @@ export default function UpcomingEvents({ events }: { events: MedusaEvent[] }) {
                         fill
                         sizes="(max-width: 768px) 25vw, 14vw"
                         loading="lazy"
-                        className="object-cover"
+                        className="img-lift object-cover"
                       />
                     </span>
                   </Link>

@@ -145,6 +145,13 @@
     background: var(--color-ember);
     color: #fff;
   }
+  /* Ein Millimeter Auftrieb. Genug, dass die Fläche auf den Zeiger
+     reagiert, zu wenig, um als Animation gelesen zu werden. */
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) {
+    .cta:hover {
+      transform: translateY(-2px);
+    }
+  }
   .cta:active {
     transform: translateY(1px);
   }
@@ -161,6 +168,7 @@
 
   /* Nachrangig: reine Typo mit Haarlinie, nie ein zweiter Kasten. */
   .cta-quiet {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
@@ -178,6 +186,61 @@
   .cta-quiet:hover {
     color: var(--color-ivory);
     border-color: var(--color-ivory);
+  }
+  /* Über der Haarlinie läuft beim Hover eine zweite in Rot ein — von links,
+     in Leserichtung. Das ist die kleinste Rückmeldung, die die Seite gibt,
+     und sie gehört den nachrangigen Aktionen: Die Primäraktion hat ihre
+     Fläche, diese hier hat ihre Linie. */
+  .cta-quiet::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: var(--color-ember);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cta-quiet:hover::after,
+  .cta-quiet:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* Bildverweise: Beim Zeigen tritt die Aufnahme einen Hauch vor. Nur dort,
+     wo das Bild selbst ein Link ist — ein Foto, das ohne Ziel auf den Zeiger
+     reagiert, verspricht etwas, das nicht kommt. */
+  .img-lift {
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) {
+    .group:hover .img-lift {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Navigation: Der aktive Abschnitt bekommt eine Linie, die von links
+     einläuft, statt nur eine andere Textfarbe. Man sieht, wo man ist —
+     und dass die Seite es mitbekommt. */
+  .nav-link {
+    position: relative;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.25rem;
+    height: 1px;
+    background: var(--color-ember);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-link[aria-current="true"]::after,
+  .nav-link:hover::after {
+    transform: scaleX(1);
   }
 
   /* Auswahlflächen im Reservierungsablauf — flach, kantig, kein „Card“-Look. */

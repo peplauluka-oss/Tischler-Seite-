@@ -18,6 +18,11 @@ import { scrollToSection } from "@/lib/scroll";
  * Auf dem Telefon steht neben der Marke nur die Gästeliste und ein
  * Menüzeichen: Die wichtigste Handlung ist immer mit einem Daumen erreichbar,
  * alles Übrige liegt eine Berührung tiefer.
+ *
+ * Der Grund der Leiste hat zwei Zustände. Über der Bühne liegt er dünn — die
+ * Leiste soll dort im Bild liegen, nicht darauf. Sobald Inhalt darunter
+ * durchläuft, wird er dicht und bekommt seine Kante: Ab da trennt die Leiste
+ * etwas, vorher hat sie nichts zu trennen.
  */
 export default function SiteNav({
   /** Auf der Startseite blendet die Hero-Timeline die Leiste ein und wieder
@@ -28,6 +33,25 @@ export default function SiteNav({
 }) {
   const [active, setActive] = useState<string | null>(null);
   const [menu, setMenu] = useState(false);
+  /* Auf Unterseiten beginnt der Inhalt direkt unter der Leiste — dort ist
+     der dichte Zustand von Anfang an der richtige. */
+  const [onContent, setOnContent] = useState(!heroDriven);
+
+  useEffect(() => {
+    if (!heroDriven) return;
+    const onScroll = () => {
+      const hero = document.getElementById("top");
+      const end = hero ? hero.offsetHeight - window.innerHeight * 0.4 : 0;
+      setOnContent(window.scrollY > end);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [heroDriven]);
 
   useEffect(() => {
     const sections = navItems
@@ -69,7 +93,11 @@ export default function SiteNav({
     >
       <div
         data-nav-bg
-        className="absolute inset-0 border-b border-ivory/10 bg-void/55 backdrop-blur-xl"
+        className={`absolute inset-0 border-b transition-[background-color,border-color,backdrop-filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          onContent
+            ? "border-ivory/10 bg-void/78 backdrop-blur-xl"
+            : "border-transparent bg-void/30 backdrop-blur-md"
+        }`}
       />
 
       <div className="relative mx-auto flex h-14 max-w-[1560px] items-center justify-between gap-4 px-5 md:h-[72px] md:px-8">
@@ -93,7 +121,7 @@ export default function SiteNav({
                     go(item.id);
                   }}
                   aria-current={active === item.id ? "true" : undefined}
-                  className={`block py-2 text-[0.6875rem] font-bold tracking-[0.2em] transition-colors ${
+                  className={`nav-link block py-2 text-[0.6875rem] font-bold tracking-[0.2em] transition-colors ${
                     active === item.id ? "text-ivory" : "text-mute hover:text-ivory"
                   }`}
                 >
