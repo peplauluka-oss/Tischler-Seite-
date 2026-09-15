@@ -65,7 +65,7 @@ export default function MedusaNights() {
       <Reveal>
         <Drift amount={20} className="ml-5 md:ml-[7vw]">
           <Shot
-            image={nights.tisch}
+            image={nights.tanz}
             sizes="(max-width: 768px) 118vw, 74vw"
             className="mr-[-18vw] aspect-[3/2] md:mr-[-10vw] md:aspect-[21/9]"
             priorityPosition="52% 40%"
@@ -108,10 +108,10 @@ export default function MedusaNights() {
         </Reveal>
       </div>
 
-      {/* 03 — Randlos über die volle Breite: der Blick auf die Fläche. */}
+      {/* 03 — Randlos über die volle Breite: der Abend am Tresen. */}
       <Reveal className="mt-14 md:mt-24">
         <Shot
-          image={nights.flaeche}
+          image={nights.karte}
           sizes="100vw"
           className="aspect-[3/2] w-full sm:aspect-[2/1] md:aspect-[5/2]"
           priorityPosition="50% 45%"

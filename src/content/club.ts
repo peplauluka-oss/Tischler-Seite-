@@ -115,12 +115,12 @@ export const images = {
  * ist, und behaupten nichts über die Menschen darauf.
  */
 export const nights = {
-  tisch: {
-    src: "/media/night-tisch.webp",
-    alt: "Zwei Gäste an einem Tisch im Black Medusa, Hände in die Kamera gestreckt",
+  tanz: {
+    src: "/media/night-tanz.webp",
+    alt: "Gäste im Gespräch an einem Tisch, dahinter die volle Fläche",
     width: 1800,
     height: 1200,
-    lqip: "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAQAgCdASoQAAsAAwBWJQBWAB0+pVzzxDpsAP7y4qZQOznsHH7nKf44mAj08QvLTMQgvJwub5tga+qJp8315bC3WrY4Z5ra8iVqMUhoRkkDXThOd1d4AA==",
+    lqip: "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAABwAgCdASoQAAsAA4BaJZQCdAYv1ymZ/tLc1YiAAP7xgJUAnhTFbPosFXPDvIRr6Pujdz47hU/N4W56qoj3EGsfZ9mOTFdiKbS2b99UrBBBPTnqNdcTUAgvAAA=",
   },
   vip: {
     src: "/media/night-vip.webp",
@@ -135,6 +135,13 @@ export const nights = {
     width: 1800,
     height: 1200,
     lqip: "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAQCdASoQAAsAAwBWJZQAApPpEvWFCwAA/trTdYoa5TUGUSwrqxC5H7iyf80XMaJrDgrsceZWR6Ii5ntUtiVgPGqEnLv0wW8QDH6G/66fGxAA",
+  },
+  karte: {
+    src: "/media/night-karte.webp",
+    alt: "Gast am Tresen mit der Karte in der Hand, dahinter der Barbetrieb",
+    width: 1800,
+    height: 1200,
+    lqip: "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAAAQAgCdASoQAAsAA4BaJYwCdAEK35Bc7agAAP7yqqwC4FFO+FIxkl15PEOOi66X8jKlOVFVVS0gmbgkEocrpKwAbAC7RT4R8wqgAA==",
   },
   rot: {
     src: "/media/night-rot.webp",

@@ -438,13 +438,13 @@ export default function Hero({
             }}
           >
             <Image
-              src={asset(images.tresen.src)}
+              src={asset(images.bar.src)}
               alt=""
               fill
               sizes="30vh"
               className="graded-strong object-cover"
               placeholder="blur"
-              blurDataURL={images.tresen.lqip}
+              blurDataURL={images.bar.lqip}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-void via-void/25 to-void" />
           </div>
