@@ -13,7 +13,20 @@ import { club } from "@/content/club";
  * der Startseite. Sie ist ersatzlos raus; ein neuer Slogan an derselben
  * Stelle wäre derselbe Fehler mit anderen Worten.
  *
- * Geblieben ist der Satz, mit dem der Abend anfängt, und die Handlung.
+ * Geblieben ist der Satz, mit dem der Abend anfängt, die Einordnung und
+ * die Handlung.
+ *
+ * DIE EINORDNUNG ist die einzige Ergänzung, und sie schließt eine echte
+ * Lücke: Direkt darunter steht „Tisch reservieren“ — ein Angebot, das
+ * voraussetzt, dass es hier Tische gibt. Wer den Laden nicht kennt, sieht
+ * ein Video, eine Behauptung und zwei Knöpfe, aber nirgends, was für ein
+ * Haus das ist. Drei Wörter beantworten das, ohne einen „Über uns“-Absatz
+ * daraus zu machen.
+ *
+ * Alle drei sind durch die eigenen Aufnahmen des Clubs gedeckt: die Fläche
+ * im Clip, der Loungebereich mit Tresen in den Innenaufnahmen, die Nächte
+ * in der Bildstrecke. Eine Musikrichtung steht hier bewusst NICHT — die
+ * entscheidet der einzelne Abend mit seinen Artists, nicht die Startseite.
  */
 export default function HeroCaption() {
   return (
@@ -43,9 +56,17 @@ export default function HeroCaption() {
         ))}
       </h1>
 
+      <p
+        data-reveal="kind"
+        className="label hero-reveal mt-6 md:mt-7 md:text-[0.75rem]"
+      >
+        Club <span className="text-ember-soft">·</span> Lounge{" "}
+        <span className="text-ember-soft">·</span> Nightlife
+      </p>
+
       <div
         data-reveal="cta"
-        className="hero-reveal mt-9 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7 md:mt-11"
+        className="hero-reveal mt-7 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7 md:mt-8"
       >
         <GuestlistButton />
         <TableLink />

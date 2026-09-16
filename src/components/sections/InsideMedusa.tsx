@@ -90,7 +90,7 @@ export default function InsideMedusa() {
   const [raum, flaeche, boxen, bar] = insideStory;
 
   return (
-    <section id="inside" className="scroll-mt-16 pb-24 pt-16 md:pb-32 md:pt-24">
+    <section id="inside" className="scroll-mt-16 md:scroll-mt-20 pb-24 pt-16 md:pb-32 md:pt-24">
       <div className="px-5 md:px-[7vw]">
         <Reveal y={10}>
           <span className="label">Inside</span>
@@ -143,7 +143,7 @@ export default function InsideMedusa() {
           Praktisch, nicht als Kontaktseite: Adresse, Route, Telefon,
           Instagram. Welche Linien halten, ist nicht belegt — also steht
           hier keine Verbindung. */}
-      <div id="location" className="scroll-mt-16 grid gap-8 px-5 pt-16 md:grid-cols-12 md:gap-10 md:px-[7vw] md:pt-24">
+      <div id="location" className="scroll-mt-16 md:scroll-mt-20 grid gap-8 px-5 pt-16 md:grid-cols-12 md:gap-10 md:px-[7vw] md:pt-24">
         <div className="md:col-span-6">
           <Reveal y={10}>
             <span className="label">Location</span>
@@ -194,10 +194,10 @@ export default function InsideMedusa() {
           <dl className="mt-6 space-y-4 border-t border-ivory/12 pt-5 text-sm">
             <div>
               <dt className="label text-[0.625rem]">Kontakt</dt>
-              <dd className="mt-1.5">
+              <dd className="-my-1 mt-0.5">
                 <a
                   href={club.phoneHref}
-                  className="text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
+                  className="inline-block py-2 text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
                 >
                   {club.phone}
                 </a>
@@ -205,12 +205,12 @@ export default function InsideMedusa() {
             </div>
             <div>
               <dt className="label text-[0.625rem]">Instagram</dt>
-              <dd className="mt-1.5">
+              <dd className="-my-1 mt-0.5">
                 <a
                   href={club.instagramUrl}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
+                  className="inline-block py-2 text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
                 >
                   @{club.instagram}
                 </a>

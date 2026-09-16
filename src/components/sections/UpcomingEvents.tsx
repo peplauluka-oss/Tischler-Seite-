@@ -30,7 +30,7 @@ export default function UpcomingEvents({ events }: { events: MedusaEvent[] }) {
   return (
     <section
       id="upcoming"
-      className="scroll-mt-16 px-5 pb-16 pt-14 md:px-[7vw] md:pb-24 md:pt-20"
+      className="scroll-mt-16 md:scroll-mt-20 px-5 pb-16 pt-14 md:px-[7vw] md:pb-24 md:pt-20"
     >
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>

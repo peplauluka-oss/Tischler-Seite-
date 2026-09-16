@@ -29,7 +29,7 @@ export default function TableSection({ eventSlug = null }: { eventSlug?: string 
   return (
     <section
       id="tisch"
-      className="relative scroll-mt-16 overflow-hidden"
+      className="relative scroll-mt-16 md:scroll-mt-20 overflow-hidden"
     >
       <div className="grid grid-cols-12 items-stretch">
         <Settle className="col-span-12 md:col-span-6" from={1.08}>
@@ -81,7 +81,7 @@ export default function TableSection({ eventSlug = null }: { eventSlug?: string 
             Lieber direkt anrufen?{" "}
             <a
               href={club.phoneHref}
-              className="text-ivory underline decoration-ember decoration-1 underline-offset-4"
+              className="inline-block py-2 text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
             >
               {club.phone}
             </a>

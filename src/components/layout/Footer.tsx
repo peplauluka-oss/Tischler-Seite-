@@ -25,7 +25,7 @@ export default function Footer() {
             <br />
             <a
               href={club.phoneHref}
-              className="mt-2 inline-block text-ivory transition-colors hover:text-ember-soft"
+              className="mt-1 inline-block py-2 text-ivory transition-colors hover:text-ember-soft"
             >
               {club.phone}
             </a>
@@ -33,12 +33,12 @@ export default function Footer() {
         </div>
 
         <nav aria-label="Fußzeile" className="md:col-span-4">
-          <ul className="space-y-3">
+          <ul className="-my-1.5">
             {navItems.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
-                  className="text-[0.6875rem] font-bold tracking-[0.2em] text-mute transition-colors hover:text-ivory"
+                  className="block py-2.5 text-[0.6875rem] font-bold tracking-[0.2em] text-mute transition-colors hover:text-ivory"
                 >
                   {item.label}
                 </a>
@@ -47,7 +47,7 @@ export default function Footer() {
             <li>
               <Link
                 href="/events"
-                className="text-[0.6875rem] font-bold tracking-[0.2em] text-mute transition-colors hover:text-ivory"
+                className="block py-2.5 text-[0.6875rem] font-bold tracking-[0.2em] text-mute transition-colors hover:text-ivory"
               >
                 ALLE EVENTS
               </Link>
@@ -57,7 +57,7 @@ export default function Footer() {
                 href={club.instagramUrl}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="text-[0.6875rem] font-bold tracking-[0.2em] text-mute transition-colors hover:text-ivory"
+                className="block py-2.5 text-[0.6875rem] font-bold tracking-[0.2em] text-mute transition-colors hover:text-ivory"
               >
                 INSTAGRAM
               </a>

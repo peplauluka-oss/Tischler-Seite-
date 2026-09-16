@@ -29,6 +29,8 @@ const CUE = {
   depthIn: 0.18,
   kicker: 0.23,
   claim: 0.26,
+  /** Die Einordnung: was für ein Haus das ist. Zwischen Aussage und Handlung. */
+  kind: 0.315,
   cta: 0.35,
   navOut: 0.44,
   dissolve: 0.48,
@@ -226,6 +228,12 @@ export default function Hero({
             CUE.claim,
           )
           .fromTo(
+            q("[data-reveal='kind']"),
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.05 },
+            CUE.kind,
+          )
+          .fromTo(
             q("[data-reveal='cta']"),
             { opacity: 0, y: 20 },
             { opacity: 1, y: 0, duration: 0.07 },
@@ -311,6 +319,80 @@ export default function Hero({
            eigenem Logo. */
         tl.to(navShell, { opacity: 1, duration: 0.01 }, CUE.navBack);
 
+        /* 08 — DIE ÜBERGABE.
+               Bis hierher klebt die Bühne am oberen Rand. Genau am Ende der
+               Strecke löst sie sich — und ohne Zutun schöbe sie sich einfach
+               mit derselben Geschwindigkeit nach oben aus dem Bild, während
+               von unten das nächste Bild nachrückt. Zwei Flächen, die
+               aneinander vorbeifahren: technisch korrekt, aber genau der
+               Schnitt, den man sieht.
+
+               Stattdessen tritt die Bühne zurück. Sie bleibt ein Stück
+               hinter dem Scroll zurück, wird kleiner und dunkler und
+               verliert die Schärfe — das Bild geht in die Tiefe, statt zur
+               Seite zu gehen. Das Nachrückende gleitet darüber, und weil
+               beide Ebenen gleichzeitig zu sehen sind und sich
+               unterschiedlich verhalten, liest man einen Raum und keine
+               Kante.
+
+               Eigener Trigger, weil die Haupttimeline genau dort endet, wo
+               das hier anfängt: bei „bottom bottom“. */
+        const handover = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "bottom bottom",
+            end: "bottom top",
+            scrub: 0.65,
+            invalidateOnRefresh: true,
+            /* Die Bühne bekommt ihre eigene Ebene, solange sie sich bewegt
+               — und nur solange. Ohne den Hinweis rastert der Browser den
+               ganzen Bildschirm inklusive Foto und Schrift bei jedem Bild
+               neu; dauerhaft gesetzt kostet die Ebene über die ganze Seite
+               Speicher, den sie nur für eine Bildschirmhöhe braucht. */
+            onToggle: (self) =>
+              gsap.set(stageEl, {
+                willChange: self.isActive ? "transform, opacity" : "auto",
+              }),
+          },
+        });
+
+        const stageFade = q("[data-hero-fade]")[0] as HTMLElement;
+
+        handover
+          .fromTo(
+            stageEl,
+            { y: 0, scale: 1 },
+            {
+              /* Der Rückstand gegenüber dem Scroll — die ganze Tiefe. */
+              y: () => stageEl.clientHeight * 0.1,
+              /* Nur so viel kleiner, dass die Kante nicht zur Karte wird:
+                 Bei stärkerem Maßstab steht am Rand ein sichtbares Rechteck
+                 im Bild, und aus der Tiefe wird ein Element. */
+              scale: 0.965,
+              duration: 1,
+              immediateRender: false,
+            },
+            0,
+          )
+          .fromTo(
+            stageFade,
+            { opacity: 0 },
+            {
+              opacity: 0.88,
+              /* Erst der Raum, dann das Licht: Die Angaben zur Nacht bleiben
+                 lesbar, während die Bühne schon zurückweicht, und geben erst
+                 los, wenn das nächste Bild ohnehin die Fläche hat. Ein früher
+                 Abdunkler nähme dem Besucher die Information weg, um eine
+                 Animation zu zeigen. */
+              ease: "power2.in",
+              duration: 0.62,
+              immediateRender: false,
+            },
+            0,
+          )
+          .to(stageEl, { opacity: 0, duration: 0.3 }, 0.62);
+
         /* Der Zustandswechsel selbst: Er startet den Clip und nimmt der
            verpufften Welt Zeiger und Tastatur ab. */
         const gate = ScrollTrigger.create({
@@ -325,6 +407,10 @@ export default function Hero({
         });
 
         return () => {
+          handover.scrollTrigger?.kill();
+          handover.kill();
+          gsap.set(stageEl, { clearProps: "transform,opacity" });
+          gsap.set(q("[data-hero-fade]"), { clearProps: "opacity" });
           gate.kill();
           setEventOn(false);
         };
@@ -396,6 +482,18 @@ export default function Hero({
         ref={stage}
         className="sticky top-0 h-[100svh] w-full overflow-hidden bg-void"
       >
+        {/* Die Blende der Übergabe. Sie liegt über beiden Zuständen und
+            nimmt der Bühne das Licht, wenn die nächste Fläche übernimmt.
+            Bewusst eine Fläche mit Deckkraft und kein `filter` auf der
+            Bühne: Ein Filter zwingt den ganzen Bildschirm — Video, Foto,
+            Schrift — auf jedem Bild durch eine neue Berechnung. Gemessen
+            hat genau das die Bildfolge beim Übergang um ein Drittel
+            verschlechtert; eine Deckkraft kostet nichts. */}
+        <div
+          data-hero-fade
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-40 bg-void opacity-0"
+        />
         {/* ---- ZUSTAND 2: DAS EVENT ------------------------------------
             Liegt unter der Clubwelt und ist fertig gezeichnet, bevor sie
             verpufft. Deshalb gibt es keinen Übergangsscreen. */}
@@ -476,7 +574,7 @@ export default function Hero({
             className="absolute inset-0 z-30 flex items-end pb-14 pt-20 lg:items-center lg:pb-0 lg:pt-0"
             style={{ willChange: "transform" }}
           >
-            <div className="w-full px-5 md:px-[6vw] lg:px-[7vw]">
+            <div className="w-full px-5 md:px-[7vw]">
               <HeroCaption />
             </div>
           </div>

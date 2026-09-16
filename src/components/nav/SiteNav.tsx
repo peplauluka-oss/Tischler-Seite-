@@ -104,7 +104,7 @@ export default function SiteNav({
         <button
           type="button"
           onClick={() => go("top")}
-          className="flex shrink-0 items-center text-ivory transition-opacity hover:opacity-70"
+          className="-my-2 flex shrink-0 items-center py-2 text-ivory transition-opacity hover:opacity-70"
         >
           <Logo width={136} className="md:!w-[148px]" />
           <span className="sr-only">Black Medusa — zum Seitenanfang</span>
