@@ -47,8 +47,12 @@ export type MedusaEvent = {
   occasion: string | null;
   /** Act, der die Nacht trägt. */
   headliner: string | null;
-  /** Weitere Namen: DJs, Shows. */
+  /** Weitere Namen: DJs, Shows. Auch eine Angabe wie „2 DJs“, wenn der
+      Club die Namen (noch) nicht nennt — erfunden wird keiner. */
   support: readonly string[];
+  /** Kurze Angaben des Clubs zu dieser Nacht: Einlasskondition, Tische.
+      Keine Beschreibung und keine Werbung — nur, was angekündigt wurde. */
+  notes: readonly string[];
   /** Musikrichtung — nur wenn der Club sie für diese Nacht angibt. Es gibt
       keine Hausrichtung, die hier gälte: Was läuft, entscheidet der Abend. */
   music: string | null;
@@ -59,19 +63,26 @@ export type MedusaEvent = {
   artwork: EventArtwork;
   guestlist: boolean;
   tables: boolean;
-  minAge: string;
-  admission: string;
+  /** Nur wenn der Club es für diese Nacht angibt. `null` → die Oberfläche
+      lässt die Angabe weg, statt eine aus einer früheren Nacht zu erben.
+      Bei einer Altersgrenze ist das keine Kosmetik: Sie steht entweder da,
+      weil sie angekündigt wurde, oder sie steht nicht da. */
+  minAge: string | null;
+  admission: string | null;
 };
 
 export const events: readonly MedusaEvent[] = [
   {
-    slug: "birthday-bash-4-jahre",
-    occasion: "4 Jahre Black Medusa",
-    headliner: "SINAN",
-    support: ["DJ Maky", "DJ Pasa", "Tupan Show", "Belly Dance Show"],
-    /* Im Artwork steht keine Genreangabe — also steht hier keine. */
-    music: null,
-    entryAt: "2026-09-05T22:00:00+02:00",
+    slug: "balkan-party-19-09-2026",
+    occasion: "Balkan Party",
+    /* Der Club nennt keinen Namen — also steht hier keiner, und die Zeile
+       „mit …“ entfällt von selbst. */
+    headliner: null,
+    support: ["2 DJs"],
+    notes: ["Free Entry for Ladies", "VIP Tables", "VIP Lounge"],
+    music: "Balkan",
+    /* Samstag, 19. September 2026, Einlass 22 Uhr. */
+    entryAt: "2026-09-19T22:00:00+02:00",
     endsAfterHours: 7,
     artwork: {
       /* Eine echte Aufnahme aus dem Laden statt eines Plakats: zwei Gäste
@@ -86,8 +97,12 @@ export const events: readonly MedusaEvent[] = [
     },
     guestlist: true,
     tables: true,
-    minAge: "18+",
-    admission: "Eintritt an der Abendkasse",
+    /* Beides wurde für diese Nacht nicht angekündigt. Die Altersgrenze und
+       der Eintritt an der Abendkasse standen im Creative der letzten Nacht;
+       sie hierher zu übernehmen wäre eine Behauptung über einen Abend, über
+       den sie niemand aufgestellt hat. */
+    minAge: null,
+    admission: null,
   },
 ];
 
@@ -114,13 +129,13 @@ export type EventDate = {
   weekday: string;
   /** „Samstag“ */
   weekdayLong: string;
-  /** „05.09.“ */
+  /** „19.09.“ */
   dayMonth: string;
   /** „2026“ */
   year: string;
-  /** „SA 05.09.2026“ */
+  /** „SA 19.09.2026“ */
   short: string;
-  /** „Samstag, 5. September 2026“ */
+  /** „Samstag, 19. September 2026“ */
   long: string;
   /** „22:00“ */
   time: string;

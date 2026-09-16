@@ -119,6 +119,12 @@ export default async function EventPage({
               </p>
             )}
 
+            {event.notes.length > 0 && (
+              <p className="mt-2 max-w-[40ch] text-[0.9375rem] leading-relaxed text-ivory/80">
+                {event.notes.join(" · ")}
+              </p>
+            )}
+
             <dl className="mt-9 grid gap-x-10 gap-y-5 border-t border-ivory/12 pt-7 sm:grid-cols-2">
               <div>
                 <dt className="label text-[0.625rem]">Einlass</dt>
@@ -132,14 +138,33 @@ export default async function EventPage({
                   <dd className="mt-1.5 text-ivory">{event.music}</dd>
                 </div>
               )}
-              <div>
-                <dt className="label text-[0.625rem]">Eintritt</dt>
-                <dd className="mt-1.5 text-ivory">{event.admission}</dd>
-              </div>
-              <div>
-                <dt className="label text-[0.625rem]">Alter</dt>
-                <dd className="mt-1.5 text-ivory">{event.minAge}</dd>
-              </div>
+              {event.tables && (
+                <div>
+                  <dt className="label text-[0.625rem]">Tischbuchung</dt>
+                  <dd className="mt-0.5">
+                    <a
+                      href={club.phoneHref}
+                      className="inline-block py-2 text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
+                    >
+                      {club.phone}
+                    </a>
+                  </dd>
+                </div>
+              )}
+              {/* Eintritt und Altersgrenze stehen nur da, wenn der Club sie
+                  für diese Nacht angekündigt hat. */}
+              {event.admission && (
+                <div>
+                  <dt className="label text-[0.625rem]">Eintritt</dt>
+                  <dd className="mt-1.5 text-ivory">{event.admission}</dd>
+                </div>
+              )}
+              {event.minAge && (
+                <div>
+                  <dt className="label text-[0.625rem]">Alter</dt>
+                  <dd className="mt-1.5 text-ivory">{event.minAge}</dd>
+                </div>
+              )}
               <div className="sm:col-span-2">
                 <dt className="label text-[0.625rem]">Ort</dt>
                 <dd className="mt-1.5 text-ivory">

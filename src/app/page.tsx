@@ -65,7 +65,7 @@ export default function Page() {
       <main>
         <Hero featured={featured} />
         <MedusaNights />
-        <UpcomingEvents events={upcoming} />
+        <UpcomingEvents events={upcoming} announced={featured?.upcoming ?? false} />
         <InsideMedusa />
         <TableSection eventSlug={featured?.event.slug ?? null} />
       </main>

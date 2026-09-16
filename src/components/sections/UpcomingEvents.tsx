@@ -26,7 +26,16 @@ import { asset } from "@/lib/asset";
  * Bildstrecke ragt in diesen Abschnitt hinein, und eine Haarlinie
  * quer darüber hätte aus dem Übergang eine Naht gemacht.
  */
-export default function UpcomingEvents({ events }: { events: MedusaEvent[] }) {
+export default function UpcomingEvents({
+  events,
+  /** Steht oben schon eine Nacht? Dann geht es hier um WEITERE Termine —
+      und der Satz „Der nächste Termin steht noch nicht fest“ wäre schlicht
+      falsch, weil er eine Bildschirmhöhe weiter oben steht. */
+  announced = false,
+}: {
+  events: MedusaEvent[];
+  announced?: boolean;
+}) {
   return (
     <section
       id="upcoming"
@@ -113,7 +122,9 @@ export default function UpcomingEvents({ events }: { events: MedusaEvent[] }) {
       ) : (
         <Reveal delay={0.06} className="mt-10 border-t border-ivory/12 pt-8 md:mt-14">
           <p className="max-w-[38ch] text-lg leading-relaxed text-ivory md:text-2xl">
-            Der nächste Termin steht noch nicht fest.
+            {announced
+              ? "Weitere Termine stehen noch nicht fest."
+              : "Der nächste Termin steht noch nicht fest."}
           </p>
           <p className="mt-4 max-w-[46ch] text-[0.9375rem] leading-relaxed text-mute">
             Neue Termine stehen auf Instagram.

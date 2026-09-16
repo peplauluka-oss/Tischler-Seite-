@@ -3,6 +3,7 @@
 import Countdown from "@/components/hero/Countdown";
 import { GuestlistButton, TableLink } from "@/components/ui/Cta";
 import { asset } from "@/lib/asset";
+import { club } from "@/content/club";
 import {
   eventDate,
   eventFullTitle,
@@ -136,9 +137,18 @@ export default function EventLayer({
             <time dateTime={date.iso}>{date.short}</time> · Einlass {date.time}
           </p>
 
-          {event.support.length > 0 && (
+          {(event.support.length > 0 || event.music) && (
             <p className="mt-3 max-w-[42ch] text-[0.75rem] leading-relaxed text-mute md:text-[0.8125rem]">
-              {event.support.join(" · ")}
+              {[...event.support, event.music].filter(Boolean).join(" · ")}
+            </p>
+          )}
+
+          {/* Die Konditionen der Nacht — was am Einlass gilt und was es an
+              Tischen gibt. Dieselbe Zeile wie das Line-up, nur eine Stufe
+              heller: Es ist die Angabe, die über das Kommen entscheidet. */}
+          {event.notes.length > 0 && (
+            <p className="mt-1.5 max-w-[42ch] text-[0.75rem] leading-relaxed text-ivory/75 md:text-[0.8125rem]">
+              {event.notes.join(" · ")}
             </p>
           )}
 
@@ -149,6 +159,24 @@ export default function EventLayer({
             {upcoming && event.tables && <TableLink eventSlug={event.slug} />}
             {upcoming && <Countdown event={event} className="md:ml-auto" />}
           </div>
+
+          {/* Wo und worüber. Ein Aushang nennt beides; die Seite hatte es
+              bisher nur weiter unten stehen, weil das alte Plakat es im Bild
+              trug. Jetzt trägt das Bild eine Aufnahme — also steht es hier. */}
+          <p className="mt-5 text-[0.75rem] leading-relaxed text-mute">
+            {club.address} · {club.postcode}
+            {event.tables && (
+              <>
+                {" · Tischbuchung "}
+                <a
+                  href={club.phoneHref}
+                  className="inline-block py-1 text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
+                >
+                  {club.phone}
+                </a>
+              </>
+            )}
+          </p>
         </div>
       </div>
     </div>
