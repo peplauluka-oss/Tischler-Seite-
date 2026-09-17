@@ -170,7 +170,7 @@ export default function EventLayer({
                 {" · Tischbuchung "}
                 <a
                   href={club.phoneHref}
-                  className="inline-block py-1 text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
+                  className="inline-block py-1 link-inline"
                 >
                   {club.phone}
                 </a>

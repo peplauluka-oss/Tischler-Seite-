@@ -144,7 +144,7 @@ export default async function EventPage({
                   <dd className="mt-0.5">
                     <a
                       href={club.phoneHref}
-                      className="inline-block py-2 text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
+                      className="inline-block py-2 link-inline"
                     >
                       {club.phone}
                     </a>

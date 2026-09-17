@@ -179,8 +179,18 @@ export const heroVideo = {
  * davon war belegt.
  */
 export const insideStory = [
-  { id: "raum", no: "01", image: images.saal, kicker: "DER RAUM" },
-  { id: "flaeche", no: "02", image: nights.flaeche, kicker: "DIE FLÄCHE" },
-  { id: "boxen", no: "03", image: images.sitzbereich, kicker: "DIE BOXEN" },
-  { id: "bar", no: "04", image: images.tresen, kicker: "DER TRESEN" },
+  /* DIE VIER ORTSMARKEN.
+     Sie hießen „Der Raum“, „Die Fläche“, „Die Boxen“, „Der Tresen“ — das
+     war die Sprache eines Grundrisses, nicht die eines Abends. „Der Raum“
+     beschreibt jedes Zimmer der Welt, und „Tresen“ klingt nach Feierabend,
+     nicht nach Samstagnacht.
+
+     Die neuen Marken benennen dasselbe, aber so, wie jemand darüber
+     spricht, der hingeht — und sie greifen die Einordnung aus dem Hero
+     auf: Club · Lounge · Nightlife. Wer oben gelesen hat, dass es hier
+     eine Lounge gibt, sieht sie hier. */
+  { id: "kulisse", no: "01", image: images.saal, kicker: "DIE KULISSE" },
+  { id: "tanzflaeche", no: "02", image: nights.flaeche, kicker: "DIE TANZFLÄCHE" },
+  { id: "lounge", no: "03", image: images.sitzbereich, kicker: "DIE LOUNGE" },
+  { id: "bar", no: "04", image: images.tresen, kicker: "DIE BAR" },
 ] as const;

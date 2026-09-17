@@ -208,6 +208,78 @@
     transform: scaleX(1);
   }
 
+  /* --- Verweise im Fließtext -------------------------------------------
+     Die Telefonnummer stand bis hierher mit einer roten Linie darunter.
+     Rot und dünn unter einem Wort heißt für jedes Auge, das schon einmal
+     einen Text getippt hat, genau eine Sache: Da stimmt etwas nicht. Eine
+     Nummer, die aussieht wie ein Schreibfehler, ruft niemand an.
+
+     Also bleibt die Linie — sie zeigt an, dass man tippen kann — aber in
+     der Schriftfarbe und mit Abstand zur Grundlinie. Rot wird sie erst,
+     wenn der Zeiger darauf steht: Dann ist sie keine Warnung mehr,
+     sondern eine Antwort.                                                */
+  .link-inline {
+    color: var(--color-ivory);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, var(--color-ivory) 32%, transparent);
+    text-underline-offset: 5px;
+    transition:
+      color 0.3s ease,
+      text-decoration-color 0.3s ease;
+  }
+  .link-inline:hover,
+  .link-inline:focus-visible {
+    color: var(--color-ember-soft);
+    text-decoration-color: var(--color-ember-soft);
+  }
+
+  /* --- Kontaktzeilen ----------------------------------------------------
+     Anrufen und Instagram sind keine Fließtextverweise, sondern Wege.
+     Deshalb sind sie hier ganze Zeilen mit Zeichen, Bezeichnung und Ziel:
+     Man erkennt am Bild, wohin es geht, bevor man das Wort gelesen hat —
+     und trifft die Zeile mit dem Daumen, nicht die sieben Zeichen einer
+     Vorwahl.                                                             */
+  .contact-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.15rem 0.25rem 1.15rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-ivory) 12%, transparent);
+    text-align: left;
+    color: var(--color-ivory);
+    transition: color 0.3s ease;
+  }
+  .contact-row:hover {
+    color: var(--color-ember-soft);
+  }
+  .contact-row svg.glyph {
+    flex: none;
+    color: var(--color-mute);
+    transition: color 0.3s ease;
+  }
+  .contact-row:hover svg.glyph {
+    color: var(--color-ember-soft);
+  }
+  .contact-row .go {
+    margin-left: auto;
+    flex: none;
+    color: var(--color-mute);
+    transition:
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      color 0.3s ease;
+  }
+  .contact-row:hover .go {
+    color: var(--color-ember-soft);
+  }
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) {
+    .contact-row:hover .go {
+      transform: translateX(5px);
+    }
+  }
+
   /* Bildverweise: Beim Zeigen tritt die Aufnahme einen Hauch vor. Nur dort,
      wo das Bild selbst ein Link ist — ein Foto, das ohne Ziel auf den Zeiger
      reagiert, verspricht etwas, das nicht kommt. */

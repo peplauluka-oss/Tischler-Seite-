@@ -253,7 +253,7 @@ export default function BookingOverlay() {
                 ändern. Lieber anrufen?{" "}
                 <a
                   href={club.phoneHref}
-                  className="text-ivory underline decoration-ember decoration-1 underline-offset-4"
+                  className="link-inline"
                 >
                   {club.phone}
                 </a>

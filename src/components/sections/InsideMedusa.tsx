@@ -3,6 +3,8 @@ import Reveal from "@/components/ui/Reveal";
 import Settle from "@/components/ui/Settle";
 import Drift from "@/components/ui/Drift";
 import { WipeLines } from "@/components/ui/Wipe";
+import { Arrow } from "@/components/ui/Cta";
+import { InstagramGlyph, PhoneGlyph } from "@/components/ui/Glyphs";
 import { club, images, insideStory } from "@/content/club";
 import { asset } from "@/lib/asset";
 
@@ -87,7 +89,7 @@ function Frame({
  * Räume nacheinander statt einer Galerie auf einmal.
  */
 export default function InsideMedusa() {
-  const [raum, flaeche, boxen, bar] = insideStory;
+  const [kulisse, tanzflaeche, lounge, bar] = insideStory;
 
   return (
     <section id="inside" className="scroll-mt-16 md:scroll-mt-20 pb-24 pt-16 md:pb-32 md:pt-24">
@@ -103,19 +105,19 @@ export default function InsideMedusa() {
       </div>
 
       <div className="mt-8 grid grid-cols-12 gap-3 md:mt-12 md:gap-4">
-        {/* Der Raum trägt die Reihe: Er läuft auf sein Maß zu. */}
+        {/* Die Kulisse trägt die Reihe: Sie läuft auf ihr Maß zu. */}
         <div className="col-span-12 md:col-span-7">
           <Frame
-            item={raum}
+            item={kulisse}
             ratio="aspect-[4/3] md:aspect-[5/4]"
             sizes="(max-width: 768px) 100vw, 58vw"
             settle
           />
         </div>
-        {/* Die Fläche rückt von rechts an ihn heran. */}
+        {/* Die Tanzfläche rückt von rechts an sie heran. */}
         <Reveal x={22} y={0} delay={0.1} className="col-span-12 md:col-span-5">
           <Frame
-            item={flaeche}
+            item={tanzflaeche}
             ratio="aspect-[4/3] md:aspect-[5/4]"
             sizes="(max-width: 768px) 100vw, 42vw"
             position="50% 45%"
@@ -126,7 +128,7 @@ export default function InsideMedusa() {
       <div className="mt-3 grid grid-cols-12 gap-3 md:mt-4 md:gap-4">
         {/* Zweite Reihe, andere Richtung — sonst wäre es dieselbe Reihe. */}
         <Reveal x={-22} y={0} className="col-span-12 md:col-span-5">
-          <Frame item={boxen} ratio="aspect-[4/3]" sizes="(max-width: 768px) 100vw, 42vw" />
+          <Frame item={lounge} ratio="aspect-[4/3]" sizes="(max-width: 768px) 100vw, 42vw" />
         </Reveal>
         <div className="col-span-12 md:col-span-7">
           <Frame
@@ -191,32 +193,44 @@ export default function InsideMedusa() {
               />
             </figure>
           </Drift>
-          <dl className="mt-6 space-y-4 border-t border-ivory/12 pt-5 text-sm">
-            <div>
-              <dt className="label text-[0.625rem]">Kontakt</dt>
-              <dd className="-my-1 mt-0.5">
-                <a
-                  href={club.phoneHref}
-                  className="inline-block py-2 text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
-                >
+          {/* DIE BEIDEN WEGE NACH DRAUSSEN.
+              Vorher standen hier zwei Beschriftungen mit je einem
+              unterstrichenen Wort darunter. Das liest man als Datenblatt,
+              nicht als Angebot — und die rote Linie unter der Nummer sah
+              aus wie ein Tippfehler.
+
+              Jetzt sind es zwei Zeilen: Zeichen, wofür es gut ist, das
+              Ziel, Pfeil. Das Zeichen trägt die Erkennung, die kleine
+              Zeile darüber den Grund, und getroffen wird die ganze Zeile
+              statt sieben Zeichen einer Vorwahl. */}
+          <div className="mt-7 border-t border-ivory/12">
+            <a href={club.phoneHref} className="contact-row">
+              <PhoneGlyph />
+              <span className="min-w-0">
+                <span className="label block text-[0.625rem]">Tischbuchung</span>
+                <span className="mt-1 block text-[0.9375rem] leading-tight">
                   {club.phone}
-                </a>
-              </dd>
-            </div>
-            <div>
-              <dt className="label text-[0.625rem]">Instagram</dt>
-              <dd className="-my-1 mt-0.5">
-                <a
-                  href={club.instagramUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="inline-block py-2 text-ivory underline decoration-ember decoration-1 underline-offset-4 transition-colors hover:text-ember-soft"
-                >
+                </span>
+              </span>
+              <Arrow className="go" />
+            </a>
+
+            <a
+              href={club.instagramUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="contact-row"
+            >
+              <InstagramGlyph />
+              <span className="min-w-0">
+                <span className="label block text-[0.625rem]">Aktuelle Nächte</span>
+                <span className="mt-1 block truncate text-[0.9375rem] leading-tight">
                   @{club.instagram}
-                </a>
-              </dd>
-            </div>
-          </dl>
+                </span>
+              </span>
+              <Arrow className="go" />
+            </a>
+          </div>
         </Reveal>
       </div>
     </section>

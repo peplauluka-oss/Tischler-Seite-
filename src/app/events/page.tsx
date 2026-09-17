@@ -100,7 +100,7 @@ export default function EventsPage() {
                 href={club.instagramUrl}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="text-ivory underline decoration-ember decoration-1 underline-offset-4"
+                className="link-inline"
               >
                 @{club.instagram}
               </a>
