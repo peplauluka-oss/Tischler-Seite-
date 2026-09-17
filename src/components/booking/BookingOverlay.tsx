@@ -6,6 +6,7 @@ import { Logo } from "@/components/ui/Brand";
 import { club } from "@/content/club";
 import { eventBySlug, eventDate, eventFullTitle } from "@/content/events";
 import { useBooking } from "@/lib/booking";
+import { isContactValid } from "@/lib/contact";
 import { lockScroll, unlockScroll } from "@/lib/scroll";
 import { bookingMessage, whatsappHref } from "@/lib/whatsapp";
 
@@ -24,6 +25,13 @@ const GROUPS = ["1–2", "3–5", "6–10", "11+"] as const;
  *
  * Der Event-Kontext kommt mit: Wer aus einer Nacht heraus öffnet, muss sie
  * nicht noch einmal auswählen.
+ *
+ * DIE GÄSTELISTE fragt zusätzlich einen Kontakt ab — E-Mail oder Nummer,
+ * eins von beiden, ein Feld. Für den Gast ist es die Adresse, unter der die
+ * Zusage ankommt; für den Club die einzige Spur, die aus einer Anfrage
+ * später eine Einladung machen kann. Beim Tisch steht sie nicht: Dort ist
+ * die Rückmeldung der Chat selbst, und ein Pflichtfeld mehr vor dem
+ * wichtigsten Knopf der Seite kostet Buchungen.
  */
 export default function BookingOverlay() {
   const { isOpen, mode, eventSlug, open, close, restoreFocus } = useBooking();
@@ -31,13 +39,22 @@ export default function BookingOverlay() {
   const reduced = useReducedMotion();
   const [people, setPeople] = useState<string>(GROUPS[1]);
   const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  /* Der Hinweis erscheint erst, wenn jemand senden wollte — nicht, während
+     er noch tippt. Eine Fehlermeldung beim ersten Zeichen ist eine
+     Beschuldigung, keine Hilfe. */
+  const [contactTouched, setContactTouched] = useState(false);
+  const contactRef = useRef<HTMLInputElement>(null);
 
   const event = eventSlug ? eventBySlug(eventSlug) ?? null : null;
   const guestlist = mode === "guestlist";
 
+  const contactOk = !guestlist || isContactValid(contact);
+  const showContactHint = guestlist && contactTouched && !contactOk;
+
   const message = useMemo(
-    () => bookingMessage({ mode, event, people, name }),
-    [mode, event, people, name],
+    () => bookingMessage({ mode, event, people, name, contact: guestlist ? contact : "" }),
+    [mode, event, people, name, contact, guestlist],
   );
 
   useEffect(() => {
@@ -172,12 +189,58 @@ export default function BookingOverlay() {
                 />
               </div>
 
+              {guestlist && (
+                <div className="mt-7">
+                  <label htmlFor="booking-contact" className="label">
+                    E-Mail oder Handynummer
+                  </label>
+                  <input
+                    ref={contactRef}
+                    id="booking-contact"
+                    /* Bewusst `text` und nicht `email`: Die native Prüfung
+                       würde jede Telefonnummer abweisen. Welches von beiden
+                       es ist, erkennt die Eingabe selbst. */
+                    type="text"
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                    autoComplete="email"
+                    aria-invalid={showContactHint || undefined}
+                    aria-describedby="booking-contact-hint"
+                    placeholder="name@mail.de oder 0170 1234567"
+                    className="field mt-3 w-full"
+                  />
+                  <p
+                    id="booking-contact-hint"
+                    className={`mt-2.5 text-[0.8125rem] leading-relaxed ${
+                      showContactHint ? "text-ember-soft" : "text-mute"
+                    }`}
+                  >
+                    {showContactHint
+                      ? "Bitte eine E-Mail-Adresse oder eine Handynummer eintragen — darüber kommt die Zusage."
+                      : "Damit die Zusage bei dir ankommt. Eins von beiden reicht."}
+                  </p>
+                </div>
+              )}
+
               <a
                 href={whatsappHref(message)}
                 target="_blank"
                 rel="noreferrer noopener"
-                onClick={close}
-                className="cta cta-glow mt-8 w-full"
+                aria-disabled={!contactOk || undefined}
+                onClick={(e) => {
+                  if (!contactOk) {
+                    /* Kein toter Knopf: Der Weg bleibt sichtbar, der Grund
+                       steht am Feld, und der Cursor springt dorthin. */
+                    e.preventDefault();
+                    setContactTouched(true);
+                    contactRef.current?.focus();
+                    return;
+                  }
+                  close();
+                }}
+                className={`cta cta-glow mt-8 w-full ${
+                  contactOk ? "" : "opacity-55"
+                }`}
               >
                 ÜBER WHATSAPP SENDEN
                 <svg viewBox="0 0 18 10" width="18" height="10" aria-hidden="true">
@@ -199,7 +262,10 @@ export default function BookingOverlay() {
               {/* Der jeweils andere Weg — als Zeile, nicht als zweiter Knopf. */}
               <button
                 type="button"
-                onClick={() => open(guestlist ? "table" : "guestlist", eventSlug)}
+                onClick={() => {
+                  setContactTouched(false);
+                  open(guestlist ? "table" : "guestlist", eventSlug);
+                }}
                 className="cta-quiet mt-8"
               >
                 {guestlist ? "Stattdessen einen Tisch" : "Stattdessen auf die Gästeliste"}
