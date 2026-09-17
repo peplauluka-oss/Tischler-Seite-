@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 import { WipeLines } from "@/components/ui/Wipe";
+import { InstagramGlyphBrand } from "@/components/ui/Glyphs";
 import { GuestlistButton } from "@/components/ui/Cta";
 import { club } from "@/content/club";
 import { eventDate, eventTitle, type MedusaEvent } from "@/content/events";
@@ -129,16 +130,25 @@ export default function UpcomingEvents({
           <p className="mt-4 max-w-[46ch] text-[0.9375rem] leading-relaxed text-mute">
             Neue Termine stehen auf Instagram.
           </p>
+          {/* Steht kein Termin fest, ist Instagram das Angebot — nicht
+              eine Fußnote dazu. Deshalb bekommt es hier das Zeichen in
+              seinen eigenen Farben und in der Größe, die der freie Platz
+              hergibt: Man sieht, wohin es geht, bevor man liest. Die
+              Schriftzeile behält ihre Haarlinie, das Zeichen steht daneben
+              im Freien — beides derselbe Link. */}
           <a
             href={club.instagramUrl}
             target="_blank"
             rel="noreferrer noopener"
-            className="cta-quiet mt-7"
+            className="group mt-7 inline-flex items-center gap-5"
           >
-            @{club.instagram}
-            <svg viewBox="0 0 18 10" width="18" height="10" aria-hidden="true">
-              <path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
+            <span className="cta-quiet">
+              @{club.instagram}
+              <svg viewBox="0 0 18 10" width="18" height="10" aria-hidden="true">
+                <path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </span>
+            <InstagramGlyphBrand size={30} />
           </a>
         </Reveal>
       )}

@@ -183,7 +183,11 @@
       color 0.3s ease,
       border-color 0.3s ease;
   }
-  .cta-quiet:hover {
+  .cta-quiet:hover,
+  /* Liegt die Zeile mit einem Zeichen zusammen in einem Verweis, reagieren
+     beide gemeinsam — sonst wirkt das Zeichen wie ein zweiter, toter Teil
+     desselben Links. */
+  .group:hover > .cta-quiet {
     color: var(--color-ivory);
     border-color: var(--color-ivory);
   }
@@ -204,7 +208,9 @@
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .cta-quiet:hover::after,
-  .cta-quiet:focus-visible::after {
+  .cta-quiet:focus-visible::after,
+  .group:hover > .cta-quiet::after,
+  .group:focus-visible > .cta-quiet::after {
     transform: scaleX(1);
   }
 

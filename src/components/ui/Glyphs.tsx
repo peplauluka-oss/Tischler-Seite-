@@ -50,3 +50,70 @@ export function InstagramGlyph({ size = 18 }: { size?: number }) {
     </svg>
   );
 }
+
+/**
+ * Dasselbe Zeichen, aber in den Farben, die jeder kennt — und nur dort, wo
+ * vorher Weiß war: Die Kontur trägt den Verlauf, die Fläche dahinter bleibt
+ * der Seitengrund. So bleibt das Zeichen ein Zeichen und wird nicht zur
+ * Kachel, die aus einer dunklen Seite heraussticht wie ein App-Symbol.
+ *
+ * Der Verlauf läuft von unten links nach oben rechts, weil das Original
+ * sein Licht dort hat: Gelb über Orange und Pink nach Violett und Blau.
+ *
+ * Steht bewusst nur an einer einzigen Stelle — dort, wo Instagram das
+ * Angebot IST („Neue Termine stehen auf Instagram“) und rundherum Platz
+ * ist. In der engen Kontaktzeile weiter unten bleibt die Kontur einfarbig;
+ * zweimal dieselbe Buntheit auf einer Seite macht aus einem Akzent eine
+ * Dekoration.
+ */
+export function InstagramGlyphBrand({
+  size = 30,
+  id = "bm-ig-gradient",
+}: {
+  size?: number;
+  /** Nur nötig, falls das Zeichen je zweimal auf einer Seite steht. */
+  id?: string;
+}) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <linearGradient
+          id={id}
+          /* Ohne diese Angabe liest der Browser die Koordinaten als
+             Bruchteile der Objektbox, nicht als Einheiten des viewBox —
+             der Verlauf landet außerhalb des Zeichens und es bleibt eine
+             einzige Farbe übrig. */
+          gradientUnits="userSpaceOnUse"
+          x1="2"
+          y1="18"
+          x2="18"
+          y2="2"
+        >
+          <stop offset="0%" stopColor="#FEDA75" />
+          <stop offset="25%" stopColor="#FA7E1E" />
+          <stop offset="52%" stopColor="#D62976" />
+          <stop offset="76%" stopColor="#962FBF" />
+          <stop offset="100%" stopColor="#4F5BD5" />
+        </linearGradient>
+      </defs>
+      <rect
+        x="2.4"
+        y="2.4"
+        width="15.2"
+        height="15.2"
+        rx="4.6"
+        stroke={`url(#${id})`}
+        strokeWidth="1.5"
+      />
+      <circle cx="10" cy="10" r="3.8" stroke={`url(#${id})`} strokeWidth="1.5" />
+      <circle cx="14.5" cy="5.5" r="1.05" fill={`url(#${id})`} />
+    </svg>
+  );
+}
